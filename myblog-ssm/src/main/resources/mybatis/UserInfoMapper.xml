@@ -15,7 +15,7 @@
         insert into userinfo(username, password) values (#{username}, #{password})
     </insert>
     <select id="selectUserInfo" resultMap="baseMap">
-        select username, password
+        select username
         from userinfo
         where username = #{username}
           and password = #{password};
