@@ -64,9 +64,9 @@
           loginBtn.attr("onclick", "register()");
           loginBtn.text("注册");
         } else {
-          //这里flag为假，默认注册块显示，登录块隐藏
+          //这里flag为假，注册功能显示，登录功能隐藏
           flag = 1;
-          // 设置flag=1后应改：登录块显示，注册块隐藏
+          // 设置flag=1后应改：默认登录功能，注册功能隐藏
           dialog.css("height", "");
           title.text("登录");
           tips.val("没有账号？点击这里创建");
