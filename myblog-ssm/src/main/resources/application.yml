@@ -1,0 +1,21 @@
+# 服务器端口配置
+server:
+  port: 8080
+
+# 配置文件选择
+spring:
+  profiles:
+    active: dev
+
+# 配置 MyBatis 配置路径
+mybatis:
+  mapper-locations: classpath:mybatis/**Mapper.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# 日志配置，配置打印 mybatis 执行的 sql
+logging:
+  level:
+    com:
+      example:
+        myblogssm: debug
