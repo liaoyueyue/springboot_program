@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.myblogssm.mapper.UserInfoMapper">
-    <resultMap id="baseMap" type="com.example.myblogssm.entity.UserInfo">
+<mapper namespace="com.example.myblogssm.mapper.UserMapper">
+    <resultMap id="baseMap" type="com.example.myblogssm.entity.User">
         <id column="id" property="id"/>
         <result column="username" property="username"/>
         <result column="password" property="password"/>
@@ -11,13 +11,14 @@
         <result column="state" property="state"/>
     </resultMap>
 
-    <insert id="addUserInfo">
-        insert into userinfo(username, password) values (#{username}, #{password})
+    <insert id="addUser">
+        insert into userinfo(username, password)
+        values (#{username}, #{password})
     </insert>
-    <select id="selectUserInfo" resultMap="baseMap">
-        select username
+
+    <select id="queryUserByName" resultMap="baseMap">
+        select *
         from userinfo
-        where username = #{username}
-          and password = #{password};
+        where username = #{username};
     </select>
 </mapper>

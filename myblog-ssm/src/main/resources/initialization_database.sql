@@ -8,7 +8,7 @@ drop table if exists userinfo;
 create table userinfo
 (
     id         int primary key auto_increment,
-    username   varchar(100) not null,
+    username   varchar(100) not null unique ,
     password   varchar(32)  not null,
     photo      varchar(500) default '',
     createtime datetime     default now(),
@@ -42,7 +42,7 @@ create table videoinfo
 -- 添加⼀个⽤户信息
 INSERT INTO `myblog`.`userinfo` (`id`, `username`, `password`, `photo`,
                                    `createtime`, `updatetime`, `state`)
-VALUES (1, 'admin', '12456', '', '2021-12-06 17:10:48', '2021-12-06 17:10:48', 1);
+VALUES (1, 'admin', '123', '', '2021-12-06 17:10:48', '2021-12-06 17:10:48', 1);
 -- ⽂章添加测试数据
 insert into articleinfo(title, content, uid)
 values ('Java', 'Java正⽂', 1);

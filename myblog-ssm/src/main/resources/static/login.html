@@ -27,18 +27,18 @@
         </div>
         <div class="row">
           <span>用户名</span>
-          <input type="text" id="username" name="username" />
+          <input type="text" id="username" name="username" required />
         </div>
         <div class="row">
           <span>密码</span>
-          <input type="password" id="password" name="password" />
+          <input type="password" id="password" name="password" required />
         </div>
         <div class="row" id="confirm-password-row" style="display: none">
           <span>确认密码</span>
           <input type="password" id="confirm-password" />
         </div>
         <div class="row">
-          <button id="login-btn" type="button" onclick="login()">登录</button>
+          <button id="login-btn" type="submit" onclick="login()">登录</button>
         </div>
       </div>
     </div>
@@ -49,7 +49,8 @@
         let dialog = jQuery(".login-dialog");
         let title = jQuery("#title");
         let tips = jQuery(".tips");
-        let confirmPassword = jQuery("#confirm-password-row");
+        let confirmPasswordRow = jQuery("#confirm-password-row");
+        let confirmPassword = jQuery("#confirm-password");
         let loginBtn = jQuery("#login-btn");
         if (flag) {
           //这里flag为真，默认登录功能，注册功能隐藏
@@ -60,7 +61,8 @@
           tips.val("已有账号？点击这里登录");
           jQuery("#username").val("");
           jQuery("#password").val("");
-          confirmPassword.css("display", "flex");
+          confirmPasswordRow.css("display", "flex");
+          confirmPassword.attr("required", "true");
           loginBtn.attr("onclick", "register()");
           loginBtn.text("注册");
         } else {
@@ -72,44 +74,11 @@
           tips.val("没有账号？点击这里创建");
           jQuery("#username").val("");
           jQuery("#password").val("");
-          confirmPassword.css("display", "none");
+          confirmPasswordRow.css("display", "none");
+          confirmPassword.removeAttr("required");
           loginBtn.attr("onclick", "login()");
           loginBtn.text("登录");
         }
-      }
-
-      function login() {
-        // 1.非空校验
-        let username = jQuery("#username");
-        let password = jQuery("#password");
-        if (username.val() == "") {
-          alert("请先输入用户名！");
-          return;
-        }
-        if (password.val() == "") {
-          alert("请先输入密码！");
-          return;
-        }
-        // 2.提交 ajax 请求
-        jQuery.ajax({
-          url: "/user/login",
-          type: "post",
-          data: { username: username.val(), password: password.val() },
-          success: function (result) {
-            // 相应的结果
-            if (
-              result != null &&
-              result.code == 200 &&
-              result.data.username != null
-            ) {
-              // 执行成功,跳转到登录页面
-              alert(username.val() + " 登录成功，跳转至用户主界面！");
-              jQuery(window).attr("location", "blog_list.html");
-            } else {
-              alert("登录失败，请检测账号或者密码后重新尝试！");
-            }
-          },
-        });
       }
 
       function register() {
@@ -119,19 +88,23 @@
         let confirmPassword = jQuery("#confirm-password");
         if (username.val() == "") {
           alert("请先输入用户名！");
+          username.focus(); // 设置用户光标到用户名输入框
           return;
         }
         if (password.val() == "") {
           alert("请先输入密码！");
+          password.focus();
           return;
         }
         if (confirmPassword.val() == "") {
           alert("请先输入确认密码！");
+          confirmPassword.focus();
           return;
         }
         // 2.判断两次密码是否相等
         if (password.val() != confirmPassword.val()) {
           alert("两次密码不一致请重新输入！");
+          password.focus();
           return;
         }
         // 3.提交 ajax 请求
@@ -143,10 +116,46 @@
             // 相应的结果
             if (result != null && result.code == 200 && result.data == 1) {
               // 执行成功,跳转到登录页面
-              alert(username.val() + " 注册成功，跳转至登录界面！");
-              jQuery(window).attr("location", "login.html");
+              if (
+                confirm(username.val() + "注册成功，是否需要跳转至登录界面！")
+              ) {
+                // jQuery(window).attr("location", "login.html");
+                location.href = "login.html";
+              }
             } else {
               alert("抱歉执行失败，请稍后再试！");
+            }
+          },
+        });
+      }
+
+      function login() {
+        // 1.非空校验
+        let username = jQuery("#username");
+        let password = jQuery("#password");
+        if (username.val() == "") {
+          alert("请先输入用户名！");
+          username.focus();
+          return;
+        }
+        if (password.val() == "") {
+          alert("请先输入密码！");
+          password.focus();
+          return;
+        }
+        // 2.提交 ajax 请求
+        jQuery.ajax({
+          url: "/user/login",
+          type: "post",
+          data: { username: username.val(), password: password.val() },
+          success: function (result) {
+            // 相应的结果
+            if (result != null && result.code == 200 && result.data != null) {
+              // 执行成功,跳转到登录页面
+              // jQuery(window).attr("location", "blog_list.html");
+              location.href = "blog_list.html";
+            } else {
+              alert("登录失败，请检测账号或者密码后重新尝试！");
             }
           },
         });

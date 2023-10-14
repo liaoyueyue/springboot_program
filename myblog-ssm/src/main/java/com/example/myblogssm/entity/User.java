@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  * Time: 17:39
  */
 @Data
-public class UserInfo {
+public class User {
     private int id;
     private String username;
     private String password;
