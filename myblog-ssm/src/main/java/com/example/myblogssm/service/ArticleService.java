@@ -15,4 +15,8 @@ import org.springframework.stereotype.Service;
 public class ArticleService {
     @Autowired
     ArticleMapper articleMapper;
+
+    public int queryArticleTotalByUid(int uid) {
+        return articleMapper.queryArticleTotalByUid(uid);
+    }
 }

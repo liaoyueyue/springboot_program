@@ -7,6 +7,7 @@
     <title>个人博客列表</title>
     <link rel="stylesheet" href="css/common.css" />
     <link rel="stylesheet" href="css/blog_list.css" />
+    <script src="js/jquery.min.js"></script>
   </head>
   <body>
     <div class="nav">
@@ -22,28 +23,47 @@
       <div class="container-left">
         <div class="card">
           <img src="images/ProfilePicture.jpg" alt="头像" />
-          <h3></h3>
+          <h3 id="username"></h3>
           <a href="#">github地址</a>
           <div class="counter">
             <span>文章</span>
             <span>分类</span>
           </div>
           <div class="counter">
-            <span>n</span>
+            <span id="article-total"></span>
             <span>1</span>
           </div>
         </div>
       </div>
       <div class="container-right">
         <!-- <div class="blog">
-          <div class="title">我的第一篇博客</div>
+          <div class="title">出师表</div>
           <div class="date">2022-11-06 22:29</div>
           <div class="desc">
-            相太特冇时家负帝子大之了应君，想感思极，联不而应洪你为皇同感大丰设变活才中为，太德娘派新锐无易永的解大第，资才非大灰病的宋看圣化主曰了他的资说秦，过讨非才冇是战派娘亲找的子是，使于请下定极服逝就我不略重承，越王攻怎败永中得，同文实天，了回说爻国要，传婵落。
+            先帝创业未半而中道崩殂，今天下三分，益州疲弊，此诚危急存亡之秋也。然侍卫之臣不懈于内，忠志之士忘身于外者，盖追先帝之殊遇，欲报之于陛下也。诚宜开张圣听，以光先帝遗德，恢弘志士之气，不宜妄自菲薄，引喻失义，以塞忠谏之路也。
           </div>
           <a href="blog_detail.html">查看全文 &gt;&gt; </a>
         </div> -->
       </div>
     </div>
+
+    <script>
+      function showInfo() {
+        jQuery.ajax({
+          url: "/user/showinfo",
+          type: "post",
+          data: {},
+          success: function(result) {
+            if (result != null && result.code == 200){
+              jQuery("#username").text(result.data.username);
+              jQuery("#article-total").text(result.data.articleTotal);
+            } else{
+              alert("个人信息加载失败，请刷新页面");
+            }
+          }
+        });
+      }
+      showInfo();
+    </script>
   </body>
 </html>

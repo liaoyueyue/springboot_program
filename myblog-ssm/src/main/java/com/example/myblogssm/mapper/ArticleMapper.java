@@ -14,6 +14,16 @@ import org.apache.ibatis.annotations.Param;
  */
 @Mapper
 public interface ArticleMapper {
+
+    /**
+     * 使用 uid 查询文章总数
+     * @param uid 用户id
+     * @return uid 对应用户的文章总数
+     */
+    int queryArticleTotalByUid(@Param("uid") int uid);
+
+
+
     /**
      * 添加文章
      * @param article 文章实体

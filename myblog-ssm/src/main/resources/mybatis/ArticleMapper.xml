@@ -12,9 +12,14 @@
         <result column="state" property="state"/>
     </resultMap>
 
+    <select id="queryArticleTotalByUid" resultType="java.lang.Integer">
+        select count(*) from articleinfo where uid = #{uid}
+    </select>
+
     <insert id="addArticle">
         insert into articleinfo(title, content, uid)
         values (#{article.title}, #{article.content}, #{user.id})
     </insert>
+
 
 </mapper>
