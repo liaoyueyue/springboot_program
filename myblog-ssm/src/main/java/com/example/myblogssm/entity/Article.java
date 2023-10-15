@@ -1,5 +1,6 @@
 package com.example.myblogssm.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -13,12 +14,14 @@ import java.time.LocalDateTime;
  */
 @Data
 public class Article {
-    private int id;
+    private Integer id;
     private String title;
     private String content;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime createTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime updateTime;
-    private int uid;
-    private int rCount;
-    private int state;
+    private Integer uid;
+    private Integer rCount;
+    private Integer state;
 }

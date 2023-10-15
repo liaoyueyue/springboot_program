@@ -1,15 +1,16 @@
 .blog-detail h3 {
+  text-align: center;
   font-size: 20px;
-  text-align: center;
-  padding: 20px 0;
-}
-
-.blog-detail .date {
-  color: rgb(0, 128, 0);
-  text-align: center;
   padding: 10px 0;
 }
 
-#desc {
+.blog-detail .date {
+  text-align: center;
+  color: rgb(0, 128, 0);
+  padding: 10px 0;
+}
+
+.blog-detail .content {
   text-indent: 2em;
+  background-color: transparent;
 }

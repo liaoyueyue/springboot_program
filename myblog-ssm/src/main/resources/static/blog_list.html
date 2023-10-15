@@ -16,7 +16,7 @@
       <div class="spacer"></div>
       <a href="blog_list.html">主页</a>
       <a href="blog_edit.html">写博客</a>
-      <a href="logout">注销</a>
+      <a href="javascript:logout()">注销</a>
     </div>
 
     <div class="container">
@@ -35,35 +35,122 @@
           </div>
         </div>
       </div>
-      <div class="container-right">
+      <div id="blogs-div" class="container-right">
         <!-- <div class="blog">
           <div class="title">出师表</div>
           <div class="date">2022-11-06 22:29</div>
           <div class="desc">
             先帝创业未半而中道崩殂，今天下三分，益州疲弊，此诚危急存亡之秋也。然侍卫之臣不懈于内，忠志之士忘身于外者，盖追先帝之殊遇，欲报之于陛下也。诚宜开张圣听，以光先帝遗德，恢弘志士之气，不宜妄自菲薄，引喻失义，以塞忠谏之路也。
           </div>
-          <a href="blog_detail.html">查看全文 &gt;&gt; </a>
+          <div class="operations">
+            <a href="blog_detail.html">查看全文 &gt;&gt; </a>
+            <a href="blog_edit.html">修改文章 &gt;&gt; </a>
+            <a href="javascript:delArticle()">删除文章 &gt;&gt; </a>
+          </div>
         </div> -->
       </div>
     </div>
 
     <script>
-      function showInfo() {
+      function showUserInfo() {
         jQuery.ajax({
           url: "/user/showinfo",
           type: "post",
           data: {},
-          success: function(result) {
-            if (result != null && result.code == 200){
+          success: function (result) {
+            if (result != null && result.code == 200) {
               jQuery("#username").text(result.data.username);
               jQuery("#article-total").text(result.data.articleTotal);
-            } else{
+            } else {
               alert("个人信息加载失败，请刷新页面");
             }
-          }
+          },
         });
       }
-      showInfo();
+      showUserInfo();
+
+      function showArticleInfoList() {
+        jQuery.ajax({
+          url: "/article/showinfolist",
+          type: "post",
+          data: {},
+          success: function (result) {
+            if (result != null && result.code == 200) {
+              if (result.data != null && result.data.length > 0) {
+                // 发表过文章
+                let articleList = "";
+                for (let i = 0; i < result.data.length; i++) {
+                  let articleItem = result.data[i];
+                  articleList += '<div class="blog">';
+                  articleList +=
+                    '<div class="title">' + articleItem.title + "</div>";
+                  articleList +=
+                    '<div class="date">' + articleItem.createTime + "</div>";
+                  articleList +=
+                    '<div class="desc">' + articleItem.content + "</div>";
+                  articleList += '<div class="operations">';
+                  articleList +=
+                    '<a href="blog_detail.html?id=' +
+                    articleItem.id +
+                    '">查看全文 &gt;&gt; </a>';
+                  articleList +=
+                    '<a href="blog_edit.html?id=' +
+                    articleItem.id +
+                    '">修改文章 &gt;&gt; </a>';
+                  articleList +=
+                    '<a href="javascript:delArticle(' +
+                    articleItem.id +
+                    ')">删除文章 &gt;&gt; </a>';
+                  articleList += "</div>";
+                  articleList += "</div>";
+                }
+                jQuery("#blogs-div").html(articleList);
+              } else {
+                // 没发表过文章
+                jQuery("#blogs-div").html("<h3>暂无文章</h3>");
+              }
+            } else {
+              alert("查询文章列表失败,请重试");
+            }
+          },
+        });
+      }
+      showArticleInfoList();
+
+      function delArticle(id) {
+        if (confirm("确认是否删除该文章？")) {
+          jQuery.ajax({
+            url: "/article/delarticle",
+            type: "post",
+            data: { id: id },
+            success: function (result) {
+              if (result != null && result.code == 200 && result.data == 1) {
+                alert("删除该文章成功！");
+                location.reload();
+              } else {
+                alert("删除该文章失败！");
+              }
+            },
+          });
+        }
+      }
+
+      function logout() {
+        if (confirm("确认注销？")) {
+          jQuery.ajax({
+            url: "/user/logout",
+            type: "post",
+            data: {},
+            success: function (result) {
+              if (result != null && result.code == 200 && result.data == 1) {
+                location.href = "/login.html";
+              }else {
+                alert("注销失败");
+              }
+            },
+          });
+        }
+      }
     </script>
   </body>
 </html>

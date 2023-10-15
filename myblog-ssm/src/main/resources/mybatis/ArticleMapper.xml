@@ -11,15 +11,20 @@
         <result column="rcount" property="rCount"/>
         <result column="state" property="state"/>
     </resultMap>
-
     <select id="queryArticleTotalByUid" resultType="java.lang.Integer">
         select count(*) from articleinfo where uid = #{uid}
     </select>
 
-    <insert id="addArticle">
-        insert into articleinfo(title, content, uid)
-        values (#{article.title}, #{article.content}, #{user.id})
-    </insert>
+    <select id="qryUserArtListByUid" resultMap="baseMap">
+        select *
+        from articleinfo
+        where uid = #{uid};
+    </select>
+
+    <delete id="delArticleById">
+        delete from articleinfo where id = #{id} and uid = #{uid}
+    </delete>
+
 
 
 </mapper>

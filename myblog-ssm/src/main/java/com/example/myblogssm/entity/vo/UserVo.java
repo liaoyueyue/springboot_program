@@ -12,7 +12,7 @@ import lombok.Data;
  */
 @Data
 public class UserVo extends User {
-    private int articleTotal;
+    private Integer articleTotal;
 
     @Override
     public String toString() {

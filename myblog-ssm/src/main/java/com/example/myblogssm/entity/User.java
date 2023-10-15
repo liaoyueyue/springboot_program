@@ -13,11 +13,11 @@ import java.time.LocalDateTime;
  */
 @Data
 public class User {
-    private int id;
+    private Integer id;
     private String username;
     private String password;
     private String photo;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
-    private int state;
+    private Integer state;
 }

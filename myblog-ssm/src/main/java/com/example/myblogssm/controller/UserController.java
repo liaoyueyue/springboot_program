@@ -78,4 +78,10 @@ public class UserController {
         return AjaxResult.success(userVo);
     }
 
+    @PostMapping("/logout")
+    public AjaxResult logout(HttpSession session) {
+        session.removeAttribute(AppConstant.USER_SESSION_KEY);
+        return AjaxResult.success(1);
+    }
+
 }

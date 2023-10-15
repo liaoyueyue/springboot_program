@@ -5,6 +5,8 @@ import com.example.myblogssm.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * Description:
@@ -18,18 +20,25 @@ public interface ArticleMapper {
     /**
      * 使用 uid 查询文章总数
      * @param uid 用户id
-     * @return uid 对应用户的文章总数
+     * @return uid对应用户的文章总数
      */
-    int queryArticleTotalByUid(@Param("uid") int uid);
-
-
+    int queryArticleTotalByUid(@Param("uid") Integer uid);
 
     /**
-     * 添加文章
-     * @param article 文章实体
-     * @param user 用户实体
+     * 使用 uid 查询登录用户发布文章列表
+     * @param uid 用户id
+     * @return uid对应用户的全部文章列表
+     */
+    List<Article> qryUserArtListByUid(@Param("uid") Integer uid);
+
+    /**
+     * 使用 id 删除文章
+     * @param id 文章id
+     * @param uid 用户id
      * @return 数据影响行数
      */
-    int addArticle(@Param("articleInfo") Article article, @Param("userInfo") User user);
+    int delArticleById(@Param("id") Integer id, @Param("uid") Integer uid);
+
+
 
 }
