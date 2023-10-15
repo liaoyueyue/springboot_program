@@ -45,7 +45,7 @@ INSERT INTO `myblog`.`userinfo` (`id`, `username`, `password`, `photo`,
 VALUES (1, 'admin', '123', '', '2021-12-06 17:10:48', '2021-12-06 17:10:48', 1);
 -- ⽂章添加测试数据
 insert into articleinfo(title, content, uid)
-values ('Java', 'Java正⽂', 1);
+values ('Java', 'Java正⽂', 1), ('C++', 'C++正⽂', 1), ('Python', 'Python正⽂', 1);
 -- 添加视频
 insert into videoinfo(vid, title, url, uid)
 values (1, 'baidu title', 'https://www.baidu.com', 1);
