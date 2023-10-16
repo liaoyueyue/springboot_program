@@ -30,4 +30,12 @@ public class ArticleService {
     public int delArticleById(Integer id, Integer uid) {
         return articleMapper.delArticleById(id, uid);
     }
+
+    public Article queryArticleById(Integer id) {
+        return articleMapper.queryArticleById(id);
+    }
+
+    public int updateRCount(Integer id) {
+        return articleMapper.updateRCount(id);
+    }
 }

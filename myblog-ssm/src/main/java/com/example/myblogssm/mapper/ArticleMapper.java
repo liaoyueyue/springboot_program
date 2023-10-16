@@ -39,6 +39,18 @@ public interface ArticleMapper {
      */
     int delArticleById(@Param("id") Integer id, @Param("uid") Integer uid);
 
+    /**
+     * 使用 id 查询文章
+     * @param id 文章id
+     * @return 文章实体
+     */
+    Article queryArticleById(@Param("id") Integer id);
 
+    /**
+     * 文章阅读量+1
+     * @param id 文章id
+     * @return 数据库影响行数
+     */
+    int updateRCount(@Param("id") Integer id);
 
 }

@@ -24,4 +24,8 @@ public class UserService {
     public User queryUserByName(String username) {
         return userMapper.queryUserByName(username);
     }
+
+    public User queryUserById(Integer id) {
+        return userMapper.queryUserById(id);
+    }
 }

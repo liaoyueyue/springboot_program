@@ -38,6 +38,19 @@ public class ArticleController {
         return AjaxResult.success(articleList);
     }
 
+    @PostMapping("/showinfo")
+    public AjaxResult showInfo(Integer id) {
+        if (id == null || id <= 0) {
+            return AjaxResult.fail(-1, "illegal request");
+        }
+        Article article = articleService.queryArticleById(id);
+        if(article == null) {
+            return AjaxResult.fail(-1, "illegal request");
+        }
+        articleService.updateRCount(id);
+        return AjaxResult.success(article);
+    }
+
     @PostMapping("/delarticle")
     public AjaxResult delArticle(HttpServletRequest request, Integer id) {
         if (id == null || id <= 0) {

@@ -1,10 +1,12 @@
-.blog-detail h3 {
+.blog-detail .title {
   text-align: center;
   font-size: 20px;
   padding: 10px 0;
 }
 
-.blog-detail .date {
+.blog-detail .info {
+  display: flex;
+  justify-content: center;
   text-align: center;
   color: rgb(0, 128, 0);
   padding: 10px 0;

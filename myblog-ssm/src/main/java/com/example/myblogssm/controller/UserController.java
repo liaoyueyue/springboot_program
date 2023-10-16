@@ -78,6 +78,22 @@ public class UserController {
         return AjaxResult.success(userVo);
     }
 
+    @PostMapping("/showinfobyid")
+    public AjaxResult showInfoById(Integer id) {
+        if (id == null || id <= 0) {
+            return AjaxResult.fail(-1, "illegal request");
+        }
+        User user = userService.queryUserById(id);
+        if (user != null) {
+            user.setPassword("");
+            UserVo userVo = new UserVo();
+            BeanUtils.copyProperties(user, userVo);
+            userVo.setArticleTotal(articleService.queryArticleTotalByUid(id));
+            return AjaxResult.success(userVo);
+        }
+        return AjaxResult.fail(-1, "user not found");
+    }
+
     @PostMapping("/logout")
     public AjaxResult logout(HttpSession session) {
         session.removeAttribute(AppConstant.USER_SESSION_KEY);

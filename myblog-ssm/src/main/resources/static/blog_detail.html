@@ -29,27 +29,100 @@
       <div class="container-left">
         <div class="card">
           <img src="images/ProfilePicture.jpg" alt="头像" />
-          <h3></h3>
+          <h3 id="username"></h3>
           <a href="#">github地址</a>
           <div class="counter">
             <span>文章</span>
             <span>分类</span>
           </div>
           <div class="counter">
-            <span>n</span>
+            <span id="article-total"></span>
             <span>1</span>
           </div>
         </div>
       </div>
       <div class="container-right">
         <div class="blog-detail">
-          <h3>这里是博客标题</h3>
-          <div class="date">2023-10-16 1:24</div>
-          <div class="content">
-            先帝创业未半而中道崩殂，今天下三分，益州疲弊，此诚危急存亡之秋也。然侍卫之臣不懈于内，忠志之士忘身于外者，盖追先帝之殊遇，欲报之于陛下也。诚宜开张圣听，以光先帝遗德，恢弘志士之气，不宜妄自菲薄，引喻失义，以塞忠谏之路也。
+          <h3 id="title" class="title"></h3>
+          <div class="info">
+            发布于：<span id="update-time"></span> &nbsp;&nbsp;
+            阅读量：<span id="read-count"></span>
           </div>
+          <div id="content" class="content"></div>
         </div>
       </div>
     </div>
+
+    <script>
+      var editormd;
+      function initEditor(md) {
+        editormd = editormd.markdownToHTML("content", {
+          markdown: md, // Also, you can dynamic set Markdown text
+          // htmlDecode : true,  // Enable / disable HTML tag encode.
+          // htmlDecode : "style,script,iframe",  // Note: If enabled, you should filter some dangerous HTML tags for website security.
+        });
+      }
+
+      // 获取当前 url 参数的公共方法
+      function getUrlValue(key) {
+        let params = location.search;
+        if (params.length > 1) {
+          params = params.substring(1);
+          let paramArr = params.split("&");
+          for (let i = 0; i < paramArr.length; i++) {
+            let kv = paramArr[i].split("=");
+            if (kv[0] == key) {
+              return kv[1];
+            }
+          }
+        }
+        return "";
+      }
+
+      function showArticleInfo(id) {
+        if (id == "") {
+          alert("illegal parameter");
+          return;
+        }
+        jQuery.ajax({
+          url: "/article/showinfo",
+          type: "post",
+          data: { id: id },
+          success: function (result) {
+            if (result != null && result.code == 200) {
+              jQuery("#title").html(result.data.title);
+              jQuery("#update-time").html(result.data.updateTime);
+              jQuery("#read-count").html(result.data.rcount);
+              initEditor(result.data.content);
+              // editormd.markdownToHTML('content', {markdown: result.data.content});
+              showUserInfoById(result.data.uid);
+            } else {
+              alert("获取文章信息失败");
+            }
+          },
+        });
+      }
+      showArticleInfo(getUrlValue("id"));
+
+      function showUserInfoById(id) {
+        if (id == "") {
+          alert("illegal parameter");
+          return;
+        }
+        jQuery.ajax({
+          url: "/user/showinfobyid",
+          type: "post",
+          data: { id: id },
+          success: function (result) {
+            if (result != null && result.code == 200) {
+              jQuery("#username").html(result.data.username);
+              jQuery("#article-total").html(result.data.articleTotal);
+            } else {
+              alert("获取用户信息失败");
+            }
+          },
+        });
+      }
+    </script>
   </body>
 </html>

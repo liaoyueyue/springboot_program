@@ -21,4 +21,7 @@
         from userinfo
         where username = #{username};
     </select>
+    <select id="queryUserById" resultMap="baseMap">
+        select * from userinfo where id = #{id}
+    </select>
 </mapper>

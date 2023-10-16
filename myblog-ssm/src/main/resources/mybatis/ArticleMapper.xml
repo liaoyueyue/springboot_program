@@ -8,9 +8,13 @@
         <result column="createtime" property="createTime"/>
         <result column="updatetime" property="updateTime"/>
         <result column="uid" property="uid"/>
-        <result column="rcount" property="rCount"/>
+        <result column="rcount" property="rcount"/>
         <result column="state" property="state"/>
     </resultMap>
+    <update id="updateRCount">
+        update articleinfo set rcount = rcount+1 where id = #{id}
+    </update>
+
     <select id="queryArticleTotalByUid" resultType="java.lang.Integer">
         select count(*) from articleinfo where uid = #{uid}
     </select>
@@ -19,6 +23,12 @@
         select *
         from articleinfo
         where uid = #{uid};
+    </select>
+
+    <select id="queryArticleById" resultMap="baseMap">
+        select *
+        from articleinfo
+        where id = #{id};
     </select>
 
     <delete id="delArticleById">
