@@ -11,7 +11,7 @@
   align-items: center;
 }
 
-#blog-title {
+#article-title {
   width: 897px;
   height: 40px;
   font-size: 16px;
@@ -22,7 +22,7 @@
   background-color: rgba(255, 255, 255, 0.8);
 }
 
-#submit {
+#submitArticle {
   width: 100px;
   height: 40px;
   outline: none;
@@ -32,11 +32,11 @@
   border-radius: 6px;
 }
 
-#submit:active {
+#submitArticle:active {
   background-color: grey;
 }
 
-#editor {
+#editorDiv {
   border-radius: 10px;
   opacity: 80%;
 }

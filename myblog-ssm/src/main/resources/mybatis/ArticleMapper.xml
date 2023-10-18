@@ -11,6 +11,10 @@
         <result column="rcount" property="rcount"/>
         <result column="state" property="state"/>
     </resultMap>
+    <insert id="addArticle">
+        insert into articleinfo(title, content, uid) values (#{title}, #{content}, #{uid})
+    </insert>
+
     <update id="updateRCount">
         update articleinfo set rcount = rcount+1 where id = #{id}
     </update>
@@ -22,7 +26,7 @@
     <select id="qryUserArtListByUid" resultMap="baseMap">
         select *
         from articleinfo
-        where uid = #{uid};
+        where uid = #{uid} order by updatetime desc
     </select>
 
     <select id="queryArticleById" resultMap="baseMap">

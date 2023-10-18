@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="css/blog_detail.css" />
     <!-- 引入 editor.md 的依赖 -->
     <link rel="stylesheet" href="editor.md/css/editormd.min.css" />
-    <script src="editor.md/examples\js\jquery.min.js"></script>
+    <script src="js/jquery.min.js"></script>
     <!-- <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script> -->
     <script src="editor.md/editormd.js"></script>
     <script src="editor.md/lib/marked.min.js"></script>
@@ -21,7 +21,7 @@
       <span class="title">我的博客系统</span>
       <div class="spacer"></div>
       <a href="blog_list.html">主页</a>
-      <a href="blog_edit.html">写博客</a>
+      <a href="blog_create.html">写博客</a>
       <a href="javascript:logout()">注销</a>
     </div>
 
@@ -45,8 +45,9 @@
         <div class="blog-detail">
           <h3 id="title" class="title"></h3>
           <div class="info">
-            发布于：<span id="update-time"></span> &nbsp;&nbsp;
-            阅读量：<span id="read-count"></span>
+            发布于：<span id="update-time"></span> &nbsp;&nbsp; 阅读量：<span
+              id="read-count"
+            ></span>
           </div>
           <div id="content" class="content"></div>
         </div>
@@ -114,7 +115,7 @@
           type: "post",
           data: { id: id },
           success: function (result) {
-            if (result != null && result.code == 200) {
+            if (result != null && result.code == 200 && result.data.id > 0) {
               jQuery("#username").html(result.data.username);
               jQuery("#article-total").html(result.data.articleTotal);
             } else {

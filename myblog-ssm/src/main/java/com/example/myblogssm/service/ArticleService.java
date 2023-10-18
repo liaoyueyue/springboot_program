@@ -38,4 +38,8 @@ public class ArticleService {
     public int updateRCount(Integer id) {
         return articleMapper.updateRCount(id);
     }
+
+    public int addArticle(Article article) {
+        return articleMapper.addArticle(article);
+    }
 }

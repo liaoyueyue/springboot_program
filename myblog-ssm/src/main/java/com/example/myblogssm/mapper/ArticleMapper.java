@@ -1,7 +1,6 @@
 package com.example.myblogssm.mapper;
 
 import com.example.myblogssm.entity.Article;
-import com.example.myblogssm.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -52,5 +51,12 @@ public interface ArticleMapper {
      * @return 数据库影响行数
      */
     int updateRCount(@Param("id") Integer id);
+
+    /**
+     * 创建文章
+     * @param article 文章实体
+     * @return 数据库影响行数
+     */
+    int addArticle(Article article);
 
 }

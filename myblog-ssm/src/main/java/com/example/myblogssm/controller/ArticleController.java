@@ -7,6 +7,7 @@ import com.example.myblogssm.entity.User;
 import com.example.myblogssm.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -61,6 +62,19 @@ public class ArticleController {
             return AjaxResult.fail(-1, "illegal request");
         }
         return AjaxResult.success(articleService.delArticleById(id, user.getId()));
+    }
+
+    @PostMapping("/submitarticle")
+    public AjaxResult submitArticle(HttpServletRequest request, Article article) {
+        if (article == null || !StringUtils.hasLength(article.getTitle()) || !StringUtils.hasLength(article.getContent())) {
+            return AjaxResult.fail(-1, "illegal parameter");
+        }
+        User user = UserSessionUtils.getSessionUser(request);
+        if (user == null || user.getId() <= 0) {
+            return AjaxResult.fail(-2, "invalid user");
+        }
+        article.setUid(user.getId());
+        return AjaxResult.success(articleService.addArticle(article));
     }
 
 }
