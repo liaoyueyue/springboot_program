@@ -44,7 +44,7 @@
           </div>
           <div class="operations">
             <a href="blog_detail.html">查看全文 &gt;&gt; </a>
-            <a href="blog_edit.html">修改文章 &gt;&gt; </a>
+            <a href="blog_update.html">修改文章 &gt;&gt; </a>
             <a href="javascript:delArticle()">删除文章 &gt;&gt; </a>
           </div>
         </div> -->
@@ -85,7 +85,7 @@
                   articleList +=
                     '<div class="title">' + articleItem.title + "</div>";
                   articleList +=
-                    '<div class="date">' + articleItem.createTime + "</div>";
+                    '<div class="date">于 ' + articleItem.updateTime + " 更新</div>";
                   articleList +=
                     '<div class="desc">' + articleItem.content + "</div>";
                   articleList += '<div class="operations">';
@@ -94,7 +94,7 @@
                     articleItem.id +
                     '">查看全文 &gt;&gt; </a>';
                   articleList +=
-                    '<a href="blog_edit.html?id=' +
+                    '<a href="blog_update.html?id=' +
                     articleItem.id +
                     '">修改文章 &gt;&gt; </a>';
                   articleList +=

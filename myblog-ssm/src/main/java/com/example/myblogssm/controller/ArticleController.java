@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,6 +37,14 @@ public class ArticleController {
             return AjaxResult.fail(-1, "illegal request");
         }
         List<Article> articleList = articleService.qryUserArtListByUid(user.getId());
+        if (!articleList.isEmpty()) {
+            for (Article a : articleList) {
+                String content = a.getContent();
+                if (content.length() > 100) {
+                    a.setContent(content.substring(0, 120) + "...");
+                }
+            }
+        }
         return AjaxResult.success(articleList);
     }
 
@@ -45,7 +54,7 @@ public class ArticleController {
             return AjaxResult.fail(-1, "illegal request");
         }
         Article article = articleService.queryArticleById(id);
-        if(article == null) {
+        if (article == null) {
             return AjaxResult.fail(-1, "illegal request");
         }
         articleService.updateRCount(id);
@@ -75,6 +84,19 @@ public class ArticleController {
         }
         article.setUid(user.getId());
         return AjaxResult.success(articleService.addArticle(article));
+    }
+
+    @PostMapping("/updatearticle")
+    public AjaxResult updateArticle(HttpServletRequest request, Article article) {
+        if (article == null || !StringUtils.hasLength(article.getTitle()) || !StringUtils.hasLength(article.getContent()) || article.getId() == null) {
+            return AjaxResult.fail(-1, "illegal parameter");
+        }
+        User user = UserSessionUtils.getSessionUser(request);
+        if (user == null || user.getId() == null) {
+            return AjaxResult.fail(-2, "invalid user");
+        }
+        article.setUid(user.getId());
+        return AjaxResult.success(articleService.updateArticle(article));
     }
 
 }

@@ -42,4 +42,8 @@ public class ArticleService {
     public int addArticle(Article article) {
         return articleMapper.addArticle(article);
     }
+
+    public int updateArticle(Article article) {
+        return articleMapper.updateArticle(article);
+    }
 }

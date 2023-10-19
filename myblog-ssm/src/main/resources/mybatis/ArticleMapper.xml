@@ -19,6 +19,10 @@
         update articleinfo set rcount = rcount+1 where id = #{id}
     </update>
 
+    <update id="updateArticle">
+        update articleinfo set title = #{title}, content = #{content}, updatetime = now() where id = #{id} and uid = #{uid}
+    </update>
+
     <select id="queryArticleTotalByUid" resultType="java.lang.Integer">
         select count(*) from articleinfo where uid = #{uid}
     </select>

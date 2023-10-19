@@ -59,4 +59,10 @@ public interface ArticleMapper {
      */
     int addArticle(Article article);
 
+    /**
+     * 修改文章
+     * @param article 文章实体
+     * @return 数据库影响行数
+     */
+    int updateArticle(Article article);
 }

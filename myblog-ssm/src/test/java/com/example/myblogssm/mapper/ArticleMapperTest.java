@@ -1,8 +1,11 @@
 package com.example.myblogssm.mapper;
 
+import com.example.myblogssm.entity.Article;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,5 +25,14 @@ class ArticleMapperTest {
     void queryArticleTotalByUid() {
         int result = articleMapper.queryArticleTotalByUid(2);
         System.out.println("result = " + result);
+    }
+
+    @Test
+    void qryUserArtListByUid() {
+        int uid = 2;
+        List<Article> articleList = articleMapper.qryUserArtListByUid(2);
+        System.out.println(articleList != null);
+        System.out.println(articleList);
+        System.out.println(articleList.isEmpty());
     }
 }

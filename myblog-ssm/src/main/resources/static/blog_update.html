@@ -27,12 +27,11 @@
         <!-- 标题的编辑区 -->
         <div class="title">
           <input
+            id="article-title"
             type="text"
-            id="blog-title"
             placeholder="在这里写下文章标题"
-            name="title"
           />
-          <button id="submitArticle" onclick="submitArticle()">发布文章</button>
+          <button id="submitArticle" onclick="updateArticle()">更新文章</button>
         </div>
         <!-- 正文编辑区 -->
         <div id="editorDiv">
@@ -43,24 +42,84 @@
     <script>
       var editor;
       function initEditor(md) {
-        // 编辑器设置
         editor = editormd("editorDiv", {
-          // 这里的尺寸必须在这里设置. 设置样式会被 editormd 自动覆盖掉.
           width: "100%",
-          // 高度 100% 意思是和父元素一样高. 要在父元素的基础上去掉标题编辑区的高度
           height: "calc(100% - 50px)",
-          // 编辑器中的初始内容
           markdown: md,
-          // 指定 editor.md 依赖的插件路径
           path: "editor.md/lib/",
-          saveHTMLToTextarea: true, //
+          saveHTMLToTextarea: true, 
         });
       }
-      initEditor("# 在这里写下一篇博客"); // 初始化编译器的值
-      // 提交
-      function submitArticle() {
-        alert(editor.getValue()); // 获取值
-        // editor.setValue("#123") // 设置值
+      initEditor("# 文章内容没有加载"); // 初始化编译器的值
+      
+      // 获取当前 url 参数的公共方法
+      function getUrlValue(key) {
+        let params = location.search;
+        if (params.length > 1) {
+          params = params.substring(1);
+          let paramArr = params.split("&");
+          for (let i = 0; i < paramArr.length; i++) {
+            let kv = paramArr[i].split("=");
+            if (kv[0] == key) {
+              return kv[1];
+            }
+          }
+        }
+        return "";
+      }
+
+      // 获取需要更新的文章信息
+      function showArticleInfo(id) {
+        if (id == "") {
+          alert("illegal parameter");
+          return;
+        }
+        jQuery.ajax({
+          url: "/article/showinfo",
+          type: "post",
+          data: { id: id },
+          success: function (result) {
+            if (result != null && result.code == 200) {
+              jQuery("#article-title").attr("value", result.data.title);
+              initEditor(result.data.content);
+            } else {
+              alert("获取文章信息失败");
+            }
+          },
+        });
+      }
+      showArticleInfo(getUrlValue("id"));
+      
+      // 更新
+      function updateArticle() {
+        let articleTitle = jQuery("#article-title");
+        let articleContentValue = editor.getValue();
+        if (confirm("确认更新文章？")) {
+          if (articleTitle.val() == "") {
+            alert("请输入文章标题");
+            articleTitle.focus();
+            return;
+          }
+          if (
+            articleContentValue == ""
+          ) {
+            alert("请先输入文章内容");
+            return;
+          }
+          jQuery.ajax({
+            url: "/article/updatearticle",
+            type: "post",
+            data: {id:getUrlValue("id"), title: articleTitle.val(), content: articleContentValue},
+            success: function (result) {
+              if (result != null && result.code == 200 && result.data == 1) {
+                alert("文章更新成功！"); 
+                location.href = "/blog_list.html"
+              } else {
+                alert("文章更新失败，请重试！");
+              }
+            },
+          });
+        }
       }
 
       function logout() {
