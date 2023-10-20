@@ -2,6 +2,7 @@ package com.example.myblogssm.controller;
 
 import com.example.myblogssm.common.AjaxResult;
 import com.example.myblogssm.common.AppConstant;
+import com.example.myblogssm.common.PasswordUtils;
 import com.example.myblogssm.common.UserSessionUtils;
 import com.example.myblogssm.entity.User;
 import com.example.myblogssm.entity.vo.UserVo;
@@ -41,6 +42,8 @@ public class UserController {
         if (user == null || !StringUtils.hasLength(user.getUsername()) || !StringUtils.hasLength(user.getPassword())) {
             return AjaxResult.fail(-1, "username or password not found");
         }
+        // 给密码加密
+        user.setPassword(PasswordUtils.encrypt(user.getPassword()));
         return AjaxResult.success(userService.addUser(user));
     }
 
@@ -53,7 +56,7 @@ public class UserController {
         User user = userService.queryUserByName(username);
         if (user != null && user.getId() > 0) {
             // 有效的用户, 判断密码
-            if (password.equals(user.getPassword())) {
+            if (PasswordUtils.decrypt(password, user.getPassword())) {
                 user.setPassword("");
                 HttpSession session = request.getSession();
                 session.setAttribute(AppConstant.USER_SESSION_KEY, user);

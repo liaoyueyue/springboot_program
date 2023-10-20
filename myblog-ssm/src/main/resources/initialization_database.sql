@@ -9,7 +9,7 @@ create table userinfo
 (
     id         int primary key auto_increment,
     username   varchar(100) not null unique ,
-    password   varchar(32)  not null,
+    password   varchar(65)  not null,
     photo      varchar(500) default '',
     createtime datetime     default now(),
     updatetime datetime     default now(),
