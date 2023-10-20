@@ -39,6 +39,10 @@
         where id = #{id};
     </select>
 
+    <select id="queryArtListByPage" resultMap="baseMap">
+        select * from articleinfo limit #{pageSize} offset #{startIndex}
+    </select>
+
     <delete id="delArticleById">
         delete from articleinfo where id = #{id} and uid = #{uid}
     </delete>

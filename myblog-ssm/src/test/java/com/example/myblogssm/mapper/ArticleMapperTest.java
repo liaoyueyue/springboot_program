@@ -35,4 +35,10 @@ class ArticleMapperTest {
         System.out.println(articleList);
         System.out.println(articleList.isEmpty());
     }
+
+    @Test
+    void queryArtListByPage() {
+        List<Article> list = articleMapper.queryArtListByPage(1, 3);
+        System.out.println(list);
+    }
 }

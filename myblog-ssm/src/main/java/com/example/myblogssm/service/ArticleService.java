@@ -46,4 +46,8 @@ public class ArticleService {
     public int updateArticle(Article article) {
         return articleMapper.updateArticle(article);
     }
+
+    public List<Article> queryArtListByPage(Integer pageSize, Integer startIndex) {
+        return articleMapper.queryArtListByPage(pageSize, startIndex);
+    }
 }

@@ -65,4 +65,12 @@ public interface ArticleMapper {
      * @return 数据库影响行数
      */
     int updateArticle(Article article);
+
+    /**
+     * 分页查询文章
+     * @param pageSize 页大小
+     * @param startIndex 起始索引、偏移量
+     * @return 指定页数的文章
+     */
+    List<Article> queryArtListByPage(@Param("pageSize") Integer pageSize, @Param("startIndex") Integer startIndex);
 }

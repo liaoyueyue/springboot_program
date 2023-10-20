@@ -99,4 +99,22 @@ public class ArticleController {
         return AjaxResult.success(articleService.updateArticle(article));
     }
 
+    @PostMapping("/showinfolistbypage")
+    public AjaxResult showInfoListByPage(Integer pageIndex, Integer pageSize) {
+        // 参数矫正
+        if (pageIndex == null || pageIndex < 1) {
+            pageIndex = 1;
+        }
+        if (pageSize == null || pageSize < 1 || pageSize > 20) {
+            pageSize = 10;
+        }
+        // 查询中偏移量(offset)的值 = (当前页码-1)*每页显示条数
+        int startIndex = (pageIndex - 1) * pageSize;
+        List<Article> articleList = articleService.queryArtListByPage(pageSize, startIndex);
+        if (articleList.isEmpty()) {
+            return AjaxResult.fail(-1, "illegal request");
+        }
+        return AjaxResult.success(articleList);
+    }
+
 }
