@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -105,8 +106,8 @@ public class ArticleController {
         if (pageIndex == null || pageIndex < 1) {
             pageIndex = 1;
         }
-        if (pageSize == null || pageSize < 1 || pageSize > 20) {
-            pageSize = 10;
+        if (pageSize == null || pageSize < 1 || pageSize > 5) {
+            pageSize = 5;
         }
         // 查询中偏移量(offset)的值 = (当前页码-1)*每页显示条数
         int startIndex = (pageIndex - 1) * pageSize;
@@ -114,7 +115,22 @@ public class ArticleController {
         if (articleList.isEmpty()) {
             return AjaxResult.fail(-1, "illegal request");
         }
-        return AjaxResult.success(articleList);
+        // 限制文章在文章列表页的字数
+        for (Article a : articleList) {
+            String content = a.getContent();
+            if (content.length() > 100) {
+                a.setContent(content.substring(0, 120) + "...");
+            }
+        }
+        // 当前页面一共多少页
+        // a) 查询文章总数
+        int articleCount = articleService.queryArticleCount();
+        // b) 页面总数 = 文章总数 / 页面显示文章数量 （同时进行进1）
+        int pageCount = (int) Math.ceil(articleCount / (pageSize * 1.0));
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("articleList", articleList);
+        result.put("pageCount", pageCount);
+        return AjaxResult.success(result);
     }
 
 }

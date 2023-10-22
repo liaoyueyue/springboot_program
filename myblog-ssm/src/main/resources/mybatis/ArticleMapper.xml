@@ -42,6 +42,9 @@
     <select id="queryArtListByPage" resultMap="baseMap">
         select * from articleinfo limit #{pageSize} offset #{startIndex}
     </select>
+    <select id="queryArticleCount" resultType="java.lang.Integer">
+        select count(*) from articleinfo;
+    </select>
 
     <delete id="delArticleById">
         delete from articleinfo where id = #{id} and uid = #{uid}

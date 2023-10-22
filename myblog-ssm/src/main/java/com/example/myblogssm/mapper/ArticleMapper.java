@@ -73,4 +73,10 @@ public interface ArticleMapper {
      * @return 指定页数的文章
      */
     List<Article> queryArtListByPage(@Param("pageSize") Integer pageSize, @Param("startIndex") Integer startIndex);
+
+    /**
+     * 获取文章总数
+     * @return 文章总数
+     */
+    int queryArticleCount();
 }
