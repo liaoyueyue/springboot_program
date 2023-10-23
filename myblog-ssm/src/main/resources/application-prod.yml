@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/myblog?characterEncoding=utf8&useSSL=false
+    username: myblog
+    password: xBs547kiszh7kpxn
+    driver-class-name: com.mysql.jdbc.Driver
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: pwd123456
+    database: 0
