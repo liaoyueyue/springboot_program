@@ -3,6 +3,7 @@ package com.example.myblogssm.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
  * Time: 17:39
  */
 @Data
-public class User {
+public class User implements Serializable {
     private Integer id;
     private String username;
     private String password;
