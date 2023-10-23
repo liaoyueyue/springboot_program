@@ -33,4 +33,4 @@ build/
 .vscode/
 
 ### user ###
-application-prod.yml
+src/main/resources/application-prod.yml
