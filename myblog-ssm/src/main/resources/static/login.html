@@ -12,12 +12,11 @@
   <body>
     <div class="nav">
       <img src="images/logo.jpg" alt="导航栏图片" />
-      <span class="title">我的博客系统</span>
+      <span class="title">博客系统</span>
       <div class="spacer"></div>
       <a href="blog_list.html">主页</a>
       <a href="blog_list_comm.html">公共主页</a>
       <a href="blog_create.html">写博客</a>
-      <a href="login.html">登录</a>
     </div>
 
     <div class="login-container">
@@ -47,12 +46,12 @@
     <script>
       let flag = 1;
       function switchFunction() {
-        let dialog = jQuery(".login-dialog");
-        let title = jQuery("#title");
-        let tips = jQuery(".tips");
-        let confirmPasswordRow = jQuery("#confirm-password-row");
-        let confirmPassword = jQuery("#confirm-password");
-        let loginBtn = jQuery("#login-btn");
+        let dialog = $(".login-dialog");
+        let title = $("#title");
+        let tips = $(".tips");
+        let confirmPasswordRow = $("#confirm-password-row");
+        let confirmPassword = $("#confirm-password");
+        let loginBtn = $("#login-btn");
         if (flag) {
           //这里flag为真，默认登录功能，注册功能隐藏
           flag = 0;
@@ -60,8 +59,8 @@
           dialog.css("height", "360px");
           title.text("注册");
           tips.val("已有账号？点击这里登录");
-          jQuery("#username").val("");
-          jQuery("#password").val("");
+          $("#username").val("");
+          $("#password").val("");
           confirmPasswordRow.css("display", "flex");
           confirmPassword.attr("required", "true");
           loginBtn.attr("onclick", "register()");
@@ -73,8 +72,8 @@
           dialog.css("height", "");
           title.text("登录");
           tips.val("没有账号？点击这里创建");
-          jQuery("#username").val("");
-          jQuery("#password").val("");
+          $("#username").val("");
+          $("#password").val("");
           confirmPasswordRow.css("display", "none");
           confirmPassword.removeAttr("required");
           loginBtn.attr("onclick", "login()");
@@ -84,9 +83,9 @@
 
       function register() {
         // 1.非空校验
-        let username = jQuery("#username");
-        let password = jQuery("#password");
-        let confirmPassword = jQuery("#confirm-password");
+        let username = $("#username");
+        let password = $("#password");
+        let confirmPassword = $("#confirm-password");
         if (username.val() == "") {
           alert("请先输入用户名！");
           username.focus(); // 设置用户光标到用户名输入框
@@ -109,7 +108,7 @@
           return;
         }
         // 3.提交 ajax 请求
-        jQuery.ajax({
+        $.ajax({
           url: "/user/register",
           type: "post",
           data: { username: username.val(), password: password.val() },
@@ -132,8 +131,8 @@
 
       function login() {
         // 1.非空校验
-        let username = jQuery("#username");
-        let password = jQuery("#password");
+        let username = $("#username");
+        let password = $("#password");
         if (username.val() == "") {
           alert("请先输入用户名！");
           username.focus();
@@ -145,7 +144,7 @@
           return;
         }
         // 2.提交 ajax 请求
-        jQuery.ajax({
+        $.ajax({
           url: "/user/login",
           type: "post",
           data: { username: username.val(), password: password.val() },

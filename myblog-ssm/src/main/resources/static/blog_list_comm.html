@@ -14,11 +14,11 @@
   <body>
     <div class="nav">
       <img src="images/logo.jpg" alt="导航栏图片" />
-      <span class="title">我的博客系统</span>
-      <span class="spacer"></span>
+      <span class="title">博客系统</span>
+      <div class="spacer"></div>
       <a href="blog_list.html">主页</a>
       <a href="blog_create.html">写博客</a>
-      <a href="login.html">登陆</a>
+      <a href="login.html">登录</a>
     </div>
     <div class="container" style="justify-content: center">
       <div class="container-right">
@@ -64,7 +64,7 @@
       pageIndex = getUrlValue("pageIndex") == "" ? 1 : getUrlValue("pageIndex");
 
       function showArticleInfoList() {
-        jQuery.ajax({
+        $.ajax({
           url: "/article/showinfolistbypage",
           type: "post",
           data: { pageIndex: pageIndex, pageSize: pageSize },
@@ -90,7 +90,7 @@
                 blogsDiv += "</div>";
                 blogsDiv += "</div>";
               }
-              jQuery("#blogs-div").html(blogsDiv);
+              $("#blogs-div").html(blogsDiv);
               pageCount = result.data.pageCount;
             }
           },

@@ -8,17 +8,10 @@
     <link rel="stylesheet" href="css/common.css" />
     <link rel="stylesheet" href="css/blog_list.css" />
     <script src="js/jquery.min.js"></script>
+    <script src="js/common.js"></script>
   </head>
   <body>
-    <div class="nav">
-      <img src="images/logo.jpg" alt="导航栏图片" />
-      <span class="title">我的博客系统</span>
-      <div class="spacer"></div>
-      <a href="blog_list.html">主页</a>
-      <a href="blog_create.html">写博客</a>
-      <a href="javascript:logout()">注销</a>
-    </div>
-
+    <div class="nav"></div>
     <div class="container">
       <div class="container-left">
         <div class="card">
@@ -53,14 +46,14 @@
 
     <script>
       function showUserInfo() {
-        jQuery.ajax({
+        $.ajax({
           url: "/user/showinfo",
           type: "post",
           data: {},
           success: function (result) {
             if (result != null && result.code == 200) {
-              jQuery("#username").text(result.data.username);
-              jQuery("#article-total").text(result.data.articleTotal);
+              $("#username").text(result.data.username);
+              $("#article-total").text(result.data.articleTotal);
             } else {
               alert("个人信息加载失败，请刷新页面");
             }
@@ -70,7 +63,7 @@
       showUserInfo();
 
       function showArticleInfoList() {
-        jQuery.ajax({
+        $.ajax({
           url: "/article/showinfolist",
           type: "post",
           data: {},
@@ -85,7 +78,9 @@
                   articleList +=
                     '<div class="title">' + articleItem.title + "</div>";
                   articleList +=
-                    '<div class="date">于 ' + articleItem.updateTime + " 更新</div>";
+                    '<div class="date">于 ' +
+                    articleItem.updateTime +
+                    " 更新</div>";
                   articleList +=
                     '<div class="desc">' + articleItem.content + "</div>";
                   articleList += '<div class="operations">';
@@ -104,10 +99,10 @@
                   articleList += "</div>";
                   articleList += "</div>";
                 }
-                jQuery("#blogs-div").html(articleList);
+                $("#blogs-div").html(articleList);
               } else {
                 // 没发表过文章
-                jQuery("#blogs-div").html("<h3>暂无文章</h3>");
+                $("#blogs-div").html("<h3>暂无文章</h3>");
               }
             } else {
               alert("查询文章列表失败,请重试");
@@ -119,7 +114,7 @@
 
       function delArticle(id) {
         if (confirm("确认是否删除该文章？")) {
-          jQuery.ajax({
+          $.ajax({
             url: "/article/delarticle",
             type: "post",
             data: { id: id },
@@ -129,23 +124,6 @@
                 location.reload();
               } else {
                 alert("删除该文章失败！");
-              }
-            },
-          });
-        }
-      }
-
-      function logout() {
-        if (confirm("确认注销？")) {
-          jQuery.ajax({
-            url: "/user/logout",
-            type: "post",
-            data: {},
-            success: function (result) {
-              if (result != null && result.code == 200 && result.data == 1) {
-                location.href = "/login.html";
-              } else {
-                alert("注销失败");
               }
             },
           });

@@ -13,8 +13,8 @@ html {
 body {
   /* 让body的高度和html一样高 */
   height: 100%;
-  background-image: url(../images/cat.jpg);
-  /* background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);  */
+  /* background-image: url(../images/cat.jpg); */
+  background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -22,7 +22,7 @@ body {
 
 .nav {
   height: 50px;
-  background-color: rgba(50, 50, 50, 0.4);
+  background-color: rgba(50, 50, 50, 0.2);
   color: white;
   display: flex;
   justify-content: flex-start;
@@ -42,10 +42,20 @@ body {
   height: 40px;
 }
 
-.nav a {
+.nav > a {
   color: white;
   text-decoration: none;
   padding: 0 10px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 4px;
+  transition: all 0.7s;
+}
+
+.nav > a:hover {
+  background-color: pink;
+  text-decoration: underline white;
 }
 
 .container {
