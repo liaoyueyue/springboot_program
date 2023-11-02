@@ -27,7 +27,6 @@ public class PasswordUtils {
         // 最终密码 65位
         String finalPassword = salt + "$" + saltPassword;
         return finalPassword;
-
     }
 
     /**

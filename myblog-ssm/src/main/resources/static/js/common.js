@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  $(".nav").load("common/navigation.html");
+  $(".nav-wrapper").load("common/navigation.html");
 });
 
 function logout() {

@@ -14,10 +14,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
 
 /**
  * Created with IntelliJ IDEA.
@@ -101,6 +106,21 @@ public class UserController {
     public AjaxResult logout(HttpSession session) {
         session.removeAttribute(AppConstant.USER_SESSION_KEY);
         return AjaxResult.success(1);
+    }
+
+    @PostMapping("/updateinfo")
+    public AjaxResult updateInfo(@RequestPart("photo") MultipartFile photo) throws IOException {
+        //获取文件名
+        String fileName = photo.getOriginalFilename();
+        //获取文件后缀名
+        String suffixName = fileName.substring(fileName.lastIndexOf("."));
+        //重新生成文件名
+        fileName = UUID.randomUUID().toString().replace("-", "")+suffixName;
+        //指定本地文件夹存储图片，写到需要保存的目录下
+        String filePath = "C:\\users\\liaoyueyue\\desktop\\";
+        //将图片保存到static文件夹里
+        photo.transferTo(new File(filePath+fileName));
+        return AjaxResult.success(200);
     }
 
 }

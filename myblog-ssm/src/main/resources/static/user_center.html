@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>个人中心</title>
+    <link rel="stylesheet" href="css/common.css" />
+    <link rel="stylesheet" href="css/user_center.css" />
+    <script src="js/jquery.min.js"></script>
+    <script src="js/common.js"></script>
+  </head>
+  <body>
+    <div class="nav-wrapper"></div>
+    <div class="container">
+      <div class="container-left">
+        <div class="card">
+          <div class="menu">
+            <a href="javascript:displayGeneralDialog()">基本资料</a>
+            <a href="javascript:displayPasswordDialog()">修改密码</a>
+            <a href="javascript:logout()">退出登录</a>
+          </div>
+        </div>
+      </div>
+      <div class="container-right">
+        <div class="user-general-dialog">
+          <h3>基本资料</h3>
+          <hr />
+          <div class="photo-row">
+            <span>头像</span>
+            <img src="../images/logo.jpg" alt="个人头像" />
+            <div class="update-photo">
+              <span>修改头像</span>
+              <input
+                type="file"
+                name="photo"
+                id="photo-file"
+                accept="image/*"
+              />
+            </div>
+          </div>
+          <div class="row">
+            <span>电子邮箱</span>
+            <label id="email">123@email.com</label>&nbsp;
+            <a href="#" style="color: rgba(128, 128, 128, 1)">编辑</a>
+          </div>
+          <div class="row">
+            <span>用户名</span>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              placeholder="请输入用户名"
+            />
+          </div>
+          <button type="button" class="save-setting" onclick="updateUserInfo()">
+            保存设置
+          </button>
+        </div>
+        <!-- -------------------------------------- -->
+        <div class="user-password-dialog" style="display: none">
+          <h3>修改密码</h3>
+          <hr />
+          <div class="row">
+            <span>原密码</span>
+            <input type="password" id="password" placeholder="请输入原密码" />
+          </div>
+          <div class="row">
+            <span>修改密码</span>
+            <input
+              type="password"
+              id="new-password"
+              placeholder="请输入新密码"
+            />
+          </div>
+          <div class="row">
+            <span>确认密码</span>
+            <input
+              type="password"
+              id="new-password-confirm"
+              placeholder="请再次输入新密码"
+            />
+          </div>
+          <button
+            type="button"
+            class="save-setting"
+            onclick="updateUserPassword()"
+          >
+            保存设置
+          </button>
+        </div>
+      </div>
+    </div>
+    <script>
+      function updateUserInfo() {
+        // 1.非空校验
+        let username = $("#username");
+        let photoFile = $("#photo-file");
+        if (username.val() == "") {
+          alert("请先输入用户名！");
+          username.focus();
+          return;
+        }
+        if (photoFile[0].files.length <= 0) {
+          alert("请先选择头像！");
+          return;
+        }
+        // 2.创建表单数据
+        let formData = new FormData();
+        formData.append("username", username);
+        formData.append("photo", photoFile[0].files[0]);
+        // 3.提交 ajax 请求
+        $.ajax({
+          url: "/user/updateinfo",
+          type: "post",
+          data: formData,
+          cache: false, //上传文件不需要缓存
+          processData: false, // 告诉jQuery不要去处理发送的数据
+          contentType: false, // 告诉jQuery不要去设置Content-Type请求头
+          success: function (result) {
+            if (result != null && result.code == 200) {
+              alert("修改基本资料成功");
+            } else {
+              alert("修改基本资料失败，请稍后重试");
+            }
+          },
+        });
+      }
+      function updateUserPassword() {
+        // 1.非空校验
+        let password = $("#password");
+        let newPassword = $("#new-password");
+        let newPasswordConfirm = $("#new-password-confirm");
+        if (password.val() == "") {
+          alert("请先输入原密码！");
+          password.focus();
+          return;
+        }
+        if (newPassword.val() == "") {
+          alert("请先输入新密码！");
+          newPassword.focus();
+          return;
+        }
+        if (newPasswordConfirm.val() == "") {
+          alert("请输入第二次新密码！");
+          newPasswordConfirm.focus();
+          return;
+        }
+        // 2.判断两次密码是否相等
+        if (newPassword.val() != newPasswordConfirm.val()) {
+          alert("两次密码不一致请重新输入！");
+          password.focus();
+          return;
+        }
+        // 3.提交 ajax 请求
+      }
+
+      function displayGeneralDialog() {
+        $(".user-general-dialog").css("display", "inline");
+        $(".user-password-dialog").css("display", "none");
+      }
+
+      function displayPasswordDialog() {
+        $(".user-general-dialog").css("display", "none");
+        $(".user-password-dialog").css("display", "inline");
+      }
+    </script>
+  </body>
+</html>

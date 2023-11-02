@@ -3,6 +3,8 @@ package com.example.myblogssm.mapper;
 import com.example.myblogssm.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Created with IntelliJ IDEA.

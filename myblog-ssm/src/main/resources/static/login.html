@@ -10,13 +10,18 @@
     <script src="js/jquery.min.js"></script>
   </head>
   <body>
-    <div class="nav">
-      <img src="images/logo.jpg" alt="导航栏图片" />
-      <span class="title">博客系统</span>
-      <div class="spacer"></div>
-      <a href="blog_list.html">主页</a>
-      <a href="blog_list_comm.html">公共主页</a>
-      <a href="blog_create.html">写博客</a>
+    <div class="nav-wrapper">
+      <div class="nav">
+        <div class="logo-info">
+          <img src="images/logo.jpg" alt="导航栏图片" />
+          <span>博客系统</span>
+        </div>
+        <div class="menu">
+          <a href="blog_list.html">主页</a>
+          <a href="blog_list_comm.html">公共主页</a>
+          <a href="blog_create.html">写博客</a>
+        </div>
+      </div>
     </div>
 
     <div class="login-container">
@@ -27,15 +32,15 @@
         </div>
         <div class="row">
           <span>用户名</span>
-          <input type="text" id="username" name="username" required />
+          <input type="text" id="username" name="username" placeholder="请输入用户名" required />
         </div>
         <div class="row">
           <span>密码</span>
-          <input type="password" id="password" name="password" required />
+          <input type="password" id="password" name="password" placeholder="请输入密码" required />
         </div>
         <div class="row" id="confirm-password-row" style="display: none">
           <span>确认密码</span>
-          <input type="password" id="confirm-password" />
+          <input type="password" id="confirm-password" placeholder="请再次输入密码" />
         </div>
         <div class="row">
           <button id="login-btn" type="submit" onclick="login()">登录</button>
@@ -48,7 +53,7 @@
       function switchFunction() {
         let dialog = $(".login-dialog");
         let title = $("#title");
-        let tips = $(".tips");
+        let tips = $(".tips span");
         let confirmPasswordRow = $("#confirm-password-row");
         let confirmPassword = $("#confirm-password");
         let loginBtn = $("#login-btn");
@@ -58,7 +63,7 @@
           // 设置flag=0后应改：注册功能显示，登录功能隐藏
           dialog.css("height", "360px");
           title.text("注册");
-          tips.val("已有账号？点击这里登录");
+          tips.text("已有账号？点击这里登录");
           $("#username").val("");
           $("#password").val("");
           confirmPasswordRow.css("display", "flex");
@@ -71,7 +76,7 @@
           // 设置flag=1后应改：默认登录功能，注册功能隐藏
           dialog.css("height", "");
           title.text("登录");
-          tips.val("没有账号？点击这里创建");
+          tips.text("没有账号？点击这里创建");
           $("#username").val("");
           $("#password").val("");
           confirmPasswordRow.css("display", "none");
@@ -153,7 +158,7 @@
             if (result != null && result.code == 200 && result.data != null) {
               // 执行成功,跳转到登录页面
               // jQuery(window).attr("location", "blog_list.html");
-              location.href = "blog_list.html";
+              location.href = "blog_list_comm.html";
             } else {
               alert("登录失败，请检测账号或者密码后重新尝试！");
             }

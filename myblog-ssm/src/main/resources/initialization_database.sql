@@ -11,6 +11,7 @@ create table userinfo
     username   varchar(100) not null unique ,
     password   varchar(65)  not null,
     photo      varchar(500) default '',
+    email      varchar(65)  default '',
     createtime datetime     default now(),
     updatetime datetime     default now(),
     `state`    int          default 1
@@ -26,23 +27,23 @@ create table articleinfo
     updatetime datetime              default now(),
     uid        int          not null,
     rcount     int          not null default 1,
-    `state`    int                   default 1
+    state      int                   default 1
 ) default charset 'utf8mb4';
 -- 创建视频表
 drop table if exists videoinfo;
 create table videoinfo
 (
     vid        int primary key,
-    `title`    varchar(250),
-    `url`      varchar(1000),
+    title      varchar(250),
+    url        varchar(1000),
     createtime datetime default now(),
     updatetime datetime default now(),
     uid        int
 ) default charset 'utf8mb4';
 -- 添加⼀个⽤户信息
-INSERT INTO `myblog`.`userinfo` (`id`, `username`, `password`, `photo`,
+INSERT INTO `myblog`.`userinfo` (`id`, `username`, `password`, `photo`, `email`,
                                    `createtime`, `updatetime`, `state`)
-VALUES (1, 'admin', '123', '', '2021-12-06 17:10:48', '2021-12-06 17:10:48', 1);
+VALUES (1, 'admin', '123', '18812345678', '123@163.com',  '2021-12-06 17:10:48', '2021-12-06 17:10:48', 1);
 -- ⽂章添加测试数据
 insert into articleinfo(title, content, uid)
 values ('Java', 'Java正⽂', 1), ('C++', 'C++正⽂', 1), ('Python', 'Python正⽂', 1);

@@ -6,6 +6,7 @@
         <result column="username" property="username"/>
         <result column="password" property="password"/>
         <result column="photo" property="photo"/>
+        <result column="email" property="email"/>
         <result column="createtime" property="createTime"/>
         <result column="updatetime" property="updateTime"/>
         <result column="state" property="state"/>

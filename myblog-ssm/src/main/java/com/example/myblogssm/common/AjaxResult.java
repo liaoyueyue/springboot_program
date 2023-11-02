@@ -1,6 +1,9 @@
 package com.example.myblogssm.common;
 
 import lombok.Data;
+import org.springframework.util.ResourceUtils;
+
+import java.io.FileNotFoundException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -58,5 +61,4 @@ public class AjaxResult {
         result.setData(null);
         return result;
     }
-
 }

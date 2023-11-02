@@ -28,7 +28,7 @@ public class MyBlogSSMApplication {
         log.info("\n----------------------------------------------------------\n\t" +
                 "Application  is running! Access URLs:\n\t" +
                 "Local访问网址: \t\thttp://localhost:" + port + path + "/login.html\n\t" +
-                "External访问网址: \thttp://" + ip + ":" + port + path + "\n\t" +
+                "External访问网址: \thttp://" + ip + ":" + port + path + "/login.html\n\t" +
                 "----------------------------------------------------------");
         String jvmName = ManagementFactory.getRuntimeMXBean().getName();
         log.info("当前项目进程号：" + jvmName.split("@")[0]);
