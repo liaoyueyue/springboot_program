@@ -51,4 +51,12 @@ public interface UserMapper {
      */
     int updatePhotoById(@Param("id") Integer id,@Param("photo") String photo);
 
+    /**
+     * 更新用户密码
+     * @param id 用户id
+     * @param newPassword 用户新密码
+     * @return 数据影响行数
+     */
+    int updatePassword(@Param("id") Integer id, @Param("newPassword") String newPassword);
+
 }

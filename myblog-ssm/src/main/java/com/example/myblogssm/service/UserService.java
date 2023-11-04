@@ -37,4 +37,8 @@ public class UserService {
         return userMapper.updatePhotoById(id, photo);
     }
 
+    public int updatePassword(Integer id, String newPassword) {
+        return userMapper.updatePassword(id, newPassword);
+    }
+
 }

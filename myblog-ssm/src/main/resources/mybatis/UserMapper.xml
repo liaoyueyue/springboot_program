@@ -22,13 +22,18 @@
     <update id="updateUser">
         update userinfo
         set nickname   = #{nickname},
-            codecloud   = #{codeCloud},
+            codecloud  = #{codeCloud},
             updatetime = now()
         where id = #{id}
     </update>
     <update id="updatePhotoById">
         update userinfo
         set photo = #{photo}
+        where id = #{id}
+    </update>
+    <update id="updatePassword">
+        update userinfo
+        set password = #{newPassword}
         where id = #{id}
     </update>
 

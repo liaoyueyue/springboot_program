@@ -165,4 +165,25 @@ public class UserController {
         UserSessionUtils.updateSession(request, user);
         return AjaxResult.success(200, result);
     }
+
+    @PostMapping("/updatepassword")
+    public AjaxResult updatePassword(HttpServletRequest request, String password, String newPassword) {
+        // 1.非空校验
+        if (!StringUtils.hasLength(password) || !StringUtils.hasLength(newPassword)) {
+            return AjaxResult.fail(-1, "illegal parameter");
+        }
+        // 2.获取会话中用户信息
+        User user = UserSessionUtils.getSessionUser(request);
+        if (user == null) {
+            return AjaxResult.fail(-1, "illegal request");
+        }
+        // 3.从数据库中获取用户信息并判断密码是否正确
+        user = userService.queryUserById(user.getId());
+        if (PasswordUtils.decrypt(password, user.getPassword())) {
+            // 4. 返回数据
+            int result = userService.updatePassword(user.getId(), PasswordUtils.encrypt(newPassword));
+            return AjaxResult.success(200, result);
+        }
+        return AjaxResult.fail(-1, "illegal request");
+    }
 }
