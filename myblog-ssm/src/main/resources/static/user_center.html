@@ -147,7 +147,7 @@
           type: "post",
           data: {nickname: nickname.val(), codeCloud: codeCloud.val()},
           success: function (result) {
-            if(result != null && result == 200 && result.data == 1) {
+            if(result != null && result.code == 200 && result.data == 1) {
               alert("修改个人信息成功");
               location.reload();
             }else {

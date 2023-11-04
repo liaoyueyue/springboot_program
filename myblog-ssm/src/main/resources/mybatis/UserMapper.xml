@@ -22,7 +22,7 @@
     <update id="updateUser">
         update userinfo
         set nickname   = #{nickname},
-            codecloud   = #{codecloud},
+            codecloud   = #{codeCloud},
             updatetime = now()
         where id = #{id}
     </update>

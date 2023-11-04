@@ -146,7 +146,6 @@ public class UserController {
         return AjaxResult.success(photoPathRelative);
     }
 
-
     @PostMapping("/updateinfo")
     public AjaxResult updateInfo(HttpServletRequest request, User newUser) {
         // 1.非空校验
