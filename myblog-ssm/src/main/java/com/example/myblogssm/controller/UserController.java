@@ -8,7 +8,6 @@ import com.example.myblogssm.entity.User;
 import com.example.myblogssm.entity.vo.UserVo;
 import com.example.myblogssm.service.ArticleService;
 import com.example.myblogssm.service.UserService;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -105,16 +104,6 @@ public class UserController {
         return AjaxResult.success(1);
     }
 
-    @RequestMapping("/upfile")
-    public String upFile(@RequestPart("file") MultipartFile file) throws IOException { // MultipartFile 多部份文件
-        if (file.isEmpty()) {
-            return "not";
-        }
-        String path = "C:\\users\\liaoyueyue\\desktop\\img.png";
-        file.transferTo(new File(path));
-        return path;
-    }
-
     @PostMapping("/updatephoto")
     public AjaxResult updatePhoto(HttpServletRequest request, @RequestPart("photo") MultipartFile photo) throws IOException {
         // 1.非空校验
@@ -159,25 +148,22 @@ public class UserController {
 
 
     @PostMapping("/updateinfo")
-    public AjaxResult updateInfo(HttpServletRequest request, User user) {
-        // 非空校验
-        // 1.获取需要更新的用户信息
-        User newUser = UserSessionUtils.getSessionUser(request);
-        if (newUser == null) {
+    public AjaxResult updateInfo(HttpServletRequest request, User newUser) {
+        // 1.非空校验
+        if (newUser == null || !StringUtils.hasLength(newUser.getNickname()) || !StringUtils.hasLength(newUser.getCodeCloud())) {
+            return AjaxResult.fail(-1, "illegal parameter");
+        }
+        // 2.获取需要更新的用户信息
+        User user = UserSessionUtils.getSessionUser(request);
+        if (user == null) {
             return AjaxResult.fail(-1, "illegal request");
         }
-        // 2.根据需要更新字段进行更新用户信息
-        String newName = user.getUsername();
-        String newPassword = user.getPassword();
-        if (StringUtils.hasLength(newName)) {
-            newUser.setUsername(newName);
-        }
-        if (StringUtils.hasLength(newPassword)) {
-            newUser.setPassword(PasswordUtils.encrypt(newPassword));
-        }
-        // 3.正式更新会话信息和用户信息
-        UserSessionUtils.setSessionUser(request, user);
+        // 3.更新用户信息
+        user.setNickname(newUser.getNickname());
+        user.setCodeCloud(newUser.getCodeCloud());
         int result = userService.updateUser(user);
+        // 4.更新会话信息
+        UserSessionUtils.updateSession(request, user);
         return AjaxResult.success(200, result);
     }
 }

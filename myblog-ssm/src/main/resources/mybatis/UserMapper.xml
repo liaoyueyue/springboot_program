@@ -21,10 +21,8 @@
 
     <update id="updateUser">
         update userinfo
-        set username   = #{username},
-            password   = #{password},
-            photo      = #{photo},
-            email      = #{email},
+        set nickname   = #{nickname},
+            codecloud   = #{codecloud},
             updatetime = now()
         where id = #{id}
     </update>

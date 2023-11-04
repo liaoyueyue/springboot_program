@@ -40,6 +40,10 @@
             </div>
           </div>
           <div class="row">
+            <span>用户名</span>
+            <label id="username">username</label>&nbsp;
+          </div>
+          <div class="row">
             <span>电子邮箱</span>
             <label id="email">123@email.com</label>&nbsp;
             <a href="#" style="color: rgba(128, 128, 128, 1)">编辑</a>
@@ -62,7 +66,7 @@
               placeholder="请输入代码云地址"
             />
           </div>
-          <button type="button" class="save-setting" onclick="">
+          <button type="button" class="save-setting" onclick="updateUserinfo()">
             保存设置
           </button>
         </div>
@@ -120,6 +124,36 @@
               }
             },
           });
+        });
+      }
+
+      function updateUserinfo() {
+        // 1.非空校验
+        let nickname = $("#nickname");
+        let codeCloud = $("#codeCloud");
+        if (nickname.val() == "") {
+          nickname("请先输入昵称！");
+          nickname.focus();
+          return;
+        }
+        if (codeCloud.val() == "") {
+          codeCloud("请先输入代码云！");
+          codeCloud.focus();
+          return;
+        }
+        // 2.发送ajax请求
+        $.ajax({
+          url: "user/updateinfo",
+          type: "post",
+          data: {nickname: nickname.val(), codeCloud: codeCloud.val()},
+          success: function (result) {
+            if(result != null && result == 200 && result.data == 1) {
+              alert("修改个人信息成功");
+              location.reload();
+            }else {
+              alert("修改个人信息失败，请稍后重新尝试！");
+            }
+          }
         });
       }
 
