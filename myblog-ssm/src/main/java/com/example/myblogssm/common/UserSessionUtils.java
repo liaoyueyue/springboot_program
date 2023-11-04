@@ -31,6 +31,7 @@ public class UserSessionUtils {
     }
 
     public static void updateSession(HttpServletRequest request, User user) {
-        return;
+        HttpSession session = request.getSession(false);
+        session.setAttribute(AppConstant.USER_SESSION_KEY, user);
     }
 }

@@ -147,9 +147,9 @@ public class UserController {
             photo.transferTo(new File(photoPathAbsolute));
             // 保存图片相对路径到数据库中
             userService.updatePhotoById(user.getId(), photoPathRelative);
-//            // 更新会话用户信息
-//            user.setPhoto(photoPathRelative);
-//            UserSessionUtils.updateSession(request, user);
+            // 更新用户会话信息
+            user.setPhoto(photoPathRelative);
+            UserSessionUtils.updateSession(request, user);
         } catch (IOException e) {
             e.printStackTrace();
         }
