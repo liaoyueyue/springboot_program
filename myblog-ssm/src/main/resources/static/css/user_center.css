@@ -27,16 +27,43 @@
   align-items: center;
 }
 
+.photo-row {
+  position: relative;
+}
+
+/* 图片叠加效果 */
+.photo-row .image-overlay {
+  position: absolute;
+  top: 21px;
+  left: calc(50% - 150px);
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5); /* 半透明的灰色背景 */
+  opacity: 0; /* 初始时不可见 */
+  transition: opacity 0.3s ease; /* 添加淡入效果 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 24px;
+  text-align: center;
+  cursor: pointer;
+}
+
+/* 鼠标悬停时显示图片叠加效果 */
+.photo-row .image-overlay:hover {
+  opacity: 1;
+}
+
 .user-general-dialog .row span,
 .user-password-dialog .row span,
 .user-general-dialog .photo-row span {
   width: 80px;
 }
 
-#username,
-#password,
-#new-password,
-#new-password-confirm {
+.user-general-dialog .row input,
+.user-password-dialog .row input {
   width: 70%;
   height: 40px;
   font-size: 18px;

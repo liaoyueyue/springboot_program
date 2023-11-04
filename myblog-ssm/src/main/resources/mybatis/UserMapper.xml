@@ -5,8 +5,10 @@
         <id column="id" property="id"/>
         <result column="username" property="username"/>
         <result column="password" property="password"/>
+        <result column="nickname" property="nickname"/>
         <result column="photo" property="photo"/>
         <result column="email" property="email"/>
+        <result column="codecloud" property="codeCloud"/>
         <result column="createtime" property="createTime"/>
         <result column="updatetime" property="updateTime"/>
         <result column="state" property="state"/>
@@ -17,12 +19,29 @@
         values (#{username}, #{password})
     </insert>
 
+    <update id="updateUser">
+        update userinfo
+        set username   = #{username},
+            password   = #{password},
+            photo      = #{photo},
+            email      = #{email},
+            updatetime = now()
+        where id = #{id}
+    </update>
+    <update id="updatePhotoById">
+        update userinfo
+        set photo = #{photo}
+        where id = #{id}
+    </update>
+
     <select id="queryUserByName" resultMap="baseMap">
         select *
         from userinfo
         where username = #{username};
     </select>
     <select id="queryUserById" resultMap="baseMap">
-        select * from userinfo where id = #{id}
+        select *
+        from userinfo
+        where id = #{id}
     </select>
 </mapper>

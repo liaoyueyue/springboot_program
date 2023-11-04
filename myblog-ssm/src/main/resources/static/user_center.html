@@ -28,13 +28,14 @@
           <div class="photo-row">
             <span>头像</span>
             <img src="../images/logo.jpg" alt="个人头像" />
+            <div class="image-overlay" onclick="updatePhoto()">更改头像</div>
             <div class="update-photo">
-              <span>修改头像</span>
               <input
                 type="file"
                 name="photo"
                 id="photo-file"
                 accept="image/*"
+                style="display: none"
               />
             </div>
           </div>
@@ -44,15 +45,24 @@
             <a href="#" style="color: rgba(128, 128, 128, 1)">编辑</a>
           </div>
           <div class="row">
-            <span>用户名</span>
+            <span>用户昵称</span>
             <input
               type="text"
-              id="username"
-              name="username"
-              placeholder="请输入用户名"
+              id="nickname"
+              name="nickname"
+              placeholder="请输入用户昵称"
             />
           </div>
-          <button type="button" class="save-setting" onclick="updateUserInfo()">
+          <div class="row">
+            <span>代码云</span>
+            <input
+              type="text"
+              id="codeCloud"
+              name="codeCloud"
+              placeholder="请输入代码云地址"
+            />
+          </div>
+          <button type="button" class="save-setting" onclick="">
             保存设置
           </button>
         </div>
@@ -80,51 +90,39 @@
               placeholder="请再次输入新密码"
             />
           </div>
-          <button
-            type="button"
-            class="save-setting"
-            onclick="updateUserPassword()"
-          >
+          <button type="button" class="save-setting" onclick="">
             保存设置
           </button>
         </div>
       </div>
     </div>
     <script>
-      function updateUserInfo() {
-        // 1.非空校验
-        let username = $("#username");
+      function updatePhoto() {
         let photoFile = $("#photo-file");
-        if (username.val() == "") {
-          alert("请先输入用户名！");
-          username.focus();
-          return;
-        }
-        if (photoFile[0].files.length <= 0) {
-          alert("请先选择头像！");
-          return;
-        }
-        // 2.创建表单数据
-        let formData = new FormData();
-        formData.append("username", username);
-        formData.append("photo", photoFile[0].files[0]);
-        // 3.提交 ajax 请求
-        $.ajax({
-          url: "/user/updateinfo",
-          type: "post",
-          data: formData,
-          cache: false, //上传文件不需要缓存
-          processData: false, // 告诉jQuery不要去处理发送的数据
-          contentType: false, // 告诉jQuery不要去设置Content-Type请求头
-          success: function (result) {
-            if (result != null && result.code == 200) {
-              alert("修改基本资料成功");
-            } else {
-              alert("修改基本资料失败，请稍后重试");
-            }
-          },
+        photoFile.click();
+        photoFile.change(function () {
+          // 创建表单数据
+          let formData = new FormData();
+          formData.append("photo", photoFile[0].files[0]);
+          // ajax请求
+          $.ajax({
+            url: "user/updatephoto",
+            type: "post",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (result) {
+              if (result != null && result.code == 200) {
+                alert("头像修改成功!");
+                location.reload();
+              } else {
+                alert("头像上传失败，请稍后重试！");
+              }
+            },
+          });
         });
       }
+
       function updateUserPassword() {
         // 1.非空校验
         let password = $("#password");
@@ -151,7 +149,25 @@
           password.focus();
           return;
         }
-        // 3.提交 ajax 请求
+        // 3.创建表单数据
+        let user = {
+          password: newPassword.val(),
+        };
+        // 4.提交 ajax 请求
+        $.ajax({
+          url: "user/updateinfo",
+          type: "post",
+          data: JSON.stringify(user),
+          success: function (result) {
+            if (result != null && result.code == 200 && result.data == 1) {
+              if (result != null && result.code == 200 && result.data == 1) {
+                alert("修改密码成功");
+              } else {
+                alert("修改密码失败，请稍后重试");
+              }
+            }
+          },
+        });
       }
 
       function displayGeneralDialog() {

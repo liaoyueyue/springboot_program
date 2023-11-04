@@ -31,9 +31,24 @@ public interface UserMapper {
 
     /**
      * 使用 id 查询用户 -用于博客详情页获取作者信息
-     * @param id 用户id
+     * @param id 用户编号
      * @return 用户实体
      */
     User queryUserById(@Param("id") Integer id);
+
+    /**
+     * 更新用户信息
+     * @param user 用户实体
+     * @return 数据库受影响行数
+     */
+    int updateUser(User user);
+
+    /**
+     * 更新用户头像
+     * @param id 用户编号
+     * @param photo 用户头像
+     * @return 数据库受影响行数
+     */
+    int updatePhotoById(@Param("id") Integer id,@Param("photo") String photo);
 
 }

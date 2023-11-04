@@ -28,4 +28,13 @@ public class UserService {
     public User queryUserById(Integer id) {
         return userMapper.queryUserById(id);
     }
+
+    public int updateUser(User user) {
+        return userMapper.updateUser(user);
+    }
+
+    public int updatePhotoById(Integer id, String photo) {
+        return userMapper.updatePhotoById(id, photo);
+    }
+
 }

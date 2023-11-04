@@ -24,4 +24,13 @@ public class UserSessionUtils {
         }
         return null;
     }
+
+    public static void setSessionUser(HttpServletRequest request, User user) {
+        HttpSession session = request.getSession();
+        session.setAttribute(AppConstant.USER_SESSION_KEY, user);
+    }
+
+    public static void updateSession(HttpServletRequest request, User user) {
+        return;
+    }
 }

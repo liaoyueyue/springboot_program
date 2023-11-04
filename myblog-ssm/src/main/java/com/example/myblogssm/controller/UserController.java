@@ -8,14 +8,12 @@ import com.example.myblogssm.entity.User;
 import com.example.myblogssm.entity.vo.UserVo;
 import com.example.myblogssm.service.ArticleService;
 import com.example.myblogssm.service.UserService;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -63,8 +61,7 @@ public class UserController {
             // 有效的用户, 判断密码
             if (PasswordUtils.decrypt(password, user.getPassword())) {
                 user.setPassword("");
-                HttpSession session = request.getSession();
-                session.setAttribute(AppConstant.USER_SESSION_KEY, user);
+                UserSessionUtils.setSessionUser(request, user);
                 return AjaxResult.success(user);
             }
         }
@@ -108,19 +105,79 @@ public class UserController {
         return AjaxResult.success(1);
     }
 
-    @PostMapping("/updateinfo")
-    public AjaxResult updateInfo(@RequestPart("photo") MultipartFile photo) throws IOException {
-        //获取文件名
-        String fileName = photo.getOriginalFilename();
-        //获取文件后缀名
-        String suffixName = fileName.substring(fileName.lastIndexOf("."));
-        //重新生成文件名
-        fileName = UUID.randomUUID().toString().replace("-", "")+suffixName;
-        //指定本地文件夹存储图片，写到需要保存的目录下
-        String filePath = "C:\\users\\liaoyueyue\\desktop\\";
-        //将图片保存到static文件夹里
-        photo.transferTo(new File(filePath+fileName));
-        return AjaxResult.success(200);
+    @RequestMapping("/upfile")
+    public String upFile(@RequestPart("file") MultipartFile file) throws IOException { // MultipartFile 多部份文件
+        if (file.isEmpty()) {
+            return "not";
+        }
+        String path = "C:\\users\\liaoyueyue\\desktop\\img.png";
+        file.transferTo(new File(path));
+        return path;
     }
 
+    @PostMapping("/updatephoto")
+    public AjaxResult updatePhoto(HttpServletRequest request, @RequestPart("photo") MultipartFile photo) throws IOException {
+        // 1.非空校验
+        if (photo.isEmpty()) {
+            return AjaxResult.fail(403, "Image error");
+        }
+        // 2.获取需要更新头像的用户信息
+        User user = UserSessionUtils.getSessionUser(request);
+        if (user == null) {
+            return AjaxResult.fail(-1, "illegal request");
+        }
+        // 3.用户不是默认头像需要修改头像
+        if (!user.getPhoto().equals("images/defaultPhoto.jpg")) {
+            // 删除旧头像
+            File file = new File(AppConstant.IMG_PATH_ABSOLUTE + user.getPhoto());
+            file.delete();
+        }
+        // 3.处理文件名和路径
+        // 获取用户上传的文件名
+        String fileName = photo.getOriginalFilename();
+        // 获取文件后缀名
+        String suffixName = fileName.substring(fileName.lastIndexOf("."));
+        // 重新生成文件名
+        fileName = UUID.randomUUID().toString().replace("-", "") + suffixName;
+        // 图片保存路径-绝对路径用来保存文件，相对路径提供给浏览器访问
+        String photoPathAbsolute = AppConstant.IMG_PATH_ABSOLUTE + fileName; //绝对路径
+        String photoPathRelative = AppConstant.IMG_PATH_RELATIVE + fileName; //相对路径
+        try {
+            // 将上传文件绝对路径保存到服务器文件夹
+            photo.transferTo(new File(photoPathAbsolute));
+            // 保存图片相对路径到数据库中
+            userService.updatePhotoById(user.getId(), photoPathRelative);
+//            // 更新会话用户信息
+//            user.setPhoto(photoPathRelative);
+//            UserSessionUtils.updateSession(request, user);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // 将图片相对路径返回给前端
+        return AjaxResult.success(photoPathRelative);
+    }
+
+
+    @PostMapping("/updateinfo")
+    public AjaxResult updateInfo(HttpServletRequest request, User user) {
+        // 非空校验
+        // 1.获取需要更新的用户信息
+        User newUser = UserSessionUtils.getSessionUser(request);
+        if (newUser == null) {
+            return AjaxResult.fail(-1, "illegal request");
+        }
+        // 2.根据需要更新字段进行更新用户信息
+        String newName = user.getUsername();
+        String newPassword = user.getPassword();
+        if (StringUtils.hasLength(newName)) {
+            newUser.setUsername(newName);
+        }
+        if (StringUtils.hasLength(newPassword)) {
+            newUser.setPassword(PasswordUtils.encrypt(newPassword));
+        }
+        // 3.正式更新会话信息和用户信息
+        UserSessionUtils.setSessionUser(request, user);
+        int result = userService.updateUser(user);
+        return AjaxResult.success(200, result);
+    }
 }
