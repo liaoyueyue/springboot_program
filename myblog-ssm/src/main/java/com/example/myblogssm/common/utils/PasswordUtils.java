@@ -1,4 +1,4 @@
-package com.example.myblogssm.common;
+package com.example.myblogssm.common.utils;
 
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;

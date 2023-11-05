@@ -208,6 +208,9 @@
       }
 
       function displayPasswordDialog() {
+        $("#password").val("");
+        $("#new-password").val("");
+        $("#new-password-confirm").val("");
         $(".user-general-dialog").css("display", "none");
         $(".user-password-dialog").css("display", "inline");
       }

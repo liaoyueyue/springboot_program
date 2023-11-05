@@ -15,8 +15,8 @@
     </resultMap>
 
     <insert id="addUser">
-        insert into userinfo(username, password)
-        values (#{username}, #{password})
+        insert into userinfo(username, password, nickname)
+        values (#{username}, #{password}, #{nickname})
     </insert>
 
     <update id="updateUser">
@@ -46,5 +46,15 @@
         select *
         from userinfo
         where id = #{id}
+    </select>
+    <select id="queryUsernameExist" resultType="java.lang.Integer">
+        select count(*)
+        from userinfo
+        where username = #{username};
+    </select>
+    <select id="queryEmailExist" resultType="java.lang.Integer">
+        select count(*)
+        from userinfo
+        where email = #{email};
     </select>
 </mapper>

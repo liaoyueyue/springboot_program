@@ -1,15 +1,15 @@
 package com.example.myblogssm.controller;
 
-import com.example.myblogssm.common.AjaxResult;
-import com.example.myblogssm.common.AppConstant;
-import com.example.myblogssm.common.PasswordUtils;
-import com.example.myblogssm.common.UserSessionUtils;
+import com.example.myblogssm.common.*;
+import com.example.myblogssm.common.utils.*;
 import com.example.myblogssm.entity.User;
 import com.example.myblogssm.entity.vo.UserVo;
 import com.example.myblogssm.service.ArticleService;
+import com.example.myblogssm.service.EmailService;
 import com.example.myblogssm.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.UUID;
 
 /**
@@ -38,19 +39,51 @@ public class UserController {
     @Autowired
     ArticleService articleService;
 
+    @Autowired
+    EmailService emailService;
+
+    @Autowired
+    RedisTemplate redisTemplate;
+
     @PostMapping("/register")
-    public AjaxResult register(User user) {
-        // 非空校验
-        if (user == null || !StringUtils.hasLength(user.getUsername()) || !StringUtils.hasLength(user.getPassword())) {
-            return AjaxResult.fail(-1, "username or password not found");
+    public AjaxResult register(User user, String emailCode) {
+        // 1.非空校验
+        if (user == null || !StringUtils.hasLength(user.getNickname()) || !StringUtils.hasLength(user.getPassword()) || !StringUtils.hasLength(user.getEmail()) || !StringUtils.hasLength(emailCode)) {
+            return AjaxResult.fail(-1, "illegal request");
         }
+        // 2. 邮箱校验
+        // 邮箱格式判断
+        if (!EmailValidatorUtils.isEmailValid(user.getEmail())) {
+            return AjaxResult.fail(-1, "Email is illegal");
+        }
+        // 邮箱是否存在
+        int emailExist = userService.queryEmailExist(user.getEmail());
+        if (emailExist > 0) {
+            return AjaxResult.fail(-1, "Email already exists");
+        }
+        // 发送6位验证码到用户邮箱
+        String verificationCode = VerificationCodeUtils.generateCode(6);
+        emailService.sendVerificationCode(user.getEmail(), verificationCode);
+        // 验证码校验
+        if (!verificationCode.equals(emailCode)) {
+            return AjaxResult.fail(-1, "Verification code error");
+        }
+        // 3.生成用户
+        // 生成唯一用户名
+        String uniqueUsername = UniqueUsernameUtils.getUsername(user.getNickname(), userService);
+        user.setUsername(uniqueUsername);
         // 给密码加密
         user.setPassword(PasswordUtils.encrypt(user.getPassword()));
-        return AjaxResult.success(userService.addUser(user));
+        int count = userService.addUser(user);
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("count", count);
+        result.put("username", uniqueUsername);
+        return AjaxResult.success(result);
     }
 
     @PostMapping("/login")
     public AjaxResult login(HttpServletRequest request, String username, String password) {
+        System.out.println(request.getHeader("User-Agent"));
         // 非空校验
         if (!StringUtils.hasLength(username) || !StringUtils.hasLength(password)) {
             return AjaxResult.fail(-1, "illegal request");

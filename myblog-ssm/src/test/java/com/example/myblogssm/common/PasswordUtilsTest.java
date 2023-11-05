@@ -1,5 +1,6 @@
 package com.example.myblogssm.common;
 
+import com.example.myblogssm.common.utils.PasswordUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

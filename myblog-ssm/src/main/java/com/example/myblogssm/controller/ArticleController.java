@@ -1,7 +1,7 @@
 package com.example.myblogssm.controller;
 
 import com.example.myblogssm.common.AjaxResult;
-import com.example.myblogssm.common.UserSessionUtils;
+import com.example.myblogssm.common.utils.UserSessionUtils;
 import com.example.myblogssm.entity.Article;
 import com.example.myblogssm.entity.User;
 import com.example.myblogssm.service.ArticleService;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 

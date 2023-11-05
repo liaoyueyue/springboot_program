@@ -1,5 +1,6 @@
-package com.example.myblogssm.common;
+package com.example.myblogssm.common.utils;
 
+import com.example.myblogssm.common.AppConstant;
 import com.example.myblogssm.entity.User;
 
 import javax.servlet.http.HttpServletRequest;

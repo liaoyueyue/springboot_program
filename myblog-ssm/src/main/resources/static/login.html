@@ -25,25 +25,69 @@
     </div>
 
     <div class="login-container">
-      <div class="login-dialog">
+      <div id="login-dialog" class="dialog-container">
         <h3 id="title">登录</h3>
         <div class="tips">
           <span onclick="switchFunction()">没有账号？点击这里创建</span>
         </div>
         <div class="row">
           <span>用户名</span>
-          <input type="text" id="username" name="username" placeholder="请输入用户名" required />
+          <input type="text" id="login-username" placeholder="请输入用户名" />
         </div>
         <div class="row">
           <span>密码</span>
-          <input type="password" id="password" name="password" placeholder="请输入密码" required />
-        </div>
-        <div class="row" id="confirm-password-row" style="display: none">
-          <span>确认密码</span>
-          <input type="password" id="confirm-password" placeholder="请再次输入密码" />
+          <input type="password" id="login-password" placeholder="请输入密码" />
         </div>
         <div class="row">
           <button id="login-btn" type="submit" onclick="login()">登录</button>
+        </div>
+      </div>
+      <!-- ----------------------------- -->
+      <div id="register-dialog" class="dialog-container" style="display: none">
+        <h3 id="title">注册</h3>
+        <div class="tips">
+          <span onclick="switchFunction()">已有账号？点击这里登录</span>
+        </div>
+        <div class="row">
+          <span>昵称</span>
+          <input
+            type="text"
+            id="register-nickname"
+            placeholder="请输入昵称"
+          />
+        </div>
+        <div class="row">
+          <span>密码</span>
+          <input
+            type="password"
+            id="register-password"
+            placeholder="请输入密码"
+          />
+        </div>
+        <div class="row">
+          <span>邮箱</span>
+          <input
+            type="text"
+            id="register-email"
+            placeholder="请输入邮箱"
+            onclick="showEmailCodeInput()"
+          />
+        </div>
+        <div class="row" id="email-code-row" style="display: none">
+          <div id="email-code-div">
+            <span>验证码</span>
+            <input
+              type="text"
+              id="register-email-code"
+              placeholder="请输入验证码"
+            />
+            <label onclick="sendEmailCode()">发送</label>
+          </div>
+        </div>
+        <div class="row">
+          <button id="register-btn" type="submit" onclick="register()">
+            注册
+          </button>
         </div>
       </div>
     </div>
@@ -51,49 +95,42 @@
     <script>
       let flag = 1;
       function switchFunction() {
-        let dialog = $(".login-dialog");
-        let title = $("#title");
-        let tips = $(".tips span");
-        let confirmPasswordRow = $("#confirm-password-row");
-        let confirmPassword = $("#confirm-password");
-        let loginBtn = $("#login-btn");
         if (flag) {
-          //这里flag为真，默认登录功能，注册功能隐藏
+          // 这里flag为真，默认登录功能，注册功能隐藏
           flag = 0;
           // 设置flag=0后应改：注册功能显示，登录功能隐藏
-          dialog.css("height", "360px");
-          title.text("注册");
-          tips.text("已有账号？点击这里登录");
-          $("#username").val("");
-          $("#password").val("");
-          confirmPasswordRow.css("display", "flex");
-          confirmPassword.attr("required", "true");
-          loginBtn.attr("onclick", "register()");
-          loginBtn.text("注册");
+          $("#login-dialog").hide();
+          $("#email-code-row").hide();
+          $("#register-dialog").show();
+          $(".dialog-container").css("height", "360px");
         } else {
           //这里flag为假，注册功能显示，登录功能隐藏
           flag = 1;
           // 设置flag=1后应改：默认登录功能，注册功能隐藏
-          dialog.css("height", "");
-          title.text("登录");
-          tips.text("没有账号？点击这里创建");
-          $("#username").val("");
-          $("#password").val("");
-          confirmPasswordRow.css("display", "none");
-          confirmPassword.removeAttr("required");
-          loginBtn.attr("onclick", "login()");
-          loginBtn.text("登录");
+          $("#register-dialog").hide();
+          $("#login-dialog").show();
+          $(".dialog-container").css("height", "310px");
         }
+      }
+
+      function showEmailCodeInput() {
+        $(".dialog-container").css("height", "410px");
+        $("#email-code-row").show();
+      }
+
+      function sendEmailCode() {
+        alert("已经发送验证码到邮箱");
       }
 
       function register() {
         // 1.非空校验
-        let username = $("#username");
-        let password = $("#password");
-        let confirmPassword = $("#confirm-password");
-        if (username.val() == "") {
-          alert("请先输入用户名！");
-          username.focus(); // 设置用户光标到用户名输入框
+        let nickname = $("#register-nickname");
+        let password = $("#register-password");
+        let email = $("#register-email");
+        let emailCode = $("#register-email-code");
+        if (nickname.val() == "") {
+          alert("请先输入昵称！");
+          nickname.focus(); // 设置用户光标到用户名输入框
           return;
         }
         if (password.val() == "") {
@@ -101,28 +138,34 @@
           password.focus();
           return;
         }
-        if (confirmPassword.val() == "") {
-          alert("请先输入确认密码！");
-          confirmPassword.focus();
+        if (email.val() == "") {
+          alert("请先输入邮箱！");
+          email.focus();
           return;
         }
-        // 2.判断两次密码是否相等
-        if (password.val() != confirmPassword.val()) {
-          alert("两次密码不一致请重新输入！");
-          password.focus();
+        if (emailCode.val() == "") {
+          alert("请先输入验证码！");
+          emailCode.focus();
           return;
         }
-        // 3.提交 ajax 请求
+        // 2.提交 ajax 请求
         $.ajax({
           url: "/user/register",
           type: "post",
-          data: { username: username.val(), password: password.val() },
+          data: {
+            nickname: nickname.val(),
+            password: password.val(),
+            email: email.val(),
+            emailCode: emailCode.val(),
+          },
           success: function (result) {
             // 相应的结果
-            if (result != null && result.code == 200 && result.data == 1) {
+            if (result != null && result.code == 200 && result.data.count == 1) {
               // 执行成功,跳转到登录页面
               if (
-                confirm(username.val() + "注册成功，是否需要跳转至登录界面！")
+                confirm(
+                  "注册成功：" + result.data.username + "，请牢记账号，是否需要跳转至登录界面！"
+                )
               ) {
                 // jQuery(window).attr("location", "login.html");
                 location.href = "login.html";
@@ -136,8 +179,8 @@
 
       function login() {
         // 1.非空校验
-        let username = $("#username");
-        let password = $("#password");
+        let username = $("#login-username");
+        let password = $("#login-password");
         if (username.val() == "") {
           alert("请先输入用户名！");
           username.focus();

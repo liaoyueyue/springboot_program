@@ -41,4 +41,11 @@ public class UserService {
         return userMapper.updatePassword(id, newPassword);
     }
 
+    public int queryUsernameExist(String username) {
+        return userMapper.queryUsernameExist(username);
+    }
+    public int queryEmailExist(String email) {
+        return userMapper.queryEmailExist(email);
+    }
+
 }

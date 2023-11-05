@@ -59,4 +59,18 @@ public interface UserMapper {
      */
     int updatePassword(@Param("id") Integer id, @Param("newPassword") String newPassword);
 
+    /**
+     * 查询用户名是否已经存在
+     * @param username 用户名
+     * @return 数据库影响行数
+     */
+    int queryUsernameExist(@Param("username") String username);
+
+    /**
+     * 查询用户名是否已经存在
+     * @param email 邮箱
+     * @return 数据库影响行数
+     */
+    int queryEmailExist(@Param("email") String email);
+
 }
