@@ -50,11 +50,7 @@
         </div>
         <div class="row">
           <span>昵称</span>
-          <input
-            type="text"
-            id="register-nickname"
-            placeholder="请输入昵称"
-          />
+          <input type="text" id="register-nickname" placeholder="请输入昵称" />
         </div>
         <div class="row">
           <span>密码</span>
@@ -73,15 +69,15 @@
             onclick="showEmailCodeInput()"
           />
         </div>
-        <div class="row" id="email-code-row" style="display: none">
-          <div id="email-code-div">
+        <div class="row" id="verification-code-row" style="display: none">
+          <div id="verification-code-div">
             <span>验证码</span>
             <input
               type="text"
-              id="register-email-code"
+              id="register-verification-code"
               placeholder="请输入验证码"
             />
-            <label onclick="sendEmailCode()">发送</label>
+            <label onclick="sendVerificationCode()">发送</label>
           </div>
         </div>
         <div class="row">
@@ -100,7 +96,7 @@
           flag = 0;
           // 设置flag=0后应改：注册功能显示，登录功能隐藏
           $("#login-dialog").hide();
-          $("#email-code-row").hide();
+          $("#verification-code-row").hide();
           $("#register-dialog").show();
           $(".dialog-container").css("height", "360px");
         } else {
@@ -115,11 +111,34 @@
 
       function showEmailCodeInput() {
         $(".dialog-container").css("height", "410px");
-        $("#email-code-row").show();
+        $("#verification-code-row").show();
       }
 
-      function sendEmailCode() {
-        alert("已经发送验证码到邮箱");
+      function sendVerificationCode() {
+        let email = $("#register-email");
+        // 1.非空校验
+        if (email.val() == "") {
+          alert("请先输入邮箱！");
+          email.focus();
+          return;
+        }
+        // 2.提交 ajax 请求
+        $.ajax({
+          url: "/email/sendverificationcode",
+          type: "post",
+          data: { email: email.val() },
+          success: function (result) {
+            if (result != null && result.code == 200) {
+              alert("发送验证码成功，请到邮箱查看！");
+            } else if (result != null && result.msg == "Email is illegal") {
+              alert("请检查您的邮箱格式！");
+            } else if (result != null && result.msg == "Email already exists") {
+              alert("该邮箱已经被注册");
+            } else {
+              alert("抱歉执行失败，请稍后再试！");
+            }
+          },
+        });
       }
 
       function register() {
@@ -127,7 +146,7 @@
         let nickname = $("#register-nickname");
         let password = $("#register-password");
         let email = $("#register-email");
-        let emailCode = $("#register-email-code");
+        let verificationCode = $("#register-verification-code");
         if (nickname.val() == "") {
           alert("请先输入昵称！");
           nickname.focus(); // 设置用户光标到用户名输入框
@@ -143,9 +162,9 @@
           email.focus();
           return;
         }
-        if (emailCode.val() == "") {
+        if (verificationCode.val() == "") {
           alert("请先输入验证码！");
-          emailCode.focus();
+          verificationCode.focus();
           return;
         }
         // 2.提交 ajax 请求
@@ -156,20 +175,31 @@
             nickname: nickname.val(),
             password: password.val(),
             email: email.val(),
-            emailCode: emailCode.val(),
+            verificationCode: verificationCode.val(),
           },
           success: function (result) {
             // 相应的结果
-            if (result != null && result.code == 200 && result.data.count == 1) {
+            if (
+              result != null &&
+              result.code == 200 &&
+              result.data.count == 1
+            ) {
               // 执行成功,跳转到登录页面
               if (
                 confirm(
-                  "注册成功：" + result.data.username + "，请牢记账号，是否需要跳转至登录界面！"
+                  "注册成功：" +
+                    result.data.username +
+                    "，请牢记账号，是否需要跳转至登录界面！"
                 )
               ) {
                 // jQuery(window).attr("location", "login.html");
                 location.href = "login.html";
               }
+            } else if (
+              result != null &&
+              result.msg == "Verification code error"
+            ) {
+              alert("验证码错误，请检查后重试");
             } else {
               alert("抱歉执行失败，请稍后再试！");
             }

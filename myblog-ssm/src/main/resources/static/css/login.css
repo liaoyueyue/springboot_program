@@ -73,14 +73,14 @@
   background-color: grey;
 }
 
-#email-code-div {
+#verification-code-div {
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-#email-code-row label {
+#verification-code-row label {
   color: #aab2bd;
   font-size: 12px;
   position: absolute;
@@ -89,6 +89,6 @@
   cursor: pointer;
 }
 
-#email-code-row label:hover {
+#verification-code-rowlabel:hover {
   text-decoration: underline;
 }

@@ -9,7 +9,6 @@ import com.example.myblogssm.service.EmailService;
 import com.example.myblogssm.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -42,30 +41,14 @@ public class UserController {
     @Autowired
     EmailService emailService;
 
-    @Autowired
-    RedisTemplate redisTemplate;
-
     @PostMapping("/register")
-    public AjaxResult register(User user, String emailCode) {
+    public AjaxResult register(User user, String verificationCode) {
         // 1.非空校验
-        if (user == null || !StringUtils.hasLength(user.getNickname()) || !StringUtils.hasLength(user.getPassword()) || !StringUtils.hasLength(user.getEmail()) || !StringUtils.hasLength(emailCode)) {
+        if (user == null || !StringUtils.hasLength(user.getNickname()) || !StringUtils.hasLength(user.getPassword()) || !StringUtils.hasLength(user.getEmail()) || !StringUtils.hasLength(verificationCode)) {
             return AjaxResult.fail(-1, "illegal request");
         }
-        // 2. 邮箱校验
-        // 邮箱格式判断
-        if (!EmailValidatorUtils.isEmailValid(user.getEmail())) {
-            return AjaxResult.fail(-1, "Email is illegal");
-        }
-        // 邮箱是否存在
-        int emailExist = userService.queryEmailExist(user.getEmail());
-        if (emailExist > 0) {
-            return AjaxResult.fail(-1, "Email already exists");
-        }
-        // 发送6位验证码到用户邮箱
-        String verificationCode = VerificationCodeUtils.generateCode(6);
-        emailService.sendVerificationCode(user.getEmail(), verificationCode);
-        // 验证码校验
-        if (!verificationCode.equals(emailCode)) {
+        // 2. 邮箱验证码校验
+        if (!verificationCode.equals(emailService.getVerificationCode(user.getEmail()))) {
             return AjaxResult.fail(-1, "Verification code error");
         }
         // 3.生成用户

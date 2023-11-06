@@ -1,31 +1,57 @@
 package com.example.myblogssm.controller;
 
-import com.example.myblogssm.common.utils.VerificationCodeUtils;
+import com.example.myblogssm.common.AjaxResult;
+import com.example.myblogssm.common.utils.EmailUtils;
 import com.example.myblogssm.service.EmailService;
+import com.example.myblogssm.service.UserService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * Created with IntelliJ IDEA.
  * Description:
  * User: liaoyueyue
  * Date: 2023-11-06
- * Time: 0:45
+ * Time: 23:47
  */
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-@RestController
+@Controller
+@ResponseBody
+@Slf4j
+@RequestMapping("/email")
 public class EmailController {
-    private final EmailService emailService;
-
-    public EmailController(EmailService emailService) {
-        this.emailService = emailService;
-    }
-
+    @Autowired
+    EmailService emailService;
+    @Autowired
+    UserService userService;
     @PostMapping("/sendverificationcode")
-    public void sendVerificationCode(String email) {
-        String code = VerificationCodeUtils.generateCode(6); // 生成6位验证码
-        emailService.sendVerificationCode(email, code);
+    public AjaxResult sendVerificationCode(String email) {
+        // 1.非空验证
+        if (!StringUtils.hasLength(email)) {
+            return AjaxResult.fail(-1, "illegal request");
+        }
+        // 2.邮箱校验
+        // 邮箱格式判断
+        if (!EmailUtils.isEmailValid(email)) {
+            return AjaxResult.fail(-1, "Email is illegal");
+        }
+        // 邮箱是否存在
+        int emailExist = userService.queryEmailExist(email);
+        if (emailExist > 0) {
+            return AjaxResult.fail(-1, "Email already exists");
+        }
+        // 3.发送6位验证码到用户邮箱
+        try {
+            String verificationCode = emailService.generateAndStoreVerificationCode(email);
+            emailService.sendVerificationCode(email, verificationCode);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("发送验证码邮件时发生异常了！", e);
+        }
+        return AjaxResult.success(200, "Successfully sent");
     }
 }
-
