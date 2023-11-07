@@ -47,10 +47,17 @@ public class UserController {
         if (user == null || !StringUtils.hasLength(user.getNickname()) || !StringUtils.hasLength(user.getPassword()) || !StringUtils.hasLength(user.getEmail()) || !StringUtils.hasLength(verificationCode)) {
             return AjaxResult.fail(-1, "illegal request");
         }
+        String userEmail = user.getEmail();
         // 2. 邮箱验证码校验
-        if (!verificationCode.equals(emailService.getVerificationCode(user.getEmail()))) {
+        if (!verificationCode.equals(emailService.getVerificationCode(userEmail))) {
             return AjaxResult.fail(-1, "Verification code error");
         }
+        // 检查邮箱验证码是否有效
+        if (!emailService.isVerificationCodeValid(userEmail, verificationCode)) {
+            return AjaxResult.fail(-1, "Verification code expired");
+        }
+        // 邮箱验证码有效，删除Redis中的验证码，执行注册操作
+        emailService.deleteVerificationCode(userEmail);
         // 3.生成用户
         // 生成唯一用户名
         String uniqueUsername = UniqueUsernameUtils.getUsername(user.getNickname(), userService);

@@ -54,6 +54,8 @@
             下一页
           </button>
           <button class="blog-pagnation-item" onclick="lastPage()">末页</button>
+          <input type="text" name="pageIndex" id="page-navgation-index" />
+          <button class="blog-pagnation-item" onclick="jumpPage()">跳转</button>
         </div>
       </div>
     </div>
@@ -131,6 +133,23 @@
           return;
         }
         location.href = "blog_list_comm.html?pageIndex=" + pageCount;
+      }
+
+      function jumpPage() {
+        let jumpPageIndex = $("#page-navgation-index").val();
+        if (jumpPageIndex <= 0) {
+          jumpPageIndex = "";
+          alert("页面非法请重新输入");
+          return;
+        }else if(jumpPageIndex >= pageCount) {
+          jumpPageIndex = "";
+          alert("没有这么多页数,为你跳转到末页");
+          location.href = "blog_list_comm.html?pageIndex=" + pageCount;
+          return;
+        } else {
+          location.href =
+          "blog_list_comm.html?pageIndex=" + jumpPageIndex;
+        }
       }
 
       function getUrlValue(key) {

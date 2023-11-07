@@ -59,4 +59,25 @@ public class EmailService {
         String key = "verification_code:" + email;
         return (String) redisTemplate.opsForValue().get(key);
     }
+
+    /**
+     * 检查验证码是否还有效
+     * @param email 邮箱
+     * @param code 验证码
+     * @return
+     */
+    public boolean isVerificationCodeValid(String email, String code) {
+        // 拿 redis 中的验证码
+        String storedCode = getVerificationCode(email);
+        return code != null && code.equals(storedCode);
+    }
+
+    /**
+     * 删除Redis中的验证码，用户登录后可以先检验是否有效后进行删除
+     * @param email 邮箱
+     */
+    public void deleteVerificationCode(String email) {
+        String key = "verification_code:" + email;
+        redisTemplate.delete(key);
+    }
 }
