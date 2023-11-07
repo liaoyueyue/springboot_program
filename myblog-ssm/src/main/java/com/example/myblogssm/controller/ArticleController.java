@@ -1,6 +1,7 @@
 package com.example.myblogssm.controller;
 
 import com.example.myblogssm.common.AjaxResult;
+import com.example.myblogssm.common.utils.ArticleListUtils;
 import com.example.myblogssm.common.utils.UserSessionUtils;
 import com.example.myblogssm.entity.Article;
 import com.example.myblogssm.entity.User;
@@ -38,12 +39,8 @@ public class ArticleController {
         }
         List<Article> articleList = articleService.qryUserArtListByUid(user.getId());
         if (!articleList.isEmpty()) {
-            for (Article a : articleList) {
-                String content = a.getContent();
-                if (content.length() > 100) {
-                    a.setContent(content.substring(0, 120) + "...");
-                }
-            }
+            // 限制单篇文章在文章列表页的字数并去除Markdown标记并提取纯文本
+            ArticleListUtils.limitWordCountAndRemoveMarkdownTags(articleList, 120);
         }
         return AjaxResult.success(articleList);
     }
@@ -114,13 +111,8 @@ public class ArticleController {
         if (articleList.isEmpty()) {
             return AjaxResult.fail(-1, "illegal request");
         }
-        // 限制文章在文章列表页的字数
-        for (Article a : articleList) {
-            String content = a.getContent();
-            if (content.length() > 100) {
-                a.setContent(content.substring(0, 120) + "...");
-            }
-        }
+        // 限制单篇文章在文章列表页的字数并去除Markdown标记并提取纯文本
+        ArticleListUtils.limitWordCountAndRemoveMarkdownTags(articleList, 120);
         // 当前页面一共多少页
         // a) 查询文章总数
         int articleCount = articleService.queryArticleCount();
