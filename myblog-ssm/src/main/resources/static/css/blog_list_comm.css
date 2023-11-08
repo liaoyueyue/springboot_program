@@ -1,3 +1,11 @@
+.search-div input {
+  height: 32px;
+  width: 320px;
+  border: 0.1px solid #6666;
+  border-radius: 10px;
+  background-color: #f5f6f7;
+}
+
 .blog-pagnation-wrapper {
   height: 40px;
   margin: 16px 0;

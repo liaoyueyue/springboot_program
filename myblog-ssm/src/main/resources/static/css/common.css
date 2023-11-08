@@ -28,14 +28,14 @@ input::-webkit-input-placeholder {
 }
 
 .nav-wrapper {
-  background-color: rgba(50, 50, 50, 0.2);
+  background-color: rgba(255, 255, 255, 0.8);
 }
 
 .nav {
   height: 50px;
   width: 1000px;
   margin: 0 auto;
-  color: white;
+  color: #333333;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -55,19 +55,19 @@ input::-webkit-input-placeholder {
 }
 
 .nav .menu a {
-  color: white;
   text-decoration: none;
+  color: #333333;
   padding: 0 10px;
   height: 40px;
   display: inline-flex;
   align-items: center;
   border-radius: 4px;
-  transition: all 0.7s;
+  transition: all 0.4s;
 }
 
 .nav .menu a:hover {
-  background-color: pink;
-  text-decoration: underline white;
+  color: #67c23a;
+  text-decoration: underline;
 }
 
 .container {
