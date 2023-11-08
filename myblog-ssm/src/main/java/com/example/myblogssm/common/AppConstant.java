@@ -15,15 +15,16 @@ import java.io.FileNotFoundException;
 public class AppConstant {
     // 用户会话键
     public static final String USER_SESSION_KEY = "USER_SESSION_KEY";
-    public static final String PROJECT_PATH;
+    public static final String CLASS_PATH;
 
     static {
         try {
-            PROJECT_PATH = ResourceUtils.getFile(ResourceUtils.CLASSPATH_URL_PREFIX).getPath();
+            CLASS_PATH = ResourceUtils.getFile(ResourceUtils.CLASSPATH_URL_PREFIX).getPath();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
-    public static final String IMG_PATH_ABSOLUTE = PROJECT_PATH + "/images/";
-    public static final String IMG_PATH_RELATIVE = "images/";
+    public static final String IMG_PATH_ABSOLUTE = CLASS_PATH + "/upload/";
+    public static final String IMG_PATH_RELATIVE = "/upload/";
+    public static final String DEFAULT_PHOTO = "/upload/defaultPhoto.jpg";
 }

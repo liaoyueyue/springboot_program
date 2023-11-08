@@ -27,12 +27,12 @@
           <hr />
           <div class="photo-row">
             <span>头像</span>
-            <img src="../images/logo.jpg" alt="个人头像" />
+            <img id="photo" src="" alt="个人头像" />
             <div class="image-overlay" onclick="updatePhoto()">更改头像</div>
             <div class="update-photo">
               <input
                 type="file"
-                name="photo"
+                name="photo-file"
                 id="photo-file"
                 accept="image/*"
                 style="display: none"
@@ -41,7 +41,7 @@
           </div>
           <div class="row">
             <span>用户名</span>
-            <label id="username">username</label>&nbsp;
+            <label id="username"></label>&nbsp;
           </div>
           <div class="row">
             <span>电子邮箱</span>
@@ -61,8 +61,8 @@
             <span>代码云</span>
             <input
               type="text"
-              id="codeCloud"
-              name="codeCloud"
+              id="code-cloud"
+              name="code-cloud"
               placeholder="请输入代码云地址"
             />
           </div>
@@ -105,6 +105,26 @@
       </div>
     </div>
     <script>
+      function showUserInfo() {
+        $.ajax({
+          url: "/user/showinfo",
+          type: "post",
+          data: {},
+          success: function (result) {
+            if (result != null && result.code == 200) {
+              $("#username").text(result.data.username);
+              $("#email").text(result.data.email);
+              $("#nickname").val(result.data.nickname);
+              $("#code-cloud").val(result.data.codeCloud);
+              $("#photo").attr("src", result.data.photo);
+            } else {
+              alert("个人信息加载失败，请刷新页面");
+            }
+          },
+        });
+      }
+      showUserInfo();
+      
       function updatePhoto() {
         let photoFile = $("#photo-file");
         photoFile.click();
@@ -134,7 +154,7 @@
       function updateUserinfo() {
         // 1.非空校验
         let nickname = $("#nickname");
-        let codeCloud = $("#codeCloud");
+        let codeCloud = $("#code-cloud");
         if (nickname.val() == "") {
           nickname("请先输入昵称！");
           nickname.focus();

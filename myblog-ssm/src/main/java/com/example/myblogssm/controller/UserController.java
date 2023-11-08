@@ -139,9 +139,9 @@ public class UserController {
             return AjaxResult.fail(-1, "illegal request");
         }
         // 3.用户不是默认头像需要修改头像
-        if (!user.getPhoto().equals("images/defaultPhoto.jpg")) {
+        if (!user.getPhoto().equals(AppConstant.DEFAULT_PHOTO)) {
             // 删除旧头像
-            File file = new File(AppConstant.IMG_PATH_ABSOLUTE + user.getPhoto());
+            File file = new File(AppConstant.IMG_PATH_ABSOLUTE + user.getPhoto().split("/")[2]);
             file.delete();
         }
         // 3.处理文件名和路径
