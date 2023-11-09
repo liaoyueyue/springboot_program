@@ -26,13 +26,93 @@ input::-webkit-input-placeholder {
   /* placeholder字体大小 */
   font-size: 12px;
 }
-
+/* 导航栏 start */
 .nav-wrapper {
   background-color: rgba(255, 255, 255, 0.8);
   position: relative;
   z-index: 1000;
 }
 
+.nav {
+  height: 50px;
+  width: 1000px;
+  margin: 0 auto;
+  color: #333333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav .logo-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav .logo-info img {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  border-radius: 20px;
+}
+
+.nav .menu > ul {
+  display: flex;
+  justify-content: space-between;
+}
+
+.nav .menu ul li {
+  list-style: none;
+}
+
+.nav .menu > ul > li {
+  width: 85px;
+  position: relative;
+  text-align: center;
+}
+
+.nav .menu ul li a {
+  text-decoration: none;
+  color: #333333;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 4px;
+  transition: all 0.4s;
+}
+
+.nav .menu ul li > a:hover {
+  color: #67c23a;
+}
+
+.nav .menu ul li a img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.nav .menu ul li a p {
+  width: 80px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.nav .menu ul ul {
+  position: absolute;
+  width: 100%;
+  background: white;
+  display: none;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  border-radius: 5px;
+}
+
+.nav .menu ul ul li a:hover {
+  padding: 0 28px;
+  background-color: #67c23a;
+  color: white;
+}
+/* 导航栏 end */
 .container {
   width: 1000px;
   height: calc(100% - 60px);

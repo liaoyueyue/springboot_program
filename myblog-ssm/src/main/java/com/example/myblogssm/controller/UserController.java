@@ -92,13 +92,13 @@ public class UserController {
     }
 
     @PostMapping("/showinfo")
-    public AjaxResult showInfo(HttpServletRequest request) {
-        UserVo userVo = new UserVo();
+    public AjaxResult showInfoBySession(HttpServletRequest request) {
         // 1.得到当前登录用户
         User user = UserSessionUtils.getSessionUser(request);
         if (user == null) {
-            return AjaxResult.fail(-1, "illegal request");
+            return AjaxResult.fail(-1, "User not logged in");
         }
+        UserVo userVo = new UserVo();
         BeanUtils.copyProperties(user, userVo); // Spring 提供的深克隆方法
         // 2.得到用户发表文章总数
         userVo.setArticleTotal(articleService.queryArticleTotalByUid(user.getId()));

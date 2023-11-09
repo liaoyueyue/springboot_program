@@ -58,6 +58,24 @@
         });
       }
 
+            function showUserInfo() {
+        $.ajax({
+          url: "/user/showinfo",
+          type: "post",
+          data: {},
+          success: function (result) {
+            if (result != null && result.code == 200) {
+              $("#nav-photo").attr("src", result.data.photo);
+              $("#nav-username").attr("src", result.data.username);
+              $("#nav-logout").show();
+            } else {
+              alert("个人信息加载失败，请刷新页面");
+            }
+          },
+        });
+      }
+      showUserInfo();
+
       // 获取当前 url 参数的公共方法
       function getUrlValue(key) {
         let params = location.search;
@@ -73,6 +91,7 @@
         }
         return "";
       }
+      
 
       function showArticleInfo(id) {
         if (id == "") {
