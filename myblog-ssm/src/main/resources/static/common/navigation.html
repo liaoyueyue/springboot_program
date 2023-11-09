@@ -8,8 +8,11 @@
       <li>
         <a href="blog_list_comm.html">主页</a>
       </li>
-      <li>
-        <a href="blog_list_comm.html">用户</a>
+      <li style="width: 130px">
+        <a href="blog_list_comm.html">
+          <img id="nav-photo" src="" />
+          <p>牛马人才yyds</p>
+        </a>
         <ul>
           <li><a href="user_center.html">个人中心</a></li>
           <li><a href="blog_list.html">内容管理</a></li>
@@ -63,7 +66,6 @@
   .nav .menu ul li a {
     text-decoration: none;
     color: #333333;
-    padding: 0 10px;
     height: 40px;
     display: inline-flex;
     align-items: center;
@@ -73,7 +75,19 @@
 
   .nav .menu ul li > a:hover {
     color: #67c23a;
-    text-decoration: underline;
+  }
+
+  .nav .menu ul li a img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+  }
+
+  .nav .menu ul li a p {
+    width: 80px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   .nav .menu ul ul {
@@ -86,6 +100,7 @@
   }
 
   .nav .menu ul ul li a:hover {
+    padding: 0 28px;
     background-color: #67c23a;
     color: white;
   }
