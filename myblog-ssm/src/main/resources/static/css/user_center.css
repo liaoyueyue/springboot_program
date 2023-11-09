@@ -1,8 +1,8 @@
-.menu a {
+.card .menu a {
   border-radius: 5px;
 }
 
-.menu a:hover {
+.card .menu a:hover {
   background-color: pink;
   transition: all 0.7s;
 }
