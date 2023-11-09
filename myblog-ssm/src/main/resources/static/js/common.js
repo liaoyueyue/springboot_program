@@ -1,6 +1,6 @@
 // 导航栏初始化
 $(document).ready(function () {
-  $(".nav-wrapper").load("common/navigation.html");
+  $(".nav-wrapper").load("/common/navigation.html");
 });
 
 function logout() {

@@ -22,7 +22,7 @@ public class AppConfig implements WebMvcConfigurer {
         registry.addInterceptor(new LoginInterceptor())
                 .addPathPatterns("/**")
                 .excludePathPatterns("/css/**", "/editor.md/**", "/images/**", "/js/**")
-                .excludePathPatterns("/favicon.ico", "/login.html", "/blog_list_comm.html", "/blog_detail.html")
+                .excludePathPatterns("/favicon.ico", "/login.html", "/blog_list_comm.html", "/blog_detail.html", "/common/navigation.html")
                 .excludePathPatterns("/user/login", "/user/register", "/user/showinfobyid", "/email/sendverificationcode")
                 .excludePathPatterns("/article/showinfo", "/article/showinfolistbypage");
     }
