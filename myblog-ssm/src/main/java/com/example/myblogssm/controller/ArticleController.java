@@ -123,5 +123,35 @@ public class ArticleController {
         result.put("pageCount", pageCount);
         return AjaxResult.success(result);
     }
+    @PostMapping("/search")
+    public AjaxResult searchArticle(Integer pageIndex, Integer pageSize, String searchInfo) {
+        // 参数矫正
+        if (pageIndex == null || pageIndex < 1) {
+            pageIndex = 1;
+        }
+        if (pageSize == null || pageSize < 1 || pageSize > 5) {
+            pageSize = 5;
+        }
+        if (!StringUtils.hasLength(searchInfo)) {
+            return AjaxResult.fail(-1, "illegal request");
+        }
+        // 查询中偏移量(offset)的值 = (当前页码-1)*每页显示条数
+        int startIndex = (pageIndex - 1) * pageSize;
+        List<Article> articleList = articleService.queryArtListByTitle(searchInfo, pageSize, startIndex);
+        if (articleList.isEmpty()) {
+            return AjaxResult.fail(-1, "No search found");
+        }
+        // 限制单篇文章在文章列表页的字数并去除Markdown标记并提取纯文本
+        ArticleListUtils.limitWordCountAndRemoveMarkdownTags(articleList, 120);
+        // 当前页面一共多少页
+        // a) 查询对应文章总数
+        int articleCount = articleService.queryArticleCount(searchInfo);
+        // b) 页面总数 = 文章总数 / 页面显示文章数量 （同时进行进1）
+        int pageCount = (int) Math.ceil(articleCount / (pageSize * 1.0));
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("articleList", articleList);
+        result.put("pageCount", pageCount);
+        return AjaxResult.success(result);
+    }
 
 }

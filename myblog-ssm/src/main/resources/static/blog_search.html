@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>博客搜索</title>
+    <link rel="stylesheet" href="css/blog_list_comm.css" />
+    <link rel="stylesheet" href="css/blog_list.css" />
+    <link rel="stylesheet" href="css/common.css" />
+    <script src="js/jquery.min.js"></script>
+    <script src="js/common.js"></script>
+  </head>
+  <body>
+    <div class="nav-wrapper"></div>
+    <div class="container" style="justify-content: center">
+      <div class="container-right">
+        <div id="blogs-div">
+          <!-- <div class="blog">
+            <div class="title">我的第一篇博客</div>
+            <div class="date">2021-06-02</div>
+            <div class="desc">
+              从今天起, 我要认真敲代码. Lorem ipsum, dolor sit amet consectetur
+              adipisicing elit. Cum distinctio ullam eum ut veroab laborum
+              numquam tenetur est in dolorum a sint, assumenda adipisci
+              similique quaerat vel. Facere, et.
+            </div>
+            <div class="operations">
+              <a href="blog_detail.html">查看全文 &gt;&gt; </a>
+            </div>
+          </div> -->
+        </div>
+        <hr />
+        <div class="blog-pagnation-wrapper">
+          <button class="blog-pagnation-item" onclick="firstPage()">
+            首页
+          </button>
+          <button class="blog-pagnation-item" onclick="beforePage()">
+            上一页
+          </button>
+          <button class="blog-pagnation-item" onclick="nextPage()">
+            下一页
+          </button>
+          <button class="blog-pagnation-item" onclick="lastPage()">末页</button>
+          <input type="text" name="pageIndex" id="page-navgation-index" />
+          <button class="blog-pagnation-item" onclick="jumpPage()">跳转</button>
+        </div>
+      </div>
+    </div>
+    <script>
+      // 当前页码
+      let pageIndex = 1;
+      // 每页显示条数
+      let pageSize = 4;
+      // 页面总数
+      let pageCount;
+      // 搜索内容
+      let searchInfo;
+
+      // 尝试在 query string 里获取当前页面
+      pageIndex = getUrlValue("pageIndex") == "" ? 1 : getUrlValue("pageIndex");
+      searchInfo = getUrlValue("searchInfo");
+
+      function showArticleInfoList() {
+        $.ajax({
+          url: "/article/search",
+          type: "post",
+          data: { pageIndex: pageIndex, pageSize: pageSize, searchInfo: searchInfo },
+          success: function (result) {
+            if (
+              result != null &&
+              result.code == 200 &&
+              result.data.articleList.length > 0
+            ) {
+              let blogsDiv = "";
+              for (let i = 0; i < result.data.articleList.length; i++) {
+                let blogItem = result.data.articleList[i];
+                blogsDiv += '<div class="blog">';
+                blogsDiv += '<div class="title">' + blogItem.title + "</div>";
+                blogsDiv +=
+                  '<div class="date">' + blogItem.updateTime + "</div>";
+                blogsDiv += '<div class="desc">' + blogItem.content + "</div>";
+                blogsDiv += '<div class="operations">';
+                blogsDiv +=
+                  '<a href="blog_detail.html?id=' +
+                  blogItem.id +
+                  '">查看全文 &gt;&gt; </a>';
+                blogsDiv += "</div>";
+                blogsDiv += "</div>";
+              }
+              $("#blogs-div").html(blogsDiv);
+              pageCount = result.data.pageCount;
+            }
+          },
+        });
+      }
+      showArticleInfoList();
+
+      function firstPage() {
+        location.href = "blog_search.html?searchInfo=" + searchInfo + "&pageIndex=" + parseInt(pageIndex);
+      }
+
+      function beforePage() {
+        if (pageIndex <= 1) {
+          alert("当前已经在首页了！");
+          return;
+        }
+        location.href = "blog_search.html?searchInfo=" + searchInfo + "&pageIndex=" + (parseInt(pageIndex) - 1);
+      }
+
+      function nextPage() {
+        if (pageIndex >= pageCount) {
+          alert("已经没有下一页了！");
+          return;
+        }
+        location.href = "blog_search.html?searchInfo=" + searchInfo + "&pageIndex=" + (parseInt(pageIndex) + 1);
+      }
+
+      function lastPage() {
+        if (pageIndex >= pageCount) {
+          alert("已经在末页了");
+          return;
+        }
+        location.href =
+        "blog_search.html?searchInfo=" + searchInfo + "&pageIndex=" + pageCount;
+      }
+
+      function jumpPage() {
+        let jumpPageIndex = $("#page-navgation-index").val();
+        if (jumpPageIndex <= 0) {
+          jumpPageIndex = "";
+          alert("页面非法请重新输入");
+          return;
+        } else if (jumpPageIndex >= pageCount) {
+          jumpPageIndex = "";
+          alert("没有这么多页数,为你跳转到末页");
+          location.href =
+            "blog_search.html?searchInfo=" + searchInfo + "&pageIndex=" + pageCount;
+          return;
+        } else {
+          location.href =
+            "blog_search.html?searchInfo=" + searchInfo + "&pageIndex=" + jumpPageIndex;
+        }
+      }
+
+      function getUrlValue(key) {
+        let params = location.search;
+        if (params.length > 1) {
+          params = params.substring(1);
+          let paramArr = params.split("&");
+          for (let i = 0; i < paramArr.length; i++) {
+            let kv = paramArr[i].split("=");
+            if (kv[0] == key) {
+              return kv[1];
+            }
+          }
+        }
+        return "";
+      }
+    </script>
+  </body>
+</html>

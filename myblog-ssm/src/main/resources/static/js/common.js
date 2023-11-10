@@ -19,6 +19,17 @@ $(document).ready(function () {
   });
 });
 
+
+function searchArticle() {
+  searchInfo = $("#search-info");
+  if(searchInfo.val() == ""){
+    alert("请输入搜索内容");
+    searchInfo.focus();
+    return;
+  }
+  location.href = "blog_search.html?searchInfo=" + searchInfo.val();
+}
+
 function logout() {
   if (confirm("确认注销？")) {
     $.ajax({

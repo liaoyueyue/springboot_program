@@ -50,8 +50,14 @@ public class ArticleService {
     public List<Article> queryArtListByPage(Integer pageSize, Integer startIndex) {
         return articleMapper.queryArtListByPage(pageSize, startIndex);
     }
+    public List<Article> queryArtListByTitle(String searchInfo, Integer pageSize, Integer startIndex) {
+        return articleMapper.queryArtListByTitle(searchInfo, pageSize, startIndex);
+    }
 
     public int queryArticleCount() {
         return articleMapper.queryArticleCount();
+    }
+    public int queryArticleCount(String searchInfo) {
+        return articleMapper.queryArticleCount(searchInfo);
     }
 }

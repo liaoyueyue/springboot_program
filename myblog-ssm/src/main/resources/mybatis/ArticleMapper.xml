@@ -42,14 +42,22 @@
     <select id="queryArtListByPage" resultMap="baseMap">
         select * from articleinfo limit #{pageSize} offset #{startIndex}
     </select>
+
+    <select id="queryArtListByTitle" resultMap="baseMap">
+        select * from articleinfo where title like CONCAT('%', #{searchInfo}, '%') limit #{pageSize} offset #{startIndex}
+    </select>
+
     <select id="queryArticleCount" resultType="java.lang.Integer">
-        select count(*) from articleinfo;
+        select count(*) from articleinfo
+        <where>
+            <if test="searchInfo != null">
+                and title = #{searchInfo}
+            </if>
+        </where>
     </select>
 
     <delete id="delArticleById">
         delete from articleinfo where id = #{id} and uid = #{uid}
     </delete>
-
-
 
 </mapper>

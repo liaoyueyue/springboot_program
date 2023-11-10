@@ -26,6 +26,21 @@ input::-webkit-input-placeholder {
   /* placeholder字体大小 */
   font-size: 12px;
 }
+
+/* 细滚动条 问题：会超出容器 */
+
+.container-right::-webkit-scrollbar {
+  width: 4px;
+}
+.container-right::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.2);
+}
+.container-right::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
 /* 导航栏 start */
 .nav-wrapper {
   background-color: rgba(255, 255, 255, 0.8);
@@ -54,6 +69,33 @@ input::-webkit-input-placeholder {
   height: 40px;
   margin-right: 10px;
   border-radius: 20px;
+}
+
+.nav .nav-search {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-search input {
+  width: 300px;
+  height: 35px;
+  border-radius: 15px;
+  border: none;
+  box-shadow: 1px 1px 2px -2px;
+  padding: 0 45px 0px 25px;
+}
+
+.nav .nav-search input:focus {
+  outline: none;
+}
+
+.nav .nav-search p {
+  color: #666666;
+  position: relative;
+  right: 40px;
+  font-size: 13px;
+  cursor: pointer;
 }
 
 .nav .menu > ul {
@@ -113,6 +155,7 @@ input::-webkit-input-placeholder {
   color: white;
 }
 /* 导航栏 end */
+
 .container {
   width: 1000px;
   height: calc(100% - 60px);

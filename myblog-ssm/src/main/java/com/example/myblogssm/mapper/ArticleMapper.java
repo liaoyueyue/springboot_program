@@ -75,8 +75,24 @@ public interface ArticleMapper {
     List<Article> queryArtListByPage(@Param("pageSize") Integer pageSize, @Param("startIndex") Integer startIndex);
 
     /**
+     * 分页查询指定文章
+     * @param searchInfo 搜索内容
+     * @param pageSize 页大小
+     * @param startIndex 起始索引、偏移量
+     * @return 指定页数的文章
+     */
+    List<Article> queryArtListByTitle(@Param("searchInfo") String searchInfo, @Param("pageSize") Integer pageSize, @Param("startIndex") Integer startIndex);
+
+    /**
      * 获取文章总数
      * @return 文章总数
      */
     int queryArticleCount();
+
+    /**
+     * 获取指定文章总数
+     * @param searchInfo 搜索内容
+     * @return 指定文章总数
+     */
+    int queryArticleCount(@Param("searchInfo") String searchInfo);
 }
