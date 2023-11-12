@@ -26,9 +26,29 @@ public interface ArticleMapper {
     /**
      * 使用 uid 查询登录用户发布文章列表
      * @param uid 用户id
+     * @param pageSize 页大小
+     * @param startIndex 起始索引、偏移量
      * @return uid对应用户的全部文章列表
      */
-    List<Article> qryUserArtListByUid(@Param("uid") Integer uid);
+    List<Article> qryUserArtListByUid(@Param("uid") Integer uid, @Param("pageSize") Integer pageSize, @Param("startIndex") Integer startIndex);
+
+    /**
+     * 使用 uid 查询登录用户发布文章列表按更新时间排序
+     * @param uid 用户id
+     * @param pageSize 页大小
+     * @param startIndex 起始索引、偏移量
+     * @return uid对应用户的全部文章列表
+     */
+    List<Article> qryUserArtListByUidSortDate(@Param("uid") Integer uid, @Param("pageSize") Integer pageSize, @Param("startIndex") Integer startIndex);
+
+    /**
+     * 使用 uid 查询登录用户发布文章列表按阅读量排序
+     * @param uid 用户id
+     * @param pageSize 页大小
+     * @param startIndex 起始索引、偏移量
+     * @return uid对应用户的全部文章列表
+     */
+    List<Article> qryUserArtListByUidSortRCount(@Param("uid") Integer uid, @Param("pageSize") Integer pageSize, @Param("startIndex") Integer startIndex);
 
     /**
      * 使用 id 删除文章
@@ -72,14 +92,14 @@ public interface ArticleMapper {
      * @param startIndex 起始索引、偏移量
      * @return 指定页数的文章
      */
-    List<Article> queryArtListByPage(@Param("pageSize") Integer pageSize, @Param("startIndex") Integer startIndex);
+    List<Article> queryArtList(@Param("pageSize") Integer pageSize, @Param("startIndex") Integer startIndex);
 
     /**
-     * 分页查询指定文章
+     * 分页查询指定文章列表
      * @param searchInfo 搜索内容
      * @param pageSize 页大小
      * @param startIndex 起始索引、偏移量
-     * @return 指定页数的文章
+     * @return 指定页数的文章列表
      */
     List<Article> queryArtListByTitle(@Param("searchInfo") String searchInfo, @Param("pageSize") Integer pageSize, @Param("startIndex") Integer startIndex);
 
@@ -94,5 +114,40 @@ public interface ArticleMapper {
      * @param searchInfo 搜索内容
      * @return 指定文章总数
      */
-    int queryArticleCount(@Param("searchInfo") String searchInfo);
+    int queryArticleCountByTitle(@Param("searchInfo") String searchInfo);
+
+    /**
+     * 分页查询文章列表按更新时间排序
+     * @param pageSize 页大小
+     * @param startIndex 起始索引、偏移量
+     * @return 符合条件文章列表
+     */
+    List<Article> queryArtListSortDate(Integer pageSize, Integer startIndex);
+
+    /**
+     * 分页查询文章列表按阅读量排序
+     * @param pageSize 页大小
+     * @param startIndex 起始索引、偏移量
+     * @return 符合条件文章列表
+     */
+    List<Article> queryArtListSortRCount(Integer pageSize, Integer startIndex);
+
+    /**
+     * 分页查询指定文章列表按更新时间排序
+     * @param searchInfo 搜索内容
+     * @param pageSize 页大小
+     * @param startIndex 起始索引、偏移量
+     * @return 指定页数的文章列表
+     */
+    List<Article> queryArtListByTitleSortDate(@Param("searchInfo") String searchInfo, @Param("pageSize") Integer pageSize, @Param("startIndex") Integer startIndex);
+
+    /**
+     * 分页查询指定文章按阅读量排序
+     * @param searchInfo 搜索内容
+     * @param pageSize 页大小
+     * @param startIndex 起始索引、偏移量
+     * @return 指定页数的文章列表
+     */
+    List<Article> queryArtListByTitleSortRCount(@Param("searchInfo") String searchInfo, @Param("pageSize") Integer pageSize, @Param("startIndex") Integer startIndex);
+
 }

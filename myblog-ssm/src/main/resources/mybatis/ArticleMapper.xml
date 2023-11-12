@@ -12,25 +12,52 @@
         <result column="state" property="state"/>
     </resultMap>
     <insert id="addArticle">
-        insert into articleinfo(title, content, uid) values (#{title}, #{content}, #{uid})
+        insert into articleinfo(title, content, uid)
+        values (#{title}, #{content}, #{uid})
     </insert>
 
     <update id="updateRCount">
-        update articleinfo set rcount = rcount+1 where id = #{id}
+        update articleinfo
+        set rcount = rcount + 1
+        where id = #{id}
     </update>
 
     <update id="updateArticle">
-        update articleinfo set title = #{title}, content = #{content}, updatetime = now() where id = #{id} and uid = #{uid}
+        update articleinfo
+        set title      = #{title},
+            content    = #{content},
+            updatetime = now()
+        where id = #{id}
+          and uid = #{uid}
     </update>
 
     <select id="queryArticleTotalByUid" resultType="java.lang.Integer">
-        select count(*) from articleinfo where uid = #{uid}
+        select count(*)
+        from articleinfo
+        where uid = #{uid}
     </select>
 
     <select id="qryUserArtListByUid" resultMap="baseMap">
         select *
         from articleinfo
-        where uid = #{uid} order by updatetime desc
+        where uid = #{uid}
+        limit #{pageSize} offset #{startIndex}
+    </select>
+
+    <select id="qryUserArtListByUidSortDate" resultMap="baseMap">
+        select *
+        from articleinfo
+        where uid = #{uid}
+        order by updatetime desc
+        limit #{pageSize} offset #{startIndex}
+    </select>
+
+    <select id="qryUserArtListByUidSortRCount" resultMap="baseMap">
+        select *
+        from articleinfo
+        where uid = #{uid}
+        order by rcount desc
+        limit #{pageSize} offset #{startIndex}
     </select>
 
     <select id="queryArticleById" resultMap="baseMap">
@@ -39,25 +66,66 @@
         where id = #{id};
     </select>
 
-    <select id="queryArtListByPage" resultMap="baseMap">
-        select * from articleinfo limit #{pageSize} offset #{startIndex}
+    <select id="queryArtList" resultMap="baseMap">
+        select *
+        from articleinfo
+        limit #{pageSize} offset #{startIndex}
+    </select>
+
+    <select id="queryArtListSortDate" resultMap="baseMap">
+        select *
+        from articleinfo
+        order by updatetime desc
+        limit #{pageSize} offset #{startIndex}
+    </select>
+
+    <select id="queryArtListSortRCount" resultMap="baseMap">
+        select *
+        from articleinfo
+        order by rcount desc
+        limit #{pageSize} offset #{startIndex}
     </select>
 
     <select id="queryArtListByTitle" resultMap="baseMap">
-        select * from articleinfo where title like CONCAT('%', #{searchInfo}, '%') limit #{pageSize} offset #{startIndex}
+        select *
+        from articleinfo
+        where title like CONCAT('%', #{searchInfo}, '%')
+        limit #{pageSize} offset #{startIndex}
+    </select>
+
+    <select id="queryArtListByTitleSortDate" resultMap="baseMap">
+        select *
+        from articleinfo
+        where title like CONCAT('%', #{searchInfo}, '%')
+        order by updatetime desc
+        limit #{pageSize} offset #{startIndex}
+    </select>
+
+    <select id="queryArtListByTitleSortRCount" resultMap="baseMap">
+        select *
+        from articleinfo
+        where title like CONCAT('%', #{searchInfo}, '%')
+        order by rcount desc
+        limit #{pageSize} offset #{startIndex}
     </select>
 
     <select id="queryArticleCount" resultType="java.lang.Integer">
-        select count(*) from articleinfo
-        <where>
-            <if test="searchInfo != null">
-                and title = #{searchInfo}
-            </if>
-        </where>
+        select count(*)
+        from articleinfo
     </select>
 
+    <select id="queryArticleCountByTitle" resultType="java.lang.Integer">
+        select count(*)
+        from articleinfo
+        where title like CONCAT('%', #{searchInfo}, '%')
+    </select>
+
+
     <delete id="delArticleById">
-        delete from articleinfo where id = #{id} and uid = #{uid}
+        delete
+        from articleinfo
+        where id = #{id}
+          and uid = #{uid}
     </delete>
 
 </mapper>

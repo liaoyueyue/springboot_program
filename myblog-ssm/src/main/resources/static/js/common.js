@@ -1,3 +1,6 @@
+// 留给blog_search.html的变量。后续可能其他页面也需要使用
+let searchInfo;
+
 // 导航栏初始化
 // window.onload 必须等到页面内包括图片的所有元素加载完毕后才能执行；
 // $(document).ready() 是 dom 结构绘制完毕后就执行，不必等到加载完毕。
@@ -16,13 +19,16 @@ $(document).ready(function () {
         }
       },
     });
+    if (searchInfo !== undefined) {
+      // 设置搜索框的值
+      $("#search-info").val(searchInfo);
+    }
   });
 });
 
-
 function searchArticle() {
-  searchInfo = $("#search-info");
-  if(searchInfo.val() == ""){
+  let searchInfo = $("#search-info");
+  if (searchInfo.val() == "") {
     alert("请输入搜索内容");
     searchInfo.focus();
     return;

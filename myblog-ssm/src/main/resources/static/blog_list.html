@@ -28,23 +28,77 @@
           </div>
         </div>
       </div>
-      <div id="blogs-div" class="container-right">
-        <!-- <div class="blog">
+      <div class="container-right">
+        <div class="sift-div">
+          <label for="blog-sort-select">选择排序方式:</label>
+          <select id="blog-sort-select">
+            <option value="mix">综合</option>
+            <option value="new">最新</option>
+            <option value="hot">热门</option>
+          </select>
+        </div>
+        <div id="blogs-div">
+          <!-- <div class="blog">
           <div class="title">出师表</div>
-          <div class="date">2022-11-06 22:29</div>
-          <div class="desc">
-            先帝创业未半而中道崩殂，今天下三分，益州疲弊，此诚危急存亡之秋也。然侍卫之臣不懈于内，忠志之士忘身于外者，盖追先帝之殊遇，欲报之于陛下也。诚宜开张圣听，以光先帝遗德，恢弘志士之气，不宜妄自菲薄，引喻失义，以塞忠谏之路也。
-          </div>
-          <div class="operations">
-            <a href="blog_detail.html">查看全文 &gt;&gt; </a>
-            <a href="blog_update.html">修改文章 &gt;&gt; </a>
-            <a href="javascript:delArticle()">删除文章 &gt;&gt; </a>
-          </div>
-        </div> -->
+            <div class="date">2022-11-06 22:29</div>
+            <div class="desc">
+              先帝创业未半而中道崩殂，今天下三分，益州疲弊，此诚危急存亡之秋也。然侍卫之臣不懈于内，忠志之士忘身于外者，盖追先帝之殊遇，欲报之于陛下也。诚宜开张圣听，以光先帝遗德，恢弘志士之气，不宜妄自菲薄，引喻失义，以塞忠谏之路也。
+            </div>
+            <div class="operations">
+              <a href="blog_detail.html">查看全文 &gt;&gt; </a>
+              <a href="blog_update.html">修改文章 &gt;&gt; </a>
+              <a href="javascript:delArticle()">删除文章 &gt;&gt; </a>
+            </div>
+          </div> -->
+        </div>
+        <hr />
+        <div class="blog-pagnation-wrapper">
+          <button class="blog-pagnation-item" onclick="firstPage()">
+            首页
+          </button>
+          <button class="blog-pagnation-item" onclick="beforePage()">
+            上一页
+          </button>
+          <button class="blog-pagnation-item" onclick="nextPage()">
+            下一页
+          </button>
+          <button class="blog-pagnation-item" onclick="lastPage()">末页</button>
+          <input type="text" name="pageIndex" id="page-navgation-index" />
+          <button class="blog-pagnation-item" onclick="jumpPage()">跳转</button>
+        </div>
       </div>
     </div>
 
     <script>
+      // 当前页码
+      let pageIndex = 1;
+      // 每页显示条数
+      let pageSize = 4;
+      // 页面总数
+      let pageCount;
+      // 排序规则
+      let sortOption;
+
+      // 尝试在query string 里获取当前页面索引和排序规则
+      pageIndex = getUrlValue("pageIndex") == "" ? 1 : getUrlValue("pageIndex");
+      sortOption = getUrlValue("sortOption") == "" ? "mix" : getUrlValue("sortOption");
+
+      $(document).ready(function () {
+        // 页面加载完成时执行一次排序
+        showArticleInfoList();
+        // 监听选择框变化事件
+        $("#blog-sort-select").change(function () {
+          // 页码置为 1
+          pageIndex = 1;
+          // 规则改变
+          sortOption = $("#blog-sort-select").val();
+          location.href = "blog_list.html?pageIndex=" + pageIndex + "&sortOption=" + sortOption;
+        });
+        // 设置选择框的值
+        $("#blog-sort-select").val(sortOption);
+      });
+      
+
       function showUserInfo() {
         $.ajax({
           url: "/user/showinfo",
@@ -68,40 +122,45 @@
         $.ajax({
           url: "/article/showinfolist",
           type: "post",
-          data: {},
+          data: {
+            pageIndex: pageIndex,
+            pageSize: pageSize,
+            sortOption: sortOption,
+          },
           success: function (result) {
             if (result != null && result.code == 200) {
-              if (result.data != null && result.data.length > 0) {
+              if (result.data != null && result.data.articleList.length > 0) {
                 // 发表过文章
-                let articleList = "";
-                for (let i = 0; i < result.data.length; i++) {
-                  let articleItem = result.data[i];
-                  articleList += '<div class="blog">';
-                  articleList +=
-                    '<div class="title">' + articleItem.title + "</div>";
-                  articleList +=
+                let blogsDiv = "";
+                for (let i = 0; i < result.data.articleList.length; i++) {
+                  let blogItem = result.data.articleList[i];
+                  blogsDiv += '<div class="blog">';
+                  blogsDiv +=
+                    '<div class="title">' + blogItem.title + "</div>";
+                  blogsDiv +=
                     '<div class="date">于 ' +
-                    articleItem.updateTime +
+                    blogItem.updateTime +
                     " 更新</div>";
-                  articleList +=
-                    '<div class="desc">' + articleItem.content + "</div>";
-                  articleList += '<div class="operations">';
-                  articleList +=
+                  blogsDiv +=
+                    '<div class="desc">' + blogItem.content + "</div>";
+                  blogsDiv += '<div class="operations">';
+                  blogsDiv +=
                     '<a href="blog_detail.html?id=' +
-                    articleItem.id +
+                    blogItem.id +
                     '">查看全文 &gt;&gt; </a>';
-                  articleList +=
+                  blogsDiv +=
                     '<a href="blog_update.html?id=' +
-                    articleItem.id +
+                    blogItem.id +
                     '">修改文章 &gt;&gt; </a>';
-                  articleList +=
+                  blogsDiv +=
                     '<a href="javascript:delArticle(' +
-                    articleItem.id +
+                    blogItem.id +
                     ')">删除文章 &gt;&gt; </a>';
-                  articleList += "</div>";
-                  articleList += "</div>";
+                  blogsDiv += "</div>";
+                  blogsDiv += "</div>";
                 }
-                $("#blogs-div").html(articleList);
+                $("#blogs-div").html(blogsDiv);
+                pageCount = result.data.pageCount;
               } else {
                 // 没发表过文章
                 $("#blogs-div").html("<h3>暂无文章</h3>");
@@ -112,7 +171,52 @@
           },
         });
       }
-      showArticleInfoList();
+
+      function firstPage() {
+        location.href = "blog_list.html?sortOption=" + sortOption;
+      }
+
+      function beforePage() {
+        if (pageIndex <= 1) {
+          alert("当前已经在首页了！");
+          return;
+        }
+        location.href =
+          "blog_list.html?pageIndex=" + (parseInt(pageIndex) - 1) + "&sortOption=" + sortOption;
+      }
+
+      function nextPage() {
+        if (pageIndex >= pageCount) {
+          alert("已经没有下一页了！");
+          return;
+        }
+        location.href =
+          "blog_list.html?pageIndex=" + (parseInt(pageIndex) + 1) + "&sortOption=" + sortOption;
+      }
+
+      function lastPage() {
+        if (pageIndex >= pageCount) {
+          alert("已经在末页了");
+          return;
+        }
+        location.href = "blog_list.html?pageIndex=" + pageCount + "&sortOption=" + sortOption;
+      }
+
+      function jumpPage() {
+        let jumpPageIndex = $("#page-navgation-index").val();
+        if (jumpPageIndex <= 0) {
+          jumpPageIndex = "";
+          alert("页面非法请重新输入");
+          return;
+        } else if (jumpPageIndex > pageCount) {
+          jumpPageIndex = "";
+          alert("没有这么多页数,为你跳转到末页");
+          location.href = "blog_list.html?pageIndex=" + pageCount + "&sortOption=" + sortOption;
+          return;
+        } else {
+          location.href = "blog_list.html?pageIndex=" + jumpPageIndex + "&sortOption=" + sortOption;
+        }
+      }
 
       function delArticle(id) {
         if (confirm("确认是否删除该文章？")) {
@@ -130,6 +234,21 @@
             },
           });
         }
+      }
+
+      function getUrlValue(key) {
+        let params = location.search;
+        if (params.length > 1) {
+          params = params.substring(1);
+          let paramArr = params.split("&");
+          for (let i = 0; i < paramArr.length; i++) {
+            let kv = paramArr[i].split("=");
+            if (kv[0] == key) {
+              return kv[1];
+            }
+          }
+        }
+        return "";
       }
     </script>
   </body>

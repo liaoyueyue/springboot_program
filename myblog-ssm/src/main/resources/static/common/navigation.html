@@ -13,7 +13,7 @@
         <a href="blog_list_comm.html">主页</a>
       </li>
       <li style="width: 130px">
-        <a href="blog_list_comm.html">
+        <a href="login.html">
           <img id="nav-photo" src="/images/defaultPhoto.jpg" />
           <p id="nav-username">欢迎登录</p>
         </a>
@@ -34,8 +34,12 @@
 
 <script>
   $(function () {
-    $(".menu>ul>li").hover(function () {
-      $(this.querySelector("ul")).slideToggle();
-    });
+    $(".menu>ul>li")
+      .mouseenter(function () {
+        $(this.querySelector("ul")).stop().slideDown();
+      })
+      .mouseleave(function () {
+        $(this.querySelector("ul")).stop().slideUp();
+      });
   });
 </script>

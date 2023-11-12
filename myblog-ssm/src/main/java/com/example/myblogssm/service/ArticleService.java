@@ -23,8 +23,20 @@ public class ArticleService {
         return articleMapper.queryArticleTotalByUid(uid);
     }
 
-    public List<Article> qryUserArtListByUid(Integer uid) {
-        return articleMapper.qryUserArtListByUid(uid);
+    public List<Article> qryUserArtListByUid(Integer uid, Integer pageSize, Integer startIndex, String sortOption) {
+        List<Article> articleList = null;
+        switch (sortOption) {
+            case "mix":
+                articleList = articleMapper.qryUserArtListByUid(uid, pageSize, startIndex);
+                break;
+            case "new":
+                articleList = articleMapper.qryUserArtListByUidSortDate(uid, pageSize, startIndex);
+                break;
+            case "hot":
+                articleList = articleMapper.qryUserArtListByUidSortRCount(uid, pageSize, startIndex);
+                break;
+        }
+        return articleList;
     }
 
     public int delArticleById(Integer id, Integer uid) {
@@ -47,17 +59,41 @@ public class ArticleService {
         return articleMapper.updateArticle(article);
     }
 
-    public List<Article> queryArtListByPage(Integer pageSize, Integer startIndex) {
-        return articleMapper.queryArtListByPage(pageSize, startIndex);
+    public List<Article> queryArtList(Integer pageSize, Integer startIndex, String sortOption) {
+        List<Article> articleList = null;
+        switch (sortOption) {
+            case "mix":
+                articleList = articleMapper.queryArtList(pageSize, startIndex);
+                break;
+            case "new":
+                articleList = articleMapper.queryArtListSortDate(pageSize, startIndex);
+                break;
+            case "hot":
+                articleList = articleMapper.queryArtListSortRCount(pageSize, startIndex);
+                break;
+        }
+        return articleList;
     }
-    public List<Article> queryArtListByTitle(String searchInfo, Integer pageSize, Integer startIndex) {
-        return articleMapper.queryArtListByTitle(searchInfo, pageSize, startIndex);
+    public List<Article> queryArtListByTitle(String searchInfo, Integer pageSize, Integer startIndex, String sortOption) {
+        List<Article> articleList = null;
+        switch (sortOption) {
+            case "mix":
+                articleList = articleMapper.queryArtListByTitle(searchInfo, pageSize, startIndex);
+                break;
+            case "new":
+                articleList = articleMapper.queryArtListByTitleSortDate(searchInfo, pageSize, startIndex);
+                break;
+            case "hot":
+                articleList = articleMapper.queryArtListByTitleSortRCount(searchInfo, pageSize, startIndex);
+                break;
+        }
+        return articleList;
     }
 
     public int queryArticleCount() {
         return articleMapper.queryArticleCount();
     }
-    public int queryArticleCount(String searchInfo) {
-        return articleMapper.queryArticleCount(searchInfo);
+    public int queryArticleCountByTitle(String searchInfo) {
+        return articleMapper.queryArticleCountByTitle(searchInfo);
     }
 }

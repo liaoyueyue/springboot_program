@@ -7,8 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
  * Created with IntelliJ IDEA.
  * Description:
@@ -27,18 +25,10 @@ class ArticleMapperTest {
         System.out.println("result = " + result);
     }
 
-    @Test
-    void qryUserArtListByUid() {
-        int uid = 2;
-        List<Article> articleList = articleMapper.qryUserArtListByUid(2);
-        System.out.println(articleList != null);
-        System.out.println(articleList);
-        System.out.println(articleList.isEmpty());
-    }
 
     @Test
     void queryArtListByPage() {
-        List<Article> list = articleMapper.queryArtListByPage(1, 3);
+        List<Article> list = articleMapper.queryArtList(1, 3);
         System.out.println(list);
     }
 }

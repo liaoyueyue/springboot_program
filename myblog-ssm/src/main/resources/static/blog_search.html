@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>博客搜索</title>
-    <link rel="stylesheet" href="css/blog_list_comm.css" />
     <link rel="stylesheet" href="css/blog_list.css" />
     <link rel="stylesheet" href="css/common.css" />
     <script src="js/jquery.min.js"></script>
@@ -15,6 +14,14 @@
     <div class="nav-wrapper"></div>
     <div class="container" style="justify-content: center">
       <div class="container-right">
+        <div class="sift-div">
+          <label for="blog-sort-select">选择排序方式:</label>
+          <select id="blog-sort-select">
+            <option value="mix">综合</option>
+            <option value="new">最新</option>
+            <option value="hot">热门</option>
+          </select>
+        </div>
         <div id="blogs-div">
           <!-- <div class="blog">
             <div class="title">我的第一篇博客</div>
@@ -54,18 +61,48 @@
       let pageSize = 4;
       // 页面总数
       let pageCount;
-      // 搜索内容
-      let searchInfo;
+      // 搜索内容 
+      // let searchInfo; (引用的common.js内已经定义)
+      // 排序规则
+      let sortOption;
 
-      // 尝试在 query string 里获取当前页面
+      // 尝试在 query string 里获取当前页面索引、搜索内容、排序规则
       pageIndex = getUrlValue("pageIndex") == "" ? 1 : getUrlValue("pageIndex");
       searchInfo = getUrlValue("searchInfo");
+      sortOption =
+        getUrlValue("sortOption") == "" ? "mix" : getUrlValue("sortOption");
+
+      $(document).ready(function () {
+        // 页面加载完成时执行一次排序
+        showArticleInfoList();
+        // 监听选择框变化事件
+        $("#blog-sort-select").change(function () {
+          // 页码置为 1
+          pageIndex = 1;
+          // 规则改变
+          sortOption = $("#blog-sort-select").val();
+          location.href =
+            "blog_search.html?searchInfo=" +
+            searchInfo +
+            "&pageIndex=" +
+            pageIndex +
+            "&sortOption=" +
+            sortOption;
+        });
+        // 设置选择框的值
+        $("#blog-sort-select").val(sortOption);
+      });
 
       function showArticleInfoList() {
         $.ajax({
           url: "/article/search",
           type: "post",
-          data: { pageIndex: pageIndex, pageSize: pageSize, searchInfo: searchInfo },
+          data: {
+            pageIndex: pageIndex,
+            pageSize: pageSize,
+            searchInfo: searchInfo,
+            sortOption: sortOption,
+          },
           success: function (result) {
             if (
               result != null &&
@@ -90,14 +127,28 @@
               }
               $("#blogs-div").html(blogsDiv);
               pageCount = result.data.pageCount;
+            } else if (
+              result != null &&
+              result.code == -1 &&
+              result.msg == "No search found"
+            ) {
+              $(".blog-pagnation-wrapper").hide();
+              $("#blogs-div").html(
+                "<h3>没有搜索到关于 " + searchInfo + " 的内容。</h3>"
+              );
+            } else {
+              alert("查询博客出现错误，请稍后重试！");
             }
           },
         });
       }
-      showArticleInfoList();
 
       function firstPage() {
-        location.href = "blog_search.html?searchInfo=" + searchInfo + "&pageIndex=" + parseInt(pageIndex);
+        location.href =
+          "blog_search.html?searchInfo=" +
+          searchInfo +
+          "&sortOption=" +
+          sortOption;
       }
 
       function beforePage() {
@@ -105,7 +156,13 @@
           alert("当前已经在首页了！");
           return;
         }
-        location.href = "blog_search.html?searchInfo=" + searchInfo + "&pageIndex=" + (parseInt(pageIndex) - 1);
+        location.href =
+          "blog_search.html?searchInfo=" +
+          searchInfo +
+          "&pageIndex=" +
+          (parseInt(pageIndex) - 1) +
+          "&sortOption=" +
+          sortOption;
       }
 
       function nextPage() {
@@ -113,7 +170,13 @@
           alert("已经没有下一页了！");
           return;
         }
-        location.href = "blog_search.html?searchInfo=" + searchInfo + "&pageIndex=" + (parseInt(pageIndex) + 1);
+        location.href =
+          "blog_search.html?searchInfo=" +
+          searchInfo +
+          "&pageIndex=" +
+          (parseInt(pageIndex) + 1) +
+          "&sortOption=" +
+          sortOption;
       }
 
       function lastPage() {
@@ -122,7 +185,12 @@
           return;
         }
         location.href =
-        "blog_search.html?searchInfo=" + searchInfo + "&pageIndex=" + pageCount;
+          "blog_search.html?searchInfo=" +
+          searchInfo +
+          "&pageIndex=" +
+          pageCount +
+          "&sortOption=" +
+          sortOption;
       }
 
       function jumpPage() {
@@ -131,15 +199,25 @@
           jumpPageIndex = "";
           alert("页面非法请重新输入");
           return;
-        } else if (jumpPageIndex >= pageCount) {
+        } else if (jumpPageIndex > pageCount) {
           jumpPageIndex = "";
           alert("没有这么多页数,为你跳转到末页");
           location.href =
-            "blog_search.html?searchInfo=" + searchInfo + "&pageIndex=" + pageCount;
+            "blog_search.html?searchInfo=" +
+            searchInfo +
+            "&pageIndex=" +
+            pageCount +
+            "&sortOption=" +
+            sortOption;
           return;
         } else {
           location.href =
-            "blog_search.html?searchInfo=" + searchInfo + "&pageIndex=" + jumpPageIndex;
+            "blog_search.html?searchInfo=" +
+            searchInfo +
+            "&pageIndex=" +
+            jumpPageIndex +
+            "&sortOption=" +
+            sortOption;
         }
       }
 
