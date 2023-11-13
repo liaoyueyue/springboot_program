@@ -47,8 +47,8 @@ public class ArticleService {
         return articleMapper.queryArticleById(id);
     }
 
-    public int updateRCount(Integer id) {
-        return articleMapper.updateRCount(id);
+    public void updateRCount(Integer id) {
+        articleMapper.updateRCount(id);
     }
 
     public int addArticle(Article article) {
@@ -95,5 +95,13 @@ public class ArticleService {
     }
     public int queryArticleCountByTitle(String searchInfo) {
         return articleMapper.queryArticleCountByTitle(searchInfo);
+    }
+
+    public int addDraft(Article article) {
+        return articleMapper.addDraft(article);
+    }
+
+    public boolean queryIdExist(Integer id) {
+        return articleMapper.queryIdExist(id)==1;
     }
 }

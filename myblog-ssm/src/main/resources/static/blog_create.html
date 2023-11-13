@@ -24,7 +24,8 @@
             type="text"
             placeholder="在这里写下文章标题"
           />
-          <button id="submitArticle" onclick="submitArticle()">发布文章</button>
+          <button id="save-draft" onclick="saveDraft()">保存草稿</button>
+          <button id="submit-article" onclick="submitArticle()">发布文章</button>
         </div>
         <!-- 正文编辑区 -->
         <div id="editorDiv">
@@ -49,6 +50,81 @@
         });
       }
       initEditor("# 在这里写下一篇文章"); // 初始化编译器的值
+
+      let blogId;
+
+      blogId = getUrlValue("id") == "" ? -1 : getUrlValue("id");
+
+      // 获取当前 url 参数的公共方法
+      function getUrlValue(key) {
+        let params = location.search;
+        if (params.length > 1) {
+          params = params.substring(1);
+          let paramArr = params.split("&");
+          for (let i = 0; i < paramArr.length; i++) {
+            let kv = paramArr[i].split("=");
+            if (kv[0] == key) {
+              return kv[1];
+            }
+          }
+        }
+        return "";
+      }
+
+      // 获取需要继续编写的草稿文章内容
+      function showArticleInfo(id) {
+        // id == -1 代表是新博客，不是草稿文章
+        if (id == -1) {
+          return;
+        }
+        $.ajax({
+          url: "/article/showinfo",
+          type: "post",
+          data: { id: id },
+          success: function (result) {
+            if (result != null && result.code == 200) {
+              $("#article-title").attr("value", result.data.title);
+              initEditor(result.data.content);
+            } else {
+              alert("获取文章信息失败");
+            }
+          },
+        });
+      }
+      showArticleInfo(blogId);
+
+
+      // 保存为草稿
+      function saveDraft() {
+        let articleTitle = $("#article-title");
+        let articleContentValue = editor.getValue();
+        if (articleTitle.val() == "") {
+          alert("请输入文章标题");
+          articleTitle.focus();
+          return;
+        }
+        if (
+          articleContentValue == "" ||
+          articleContentValue == "# 在这里写下一篇博客"
+        ) {
+          alert("请先输入文章内容");
+          return;
+        }
+        $.ajax({
+          url: "article/savedraft",
+          type: "post",
+          data: {id: blogId, title: articleTitle.val(), content: articleContentValue },
+          success: function(result) {
+            if (result != null && result.code == 200 && result.data == 1) {
+              alert("草稿保存成功！");
+              location.reload();
+            } else {
+              alert("草稿保存失败！");
+            }
+          }
+        });
+      }
+
       // 提交
       function submitArticle() {
         let articleTitle = $("#article-title");
@@ -69,11 +145,11 @@
           $.ajax({
             url: "/article/submitarticle",
             type: "post",
-            data: { title: articleTitle.val(), content: articleContentValue },
+            data: {id: blogId, title: articleTitle.val(), content: articleContentValue },
             success: function (result) {
               if (result != null && result.code == 200 && result.data == 1) {
                 alert("文章发表成功！");
-                location.href = "/blog_list.html";
+                location.href = "blog_list.html?sortOption=new";
               } else {
                 alert("文章添加失败，请重试！");
               }

@@ -39,8 +39,8 @@
         </div>
         <div id="blogs-div">
           <!-- <div class="blog">
-          <div class="title">出师表</div>
-            <div class="date">2022-11-06 22:29</div>
+            <div class="title">出师表</div>
+            <div class="info">于2022-11-06 22:29更新<span class="blog-state">草稿</span></div>
             <div class="desc">
               先帝创业未半而中道崩殂，今天下三分，益州疲弊，此诚危急存亡之秋也。然侍卫之臣不懈于内，忠志之士忘身于外者，盖追先帝之殊遇，欲报之于陛下也。诚宜开张圣听，以光先帝遗德，恢弘志士之气，不宜妄自菲薄，引喻失义，以塞忠谏之路也。
             </div>
@@ -81,9 +81,12 @@
 
       // 尝试在query string 里获取当前页面索引和排序规则
       pageIndex = getUrlValue("pageIndex") == "" ? 1 : getUrlValue("pageIndex");
-      sortOption = getUrlValue("sortOption") == "" ? "mix" : getUrlValue("sortOption");
+      sortOption =
+        getUrlValue("sortOption") == "" ? "mix" : getUrlValue("sortOption");
 
       $(document).ready(function () {
+        // 设置个人内容排序规则为按修改时间
+        sortOption = 'new';
         // 页面加载完成时执行一次排序
         showArticleInfoList();
         // 监听选择框变化事件
@@ -92,12 +95,15 @@
           pageIndex = 1;
           // 规则改变
           sortOption = $("#blog-sort-select").val();
-          location.href = "blog_list.html?pageIndex=" + pageIndex + "&sortOption=" + sortOption;
+          location.href =
+            "blog_list.html?pageIndex=" +
+            pageIndex +
+            "&sortOption=" +
+            sortOption;
         });
         // 设置选择框的值
         $("#blog-sort-select").val(sortOption);
       });
-      
 
       function showUserInfo() {
         $.ajax({
@@ -120,7 +126,7 @@
 
       function showArticleInfoList() {
         $.ajax({
-          url: "/article/showinfolist",
+          url: "/article/showinfolistbyuid",
           type: "post",
           data: {
             pageIndex: pageIndex,
@@ -128,45 +134,56 @@
             sortOption: sortOption,
           },
           success: function (result) {
-            if (result != null && result.code == 200) {
-              if (result.data != null && result.data.articleList.length > 0) {
-                // 发表过文章
-                let blogsDiv = "";
-                for (let i = 0; i < result.data.articleList.length; i++) {
-                  let blogItem = result.data.articleList[i];
-                  blogsDiv += '<div class="blog">';
-                  blogsDiv +=
-                    '<div class="title">' + blogItem.title + "</div>";
-                  blogsDiv +=
-                    '<div class="date">于 ' +
-                    blogItem.updateTime +
-                    " 更新</div>";
-                  blogsDiv +=
-                    '<div class="desc">' + blogItem.content + "</div>";
-                  blogsDiv += '<div class="operations">';
-                  blogsDiv +=
-                    '<a href="blog_detail.html?id=' +
-                    blogItem.id +
-                    '">查看全文 &gt;&gt; </a>';
-                  blogsDiv +=
-                    '<a href="blog_update.html?id=' +
-                    blogItem.id +
-                    '">修改文章 &gt;&gt; </a>';
-                  blogsDiv +=
-                    '<a href="javascript:delArticle(' +
-                    blogItem.id +
-                    ')">删除文章 &gt;&gt; </a>';
-                  blogsDiv += "</div>";
-                  blogsDiv += "</div>";
+            if (
+              result.data != null &&
+              result.code == 200 &&
+              result.data.articleList.length > 0
+            ) {
+              // 发表过文章
+              let blogsDiv = "";
+              for (let i = 0; i < result.data.articleList.length; i++) {
+                let blogItem = result.data.articleList[i];
+                blogsDiv += '<div class="blog">';
+                blogsDiv += '<div class="title">' + blogItem.title + "</div>";
+                blogsDiv += '<div class="info">于 ' + blogItem.updateTime + ' 更新';
+                if(blogItem.state == 0) {
+                  blogsDiv += '<span class="blog-state">草稿</span>';
                 }
-                $("#blogs-div").html(blogsDiv);
-                pageCount = result.data.pageCount;
-              } else {
-                // 没发表过文章
-                $("#blogs-div").html("<h3>暂无文章</h3>");
+                blogsDiv += '</div>'
+                blogsDiv += '<div class="desc">' + blogItem.content + "</div>";
+                blogsDiv += '<div class="operations">';
+                if(blogItem.state == 0) {
+                  blogsDiv += '<a href="blog_create.html?id=' + blogItem.id + '">继续编写 &gt;&gt; </a>';
+                  blogsDiv += '<a href="javascript:delArticle(' + blogItem.id + ')">删除草稿 &gt;&gt; </a>';
+                  blogsDiv += "</div>";
+                  blogsDiv += "</div>";
+                  continue;
+                }
+                blogsDiv +=
+                  '<a href="blog_detail.html?id=' +
+                  blogItem.id +
+                  '">查看全文 &gt;&gt; </a>';
+                blogsDiv +=
+                  '<a href="blog_update.html?id=' +
+                  blogItem.id +
+                  '">修改文章 &gt;&gt; </a>';
+                blogsDiv +=
+                  '<a href="javascript:delArticle(' +
+                  blogItem.id +
+                  ')">删除文章 &gt;&gt; </a>';
+                blogsDiv += "</div>";
+                blogsDiv += "</div>";
               }
+              $("#blogs-div").html(blogsDiv);
+              pageCount = result.data.pageCount;
+            } else if (
+              result != null &&
+              result.code == -1 &&
+              result.msg == "Article not found"
+            ) {
+              $(".container-right").html("<h3>暂无文章</h3>");
             } else {
-              alert("查询文章列表失败,请重试");
+              alert("查询个人文章出错，请稍后重试！");
             }
           },
         });
@@ -182,7 +199,10 @@
           return;
         }
         location.href =
-          "blog_list.html?pageIndex=" + (parseInt(pageIndex) - 1) + "&sortOption=" + sortOption;
+          "blog_list.html?pageIndex=" +
+          (parseInt(pageIndex) - 1) +
+          "&sortOption=" +
+          sortOption;
       }
 
       function nextPage() {
@@ -191,7 +211,10 @@
           return;
         }
         location.href =
-          "blog_list.html?pageIndex=" + (parseInt(pageIndex) + 1) + "&sortOption=" + sortOption;
+          "blog_list.html?pageIndex=" +
+          (parseInt(pageIndex) + 1) +
+          "&sortOption=" +
+          sortOption;
       }
 
       function lastPage() {
@@ -199,7 +222,8 @@
           alert("已经在末页了");
           return;
         }
-        location.href = "blog_list.html?pageIndex=" + pageCount + "&sortOption=" + sortOption;
+        location.href =
+          "blog_list.html?pageIndex=" + pageCount + "&sortOption=" + sortOption;
       }
 
       function jumpPage() {
@@ -211,10 +235,18 @@
         } else if (jumpPageIndex > pageCount) {
           jumpPageIndex = "";
           alert("没有这么多页数,为你跳转到末页");
-          location.href = "blog_list.html?pageIndex=" + pageCount + "&sortOption=" + sortOption;
+          location.href =
+            "blog_list.html?pageIndex=" +
+            pageCount +
+            "&sortOption=" +
+            sortOption;
           return;
         } else {
-          location.href = "blog_list.html?pageIndex=" + jumpPageIndex + "&sortOption=" + sortOption;
+          location.href =
+            "blog_list.html?pageIndex=" +
+            jumpPageIndex +
+            "&sortOption=" +
+            sortOption;
         }
       }
 

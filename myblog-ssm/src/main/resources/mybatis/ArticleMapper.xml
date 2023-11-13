@@ -11,9 +11,15 @@
         <result column="rcount" property="rcount"/>
         <result column="state" property="state"/>
     </resultMap>
+
     <insert id="addArticle">
         insert into articleinfo(title, content, uid)
         values (#{title}, #{content}, #{uid})
+    </insert>
+
+    <insert id="addDraft">
+        insert into articleinfo(title, content, uid, state)
+        values (#{title}, #{content}, #{uid}, #{state})
     </insert>
 
     <update id="updateRCount">
@@ -69,12 +75,14 @@
     <select id="queryArtList" resultMap="baseMap">
         select *
         from articleinfo
+        where state = 1
         limit #{pageSize} offset #{startIndex}
     </select>
 
     <select id="queryArtListSortDate" resultMap="baseMap">
         select *
         from articleinfo
+        where state = 1
         order by updatetime desc
         limit #{pageSize} offset #{startIndex}
     </select>
@@ -82,6 +90,7 @@
     <select id="queryArtListSortRCount" resultMap="baseMap">
         select *
         from articleinfo
+        where state = 1
         order by rcount desc
         limit #{pageSize} offset #{startIndex}
     </select>
@@ -89,14 +98,14 @@
     <select id="queryArtListByTitle" resultMap="baseMap">
         select *
         from articleinfo
-        where title like CONCAT('%', #{searchInfo}, '%')
+        where state = 1 and title like CONCAT('%', #{searchInfo}, '%')
         limit #{pageSize} offset #{startIndex}
     </select>
 
     <select id="queryArtListByTitleSortDate" resultMap="baseMap">
         select *
         from articleinfo
-        where title like CONCAT('%', #{searchInfo}, '%')
+        where state = 1 and title like CONCAT('%', #{searchInfo}, '%')
         order by updatetime desc
         limit #{pageSize} offset #{startIndex}
     </select>
@@ -104,7 +113,7 @@
     <select id="queryArtListByTitleSortRCount" resultMap="baseMap">
         select *
         from articleinfo
-        where title like CONCAT('%', #{searchInfo}, '%')
+        where state = 1 and title like CONCAT('%', #{searchInfo}, '%')
         order by rcount desc
         limit #{pageSize} offset #{startIndex}
     </select>
@@ -112,14 +121,20 @@
     <select id="queryArticleCount" resultType="java.lang.Integer">
         select count(*)
         from articleinfo
+        where state = 1
     </select>
 
     <select id="queryArticleCountByTitle" resultType="java.lang.Integer">
         select count(*)
         from articleinfo
-        where title like CONCAT('%', #{searchInfo}, '%')
+        where state = 1 and title like CONCAT('%', #{searchInfo}, '%')
     </select>
 
+    <select id="queryIdExist" resultType="java.lang.Integer">
+        select count(*)
+        from articleinfo
+        where id = #{id}
+    </select>
 
     <delete id="delArticleById">
         delete

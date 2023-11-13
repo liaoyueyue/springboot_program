@@ -30,8 +30,8 @@ import java.util.List;
 public class ArticleController {
     @Autowired
     ArticleService articleService;
-    @PostMapping("/showinfolist")
-    public AjaxResult showInfoList(HttpServletRequest request, Integer pageIndex, Integer pageSize, String sortOption) {
+    @PostMapping("/showinfolistbyuid")
+    public AjaxResult showInfoListByUid(HttpServletRequest request, Integer pageIndex, Integer pageSize, String sortOption) {
         // 参数矫正
         if (pageIndex == null || pageIndex < 1) {
             pageIndex = 1;
@@ -66,6 +66,19 @@ public class ArticleController {
         return AjaxResult.success(result);
     }
 
+    @PostMapping("/showinfoaddrcount")
+    public AjaxResult showInfoAddRCount(Integer id) {
+        if (id == null || id <= 0) {
+            return AjaxResult.fail(-1, "illegal request");
+        }
+        Article article = articleService.queryArticleById(id);
+        if (article == null) {
+            return AjaxResult.fail(-1, "illegal request");
+        }
+        articleService.updateRCount(id);
+        return AjaxResult.success(article);
+    }
+
     @PostMapping("/showinfo")
     public AjaxResult showInfo(Integer id) {
         if (id == null || id <= 0) {
@@ -75,7 +88,6 @@ public class ArticleController {
         if (article == null) {
             return AjaxResult.fail(-1, "illegal request");
         }
-        articleService.updateRCount(id);
         return AjaxResult.success(article);
     }
 
@@ -93,13 +105,21 @@ public class ArticleController {
 
     @PostMapping("/submitarticle")
     public AjaxResult submitArticle(HttpServletRequest request, Article article) {
-        if (article == null || !StringUtils.hasLength(article.getTitle()) || !StringUtils.hasLength(article.getContent())) {
+        // 非空验证
+        if (article == null || article.getId() == null || !StringUtils.hasLength(article.getTitle()) || !StringUtils.hasLength(article.getContent())) {
             return AjaxResult.fail(-1, "illegal parameter");
         }
+        // 获取用户会话信息
         User user = UserSessionUtils.getSessionUser(request);
         if (user == null || user.getId() <= 0) {
             return AjaxResult.fail(-2, "invalid user");
         }
+        // 判断文章是否存在（草稿）
+        if (article.getId() != -1 && articleService.queryIdExist(article.getId())) {
+            // 存在则删除
+            articleService.delArticleById(article.getId(), user.getId());
+        }
+        // 新文章
         article.setUid(user.getId());
         return AjaxResult.success(articleService.addArticle(article));
     }
@@ -179,6 +199,29 @@ public class ArticleController {
         result.put("articleList", articleList);
         result.put("pageCount", pageCount);
         return AjaxResult.success(result);
+    }
+
+    @PostMapping("/savedraft")
+    public AjaxResult saveDraft(HttpServletRequest request, Article article) {
+        // 非空验证
+        if (article == null || article.getId() == null || !StringUtils.hasLength(article.getTitle()) || !StringUtils.hasLength(article.getContent())) {
+            return AjaxResult.fail(-1, "illegal parameter");
+        }
+        // 获取用户会话信息
+        User user = UserSessionUtils.getSessionUser(request);
+        if (user == null || user.getId() <= 0) {
+            return AjaxResult.fail(-2, "invalid user");
+        }
+        // 判断是否为旧草稿
+        if (article.getId() != -1 && articleService.queryIdExist(article.getId())) {
+            // 旧草稿
+            article.setUid(user.getId());
+            return AjaxResult.success(articleService.updateArticle(article));
+        }
+        // 新草稿
+        article.setUid(user.getId());
+        article.setState(0);
+        return AjaxResult.success(articleService.addDraft(article));
     }
 
 }

@@ -12,7 +12,7 @@
 }
 
 #article-title {
-  width: 897px;
+  width: 790px;
   height: 40px;
   font-size: 16px;
   padding-left: 5px;
@@ -22,7 +22,7 @@
   background-color: rgba(255, 255, 255, 0.8);
 }
 
-#submitArticle {
+#save-draft {
   width: 100px;
   height: 40px;
   outline: none;
@@ -32,7 +32,18 @@
   border-radius: 6px;
 }
 
-#submitArticle:active {
+#submit-article {
+  width: 100px;
+  height: 40px;
+  outline: none;
+  border: none;
+  color: white;
+  background-color: #67c23a;
+  border-radius: 6px;
+}
+
+#submit-article:active,
+#save-draft:active {
   background-color: grey;
 }
 

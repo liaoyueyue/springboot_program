@@ -132,8 +132,7 @@
               result.code == -1 &&
               result.msg == "No search found"
             ) {
-              $(".blog-pagnation-wrapper").hide();
-              $("#blogs-div").html(
+              $(".container-right").html(
                 "<h3>没有搜索到关于 " + searchInfo + " 的内容。</h3>"
               );
             } else {

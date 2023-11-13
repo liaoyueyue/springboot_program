@@ -25,6 +25,8 @@ public class ArticleListUtils {
             String content = removeMarkdownTags(a.getContent());
             if (content.length() > count) {
                 a.setContent(content.substring(0, count) + "...");
+            } else {
+                a.setContent(content);
             }
         }
     }

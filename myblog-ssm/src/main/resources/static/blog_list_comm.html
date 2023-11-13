@@ -25,7 +25,7 @@
         <div id="blogs-div">
           <!-- <div class="blog">
             <div class="title">我的第一篇博客</div>
-            <div class="date">2021-06-02</div>
+            <div class="info">2021-06-02</div>
             <div class="desc">
               从今天起, 我要认真敲代码. Lorem ipsum, dolor sit amet consectetur
               adipisicing elit. Cum distinctio ullam eum ut veroab laborum
@@ -104,7 +104,7 @@
                 blogsDiv += '<div class="blog">';
                 blogsDiv += '<div class="title">' + blogItem.title + "</div>";
                 blogsDiv +=
-                  '<div class="date">' + blogItem.updateTime + "</div>";
+                  '<div class="info">' + blogItem.updateTime + "</div>";
                 blogsDiv += '<div class="desc">' + blogItem.content + "</div>";
                 blogsDiv += '<div class="operations">';
                 blogsDiv +=
@@ -121,8 +121,7 @@
               result.code == -1 &&
               result.msg == "No search found"
             ) {
-              $(".blog-pagnation-wrapper").hide();
-              $("#blogs-div").html("<h3>还没有人写过博客呢！</h3>");
+              $(".container-right").html("<h3>还没有人写过博客呢！</h3>");
             } else {
               alert("查询博客出现错误，请稍后重试！");
             }

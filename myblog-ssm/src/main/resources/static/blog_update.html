@@ -11,7 +11,6 @@
     <script src="js/jquery.min.js"></script>
     <script src="editor.md/editormd.js"></script>
     <script src="js/common.js"></script>
-
   </head>
   <body>
     <div class="nav-wrapper"></div>
@@ -23,8 +22,11 @@
             id="article-title"
             type="text"
             placeholder="在这里写下文章标题"
+            style="width: 895px"
           />
-          <button id="submitArticle" onclick="updateArticle()">更新文章</button>
+          <button id="submit-article" onclick="updateArticle()">
+            更新文章
+          </button>
         </div>
         <!-- 正文编辑区 -->
         <div id="editorDiv">
@@ -40,11 +42,11 @@
           height: "calc(100% - 50px)",
           markdown: md,
           path: "editor.md/lib/",
-          saveHTMLToTextarea: true, 
+          saveHTMLToTextarea: true,
         });
       }
       initEditor("# 文章内容没有加载"); // 初始化编译器的值
-      
+
       // 获取当前 url 参数的公共方法
       function getUrlValue(key) {
         let params = location.search;
@@ -82,7 +84,7 @@
         });
       }
       showArticleInfo(getUrlValue("id"));
-      
+
       // 更新
       function updateArticle() {
         let articleTitle = $("#article-title");
@@ -93,20 +95,22 @@
             articleTitle.focus();
             return;
           }
-          if (
-            articleContentValue == ""
-          ) {
+          if (articleContentValue == "") {
             alert("请先输入文章内容");
             return;
           }
           $.ajax({
             url: "/article/updatearticle",
             type: "post",
-            data: {id:getUrlValue("id"), title: articleTitle.val(), content: articleContentValue},
+            data: {
+              id: getUrlValue("id"),
+              title: articleTitle.val(),
+              content: articleContentValue,
+            },
             success: function (result) {
               if (result != null && result.code == 200 && result.data == 1) {
-                alert("文章更新成功！"); 
-                location.href = "/blog_list.html"
+                alert("文章更新成功！");
+                location.href = "/blog_list.html";
               } else {
                 alert("文章更新失败，请重试！");
               }

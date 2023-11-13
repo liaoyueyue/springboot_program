@@ -150,4 +150,17 @@ public interface ArticleMapper {
      */
     List<Article> queryArtListByTitleSortRCount(@Param("searchInfo") String searchInfo, @Param("pageSize") Integer pageSize, @Param("startIndex") Integer startIndex);
 
+    /**
+     * 保存草稿文章
+     * @param article 文章
+     * @return 数据库影响行数
+     */
+    int addDraft(Article article);
+
+    /**
+     * 查询文章id是否存在
+     * @param id 文章编号
+     * @return 数据库影响行数
+     */
+    int queryIdExist(Integer id);
 }
