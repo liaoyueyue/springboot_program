@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>修改邮箱</title>
+    <link rel="stylesheet" href="css/common.css" />
+    <link rel="stylesheet" href="css/user_center.css" />
+    <link rel="stylesheet" href="css/user_email_update.css" />
+    <script src="js/jquery.min.js"></script>
+    <script src="js/common.js"></script>
+  </head>
+  <body>
+    <div class="nav-wrapper"></div>
+    <div class="container" style="justify-content: center">
+      <div class="container-right">
+        <h3>邮箱修改</h3>
+        <hr />
+        <ul class="email-update-process">
+          <li class="first">
+            <div class="process-index">
+              <i style="background-color: rgb(0, 128, 0)">1</i>
+              <p style="color: rgb(0, 128, 0)">验证方式</p>
+            </div>
+            <div class="process-line"></div>
+          </li>
+          <li class="second">
+            <div class="process-index">
+              <i>2</i>
+              <p>安全验证</p>
+            </div>
+            <div class="process-line"></div>
+          </li>
+          <li class="last">
+            <i>3</i>
+            <p>修改邮箱</p>
+          </li>
+        </ul>
+        <!-- ---------------- 验证方式 ---------------------- -->
+        <div class="user-update-email-dialog" id="firstDialog">
+          <div class="row">
+            <span>验证方式</span>
+            <select id="verification-option">
+              <option value="emailVerification">通过邮箱验证</option>
+            </select>
+          </div>
+          <button type="button" class="next-step" onclick="nextSecond()">
+            下一步
+          </button>
+        </div>
+        <!-- ---------------- 安全验证 ---------------------- -->
+        <div
+          class="user-update-email-dialog"
+          id="secondDialog"
+          style="display: none"
+        >
+          <div class="row">
+            <span>邮箱</span>
+            <label id="old-email"></label>&nbsp;
+            <label class="sendCodeLbl" onclick="sendVerificationCodeForVerification()"
+              >获取验证码</label
+            >&nbsp;
+          </div>
+          <div class="row">
+            <span>验证码</span>
+            <input
+              type="text"
+              id="verification-code-first"
+              placeholder="请输入验证码"
+            />
+          </div>
+          <button type="button" class="next-step" onclick="verificationEmail()">
+            下一步
+          </button>
+        </div>
+        <!-- ---------------- 修改邮箱 ---------------------- -->
+        <div
+          class="user-update-email-dialog"
+          id="lastDialog"
+          style="display: none"
+        >
+          <div class="row">
+            <span>您的新邮箱</span>
+            <input type="text" id="new-email" placeholder="请输入新的邮箱" />
+            <label
+              class="sendCodeLbl"
+              style="position: relative; right: 90px; font-size: 14px"
+              onclick="sendverificationcodeforregister()"
+              >获取验证码</label
+            >&nbsp;
+          </div>
+          <div class="row">
+            <span>验证码</span>
+            <input
+              type="text"
+              id="verification-code-second"
+              placeholder="请输入验证码"
+            />
+          </div>
+          <button type="button" class="next-step" onclick="updateEmail()">
+            修改邮箱
+          </button>
+        </div>
+      </div>
+    </div>
+    <script>
+      function showEmail() {
+        $.ajax({
+          url: "/user/showinfo",
+          type: "post",
+          data: {},
+          success: function (result) {
+            if (result != null && result.code == 200) {
+              $("#old-email").text(result.data.email);
+            } else {
+              alert("邮箱加载失败，请稍后重试！");
+            }
+          },
+        });
+      }
+      showEmail();
+
+      function sendVerificationCodeForVerification() {
+        // 1.提交 ajax 请求
+        $.ajax({
+          url: "/email/sendverificationcodeforverification",
+          type: "post",
+          data: {},
+          success: function (result) {
+            if (result != null && result.code == 200) {
+              alert("发送验证码成功，请到邮箱查看！");
+            } else if (result != null && result.msg == "User not logged in") {
+              alert("请登录后操作");
+            } else {
+              alert("抱歉执行失败，请稍后再试！");
+            }
+          },
+        });
+      }
+
+      function verificationEmail() {
+        let verificationCode = $("#verification-code-first");
+        if (verificationCode.val() == "") {
+          alert("请先输入验证码！");
+          verificationCode.focus();
+          return;
+        }
+        $.ajax({
+          url: "/user/verificationemail",
+          type: "post",
+          data: { verificationCode: verificationCode.val() },
+          success: function (result) {
+            if (result != null && result.code == 200) {
+              nextLast();
+            } else if (
+              result != null &&
+              result.msg == "Verification code error or expiration"
+            ) {
+              alert("验证码错误或者已经过期，请稍后重试");
+            } else {
+              alert("抱歉执行失败，请稍后再试！");
+            }
+          },
+        });
+      }
+
+      function sendverificationcodeforregister() {
+        let email = $("#new-email");
+        // 1.非空校验
+        if (email.val() == "") {
+          alert("请先输入新邮箱！");
+          email.focus();
+          return;
+        }
+        // 2.提交 ajax 请求
+        $.ajax({
+          url: "/email/sendverificationcodeforregister",
+          type: "post",
+          data: { email: email.val() },
+          success: function (result) {
+            if (result != null && result.code == 200) {
+              alert("发送验证码成功，请到邮箱查看！");
+            } else if (result != null && result.msg == "Email is illegal") {
+              alert("请检查您的邮箱格式！");
+            } else if (result != null && result.msg == "Email already exists") {
+              alert("该邮箱已经被注册");
+            } else {
+              alert("抱歉执行失败，请稍后再试！");
+            }
+          },
+        });
+      }
+
+      function updateEmail() {
+        let email = $("#new-email");
+        let verificationCode = $("#verification-code-second");
+        // 1.非空校验
+        if (email.val() == "") {
+          alert("请先输入新邮箱！");
+          email.focus();
+          return;
+        }
+        if (verificationCode.val() == "") {
+          alert("请先输入验证码！");
+          verificationCode.focus();
+          return;
+        }
+        // 2.发送请求
+        $.ajax({
+          url: "user/updateemail",
+          type: "post",
+          data: {email: email.val(), verificationCode: verificationCode.val()},
+          success: function (result) {
+            if (result != null && result.code == 200) {
+              alert("邮箱修改成功！");
+              location.href = "user_center.html";
+            }else if(result != null && result.msg == "Security verification expired") {
+              alert("安全验证已过期,请稍后重新安全验证后修改邮箱！");
+            } else if(result != null && result.msg == "Verification code error or expiration") {
+              alert("验证码错误或者已经过期！请重新获取！");
+            } else {
+              alert("抱歉执行失败，请稍后再试！");
+            }
+          }
+        });
+      }
+
+      function nextSecond() {
+        $(".email-update-process .first i").css("background-color", "");
+        $(".email-update-process .first p").css("color", "");
+        $(".email-update-process .second i").css(
+          "background-color",
+          "rgb(0, 128, 0)"
+        );
+        $(".email-update-process .second p").css("color", "rgb(0, 128, 0)");
+        $("#firstDialog").fadeOut(80);
+        $("#secondDialog").fadeIn();
+      }
+
+      function nextLast() {
+        $(".email-update-process .second i").css("background-color", "");
+        $(".email-update-process .second p").css("color", "");
+        $(".email-update-process .last i").css(
+          "background-color",
+          "rgb(0, 128, 0)"
+        );
+        $(".email-update-process .last p").css("color", "rgb(0, 128, 0)");
+        $("#secondDialog").fadeOut(80);
+        $("#lastDialog").fadeIn();
+      }
+    </script>
+  </body>
+</html>
