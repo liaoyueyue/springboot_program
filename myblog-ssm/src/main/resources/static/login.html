@@ -112,7 +112,7 @@
         }
         // 2.提交 ajax 请求
         $.ajax({
-          url: "/email/sendverificationcode",
+          url: "/email/sendverificationcodeforregister",
           type: "post",
           data: { email: email.val() },
           success: function (result) {
@@ -185,14 +185,9 @@
               }
             } else if (
               result != null &&
-              result.msg == "Verification code error"
+              result.msg == "Verification code error or expiration"
             ) {
-              alert("验证码错误，请检查后重试");
-            } else if (
-              result != null &&
-              result.msg == "Verification code expired"
-            ) {
-              alert("验证码过期，请稍后重试");
+              alert("验证码错误或者已经过期，请稍后重试");
             } else {
               alert("抱歉执行失败，请稍后再试！");
             }

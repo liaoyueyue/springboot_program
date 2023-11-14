@@ -15,8 +15,8 @@
     </resultMap>
 
     <insert id="addUser">
-        insert into userinfo(username, password, nickname)
-        values (#{username}, #{password}, #{nickname})
+        insert into userinfo(username, password, nickname, email)
+        values (#{username}, #{password}, #{nickname}, #{email})
     </insert>
 
     <update id="updateUser">
@@ -34,6 +34,11 @@
     <update id="updatePassword">
         update userinfo
         set password = #{newPassword}
+        where id = #{id}
+    </update>
+    <update id="updateEmailById">
+        update userinfo
+        set email = #{email}
         where id = #{id}
     </update>
 

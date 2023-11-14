@@ -49,14 +49,11 @@ public class UserController {
         }
         String userEmail = user.getEmail();
         // 2. 邮箱验证码校验
-        if (!verificationCode.equals(emailService.getVerificationCode(userEmail))) {
-            return AjaxResult.fail(-1, "Verification code error");
-        }
         // 检查邮箱验证码是否有效
         if (!emailService.isVerificationCodeValid(userEmail, verificationCode)) {
-            return AjaxResult.fail(-1, "Verification code expired");
+            return AjaxResult.fail(-1, "Verification code error or expiration");
         }
-        // 邮箱验证码有效，删除Redis中的验证码，执行注册操作
+        // 邮箱验证码有效，删除 Redis 中的验证码，执行注册操作
         emailService.deleteVerificationCode(userEmail);
         // 3.生成用户
         // 生成唯一用户名
@@ -208,5 +205,61 @@ public class UserController {
             return AjaxResult.success(200, result);
         }
         return AjaxResult.fail(-1, "illegal request");
+    }
+
+    @PostMapping("/verificationemail")
+    public AjaxResult verificationEmail(HttpServletRequest request, String verificationCode) {
+        // 1.非空校验
+        if (!StringUtils.hasLength(verificationCode)) {
+            return AjaxResult.fail(-1, "illegal parameter");
+        }
+        // 2.获取会话中用户信息
+        User user = UserSessionUtils.getSessionUser(request);
+        if (user == null) {
+            return AjaxResult.fail(-1, "illegal request");
+        }
+        String userEmail = user.getEmail();
+        // 3. 邮箱验证码校验
+        // 检查邮箱验证码是否有效
+        if (!emailService.isVerificationCodeValid(userEmail, verificationCode)) {
+            return AjaxResult.fail(-1, "Verification code error or expiration");
+        }
+        // 邮箱验证码有效，删除 Redis 中的验证码，验证成功，执行后续操作
+        emailService.deleteVerificationCode(userEmail);
+        // 存储通过安全验证的邮箱到 redis
+        emailService.storeSecurityVerification(userEmail);
+        return AjaxResult.success(200);
+    }
+
+    @PostMapping("/updateemail")
+    public AjaxResult updateEmail(HttpServletRequest request, String email, String verificationCode) {
+        // 1.非空校验
+        if (!StringUtils.hasLength(email) || !StringUtils.hasLength(verificationCode)) {
+            return AjaxResult.fail(-1, "illegal parameter");
+        }
+        // 2.获取会话中用户信息
+        User user = UserSessionUtils.getSessionUser(request);
+        if (user == null) {
+            return AjaxResult.fail(-1, "illegal request");
+        }
+        // 3.判断用户邮箱是否已经通过安全验证
+        String oldEmail = user.getEmail();
+        if (!emailService.isSecurityVerifiedEmail(oldEmail)) {
+            return AjaxResult.fail(-1, "Security verification expired");
+        }
+        // 4.从 redis 删除通过安全验证的邮箱
+        emailService.deleteSecurityVerification(oldEmail);
+        // 5.新邮箱验证码校验
+        // 检查邮箱验证码是否有效
+        if (!emailService.isVerificationCodeValid(email, verificationCode)) {
+            return AjaxResult.fail(-1, "Verification code error or expiration");
+        }
+        // 邮箱验证码有效，删除 Redis 中的验证码，验证成功，执行后续操作
+        emailService.deleteVerificationCode(email);
+        // 6.用户邮箱更新-数据库和会话
+        int result = userService.updateEmailById(user.getId(), email);
+        user.setEmail(email);
+        UserSessionUtils.updateSession(request, user);
+        return AjaxResult.success(200, result);
     }
 }

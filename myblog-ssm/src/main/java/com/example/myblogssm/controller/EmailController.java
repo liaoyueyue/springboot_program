@@ -2,6 +2,8 @@ package com.example.myblogssm.controller;
 
 import com.example.myblogssm.common.AjaxResult;
 import com.example.myblogssm.common.utils.EmailUtils;
+import com.example.myblogssm.common.utils.UserSessionUtils;
+import com.example.myblogssm.entity.User;
 import com.example.myblogssm.service.EmailService;
 import com.example.myblogssm.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +13,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,8 +32,8 @@ public class EmailController {
     EmailService emailService;
     @Autowired
     UserService userService;
-    @PostMapping("/sendverificationcode")
-    public AjaxResult sendVerificationCode(String email) {
+    @PostMapping("/sendverificationcodeforregister")
+    public AjaxResult sendVerificationCodeForRegister(String email) {
         // 1.非空验证
         if (!StringUtils.hasLength(email)) {
             return AjaxResult.fail(-1, "illegal request");
@@ -45,6 +49,25 @@ public class EmailController {
             return AjaxResult.fail(-1, "Email already exists");
         }
         // 3.发送6位验证码到用户邮箱
+        try {
+            String verificationCode = emailService.generateAndStoreVerificationCode(email);
+            emailService.sendVerificationCode(email, verificationCode);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("发送验证码邮件时发生异常了！", e);
+        }
+        return AjaxResult.success(200, "Successfully sent");
+    }
+
+    @PostMapping("/sendverificationcodeforverification")
+    public AjaxResult sendVerificationCodeForVerification(HttpServletRequest request) {
+        // 1.得到当前登录用户
+        User user = UserSessionUtils.getSessionUser(request);
+        if (user == null) {
+            return AjaxResult.fail(-1, "User not logged in");
+        }
+        String email = user.getEmail();
+        // 2.发送6位验证码到用户邮箱
         try {
             String verificationCode = emailService.generateAndStoreVerificationCode(email);
             emailService.sendVerificationCode(email, verificationCode);

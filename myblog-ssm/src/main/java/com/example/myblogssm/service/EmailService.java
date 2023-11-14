@@ -34,7 +34,7 @@ public class EmailService {
         message.setFrom("liaoyueyue.email@qq.com");
         message.setTo(toEmail);
         message.setSubject("个人博客系统");
-        message.setText("您的验证码为: " + code);
+        message.setText("您的验证码为: " + code + "。 如果不是您操作的请不要将验证码给他人。");
         mailSender.send(message);
     }
 
@@ -78,6 +78,35 @@ public class EmailService {
      */
     public void deleteVerificationCode(String email) {
         String key = "verification_code:" + email;
+        redisTemplate.delete(key);
+    }
+
+    /**
+     * 存储通过安全验证的邮箱到 redis
+     * @param email 邮箱
+     */
+    public void storeSecurityVerification(String email) {
+        String key = "security_verification:" + email;
+        String value = "true";
+        redisTemplate.opsForValue().set(key, value, 5, TimeUnit.MINUTES); // 设置验证码的过期时间为5分钟
+    }
+
+    /**
+     * 判断是否为通过安全验证的邮箱
+     * @param email 邮箱
+     */
+    public boolean isSecurityVerifiedEmail(String email) {
+        String key = "security_verification:" + email;
+        String value = (String) redisTemplate.opsForValue().get(key);
+        return value != null && value.equals("true");
+    }
+
+    /**
+     * 从 redis 删除通过安全验证的邮箱
+     * @param email 邮箱
+     */
+    public void deleteSecurityVerification(String email) {
+        String key = "security_verification:" + email;
         redisTemplate.delete(key);
     }
 }

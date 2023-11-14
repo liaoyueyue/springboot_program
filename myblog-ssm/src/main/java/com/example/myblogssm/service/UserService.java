@@ -48,4 +48,7 @@ public class UserService {
         return userMapper.queryEmailExist(email);
     }
 
+    public int updateEmailById(Integer id, String email) {
+        return userMapper.updateEmailById(id, email);
+    }
 }
