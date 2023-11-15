@@ -9,3 +9,22 @@ spring:
     port: 6379
     password: pwd123456
     database: 0
+  mail:
+    host: smtp.qq.com
+    port: 465 #端口号 465 或 587
+    username: liaoyueyue.email@qq.com
+    password: ipkphrqvhwokbebi
+    default-encoding: utf-8
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: false
+          socketFactory:
+            port: 465
+            class: javax.net.ssl.SSLSocketFactory
+          ssl:
+            enable: true

@@ -55,6 +55,7 @@ public class EmailController {
         } catch (Exception e) {
             e.printStackTrace();
             log.error("发送验证码邮件时发生异常了！", e);
+            return AjaxResult.fail(-1, "Email sending failed");
         }
         return AjaxResult.success(200, "Successfully sent");
     }
@@ -74,6 +75,7 @@ public class EmailController {
         } catch (Exception e) {
             e.printStackTrace();
             log.error("发送验证码邮件时发生异常了！", e);
+            return AjaxResult.fail(-1, "Email sending failed");
         }
         return AjaxResult.success(200, "Successfully sent");
     }

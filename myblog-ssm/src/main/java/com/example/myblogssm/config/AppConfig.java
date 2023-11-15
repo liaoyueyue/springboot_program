@@ -1,5 +1,6 @@
 package com.example.myblogssm.config;
 
+import com.example.myblogssm.common.AppConstant;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -36,7 +37,7 @@ public class AppConfig implements WebMvcConfigurer {
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/upload/**")
-                .addResourceLocations("classpath:/upload/");
+        registry.addResourceHandler("/upload/**")// 访问路径
+                .addResourceLocations("file:" + AppConstant.IMG_PATH_ABSOLUTE);
     }
 }

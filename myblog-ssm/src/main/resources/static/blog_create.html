@@ -24,8 +24,29 @@
             type="text"
             placeholder="在这里写下文章标题"
           />
-          <button id="save-draft" onclick="saveDraft()">保存草稿</button>
-          <button id="submit-article" onclick="submitArticle()">发布文章</button>
+          <button id="save-draft" class="simple-button" onclick="saveDraft()">
+            保存草稿
+          </button>
+          <button id="open-time-submit" class="simple-button">定时发布</button>
+          <div id="time-submit-container" class="modal-wrapper">
+            <div class="modal-content">
+              <span class="close">&times;</span>
+              <h2>定时发布</h2>
+              <br />
+              <label for="datetime"
+                >请选择当前时间后 4小时 至 7天 进行定时发布</label
+              >
+              <div>
+                <input type="datetime-local" id="datetime" name="datetime" />
+              </div>
+              <br />
+              <button class="close simple-button">取消</button>
+              <button id="time-submit" class="simple-button">提交</button>
+            </div>
+          </div>
+          <button class="simple-button" onclick="submitArticle()">
+            发布文章
+          </button>
         </div>
         <!-- 正文编辑区 -->
         <div id="editorDiv">
@@ -51,8 +72,42 @@
       }
       initEditor("# 在这里写下一篇文章"); // 初始化编译器的值
 
-      let blogId;
+      // 控制定时发布模态框的显示和隐藏
+      $(document).ready(function () {
+        let modal = $("#time-submit-container");
+        let open = $("#open-time-submit");
+        let close = $(".close");
+        let timeSubmit = $("#time-submit");
+        var datetimeInput = $("#datetime");
 
+        open.click(function () {
+          modal.css("display", "block");
+          // 设置日期时间范围：当前时间后4小时到7天
+          let minDate = new Date(+new Date() + 8 * 3600 * 1000);
+          minDate.setHours(minDate.getHours() + 4);
+          let maxDate = new Date(+new Date() + 8 * 3600 * 1000);
+          maxDate.setDate(maxDate.getDate() + 7);
+          // toISOString()转换因为时区问题会相差8小时，中国标准时间转换：
+          let minDateString = minDate.toISOString().slice(0, 16);
+          let maxDateString = maxDate.toISOString().slice(0, 16);
+          datetimeInput.attr("min", minDateString);
+          datetimeInput.attr("max", maxDateString);
+        });
+
+        close.click(function () {
+          modal.css("display", "none");
+        });
+
+        timeSubmit.click(function () {
+          let selectedDateTime = $("#datetime").val();
+          // 这里可以将选择的日期时间进行处理或提交到后端处理
+          alert("选择的日期时间是：" + selectedDateTime);
+          modal.css("display", "none");
+        });
+      });
+
+      // 获取博客id为了可能的继续编写博客
+      let blogId;
       blogId = getUrlValue("id") == "" ? -1 : getUrlValue("id");
 
       // 获取当前 url 参数的公共方法
@@ -93,7 +148,6 @@
       }
       showArticleInfo(blogId);
 
-
       // 保存为草稿
       function saveDraft() {
         let articleTitle = $("#article-title");
@@ -113,15 +167,19 @@
         $.ajax({
           url: "article/savedraft",
           type: "post",
-          data: {id: blogId, title: articleTitle.val(), content: articleContentValue },
-          success: function(result) {
+          data: {
+            id: blogId,
+            title: articleTitle.val(),
+            content: articleContentValue,
+          },
+          success: function (result) {
             if (result != null && result.code == 200 && result.data == 1) {
               alert("草稿保存成功！");
               location.reload();
             } else {
               alert("草稿保存失败！");
             }
-          }
+          },
         });
       }
 
@@ -145,7 +203,11 @@
           $.ajax({
             url: "/article/submitarticle",
             type: "post",
-            data: {id: blogId, title: articleTitle.val(), content: articleContentValue },
+            data: {
+              id: blogId,
+              title: articleTitle.val(),
+              content: articleContentValue,
+            },
             success: function (result) {
               if (result != null && result.code == 200 && result.data == 1) {
                 alert("文章发表成功！");
