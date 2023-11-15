@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 
@@ -122,6 +123,11 @@ public class ArticleController {
         // 新文章
         article.setUid(user.getId());
         return AjaxResult.success(articleService.addArticle(article));
+    }
+
+    @PostMapping("/plansubmit")
+    public AjaxResult planSubmit(HttpServletRequest request, Article article, LocalDateTime releaseTime) {
+        return null;
     }
 
     @PostMapping("/updatearticle")

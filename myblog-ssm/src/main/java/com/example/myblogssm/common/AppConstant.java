@@ -1,10 +1,8 @@
 package com.example.myblogssm.common;
 
 import org.springframework.boot.system.ApplicationHome;
-import org.springframework.util.ResourceUtils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 
 /**
  * Created with IntelliJ IDEA.

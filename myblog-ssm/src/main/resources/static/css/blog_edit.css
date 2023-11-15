@@ -42,6 +42,10 @@
   background-color: orange;
 }
 
+.modal-content button.close:active {
+  background-color: grey;
+}
+
 /* markdown编辑器 */
 #editorDiv {
   border-radius: 10px;
@@ -95,8 +99,8 @@
   font-weight: bold;
 }
 
-.modal-content .close:hover,
-.modal-content .close:focus {
+.modal-content span.close:hover,
+.modal-content span.close:focus {
   color: black;
   text-decoration: none;
   cursor: pointer;
