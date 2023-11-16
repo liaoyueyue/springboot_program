@@ -4,6 +4,7 @@ import com.example.myblogssm.entity.Article;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -52,22 +53,31 @@ public interface ArticleMapper {
 
     /**
      * 使用 id 删除文章
-     * @param id 文章id
+     * @param id 文章编号
      * @param uid 用户id
      * @return 数据影响行数
      */
     int delArticleById(@Param("id") Integer id, @Param("uid") Integer uid);
 
     /**
-     * 使用 id 查询文章
-     * @param id 文章id
+     * 使用 id 查询正常状态文章
+     * @param id 文章编号
      * @return 文章实体
      */
     Article queryArticleById(@Param("id") Integer id);
 
+
+    /**
+     * 使用 id 和 uid 来查询用户文章 - 用于查询非正常状态文章
+     * @param id 文章编号
+     * @param uid 用户编号
+     * @return 文章实体
+     */
+    Article queryArticleByIdUid(Integer id, Integer uid);
+
     /**
      * 文章阅读量+1
-     * @param id 文章id
+     * @param id 文章编号
      * @return 数据库影响行数
      */
     int updateRCount(@Param("id") Integer id);
@@ -78,6 +88,13 @@ public interface ArticleMapper {
      * @return 数据库影响行数
      */
     int addArticle(Article article);
+
+    /**
+     * 定时创建文章
+     * @param article 文章实体
+     * @return 数据库影响行数
+     */
+    int addArticleSchedule(Article article);
 
     /**
      * 修改文章
@@ -163,4 +180,21 @@ public interface ArticleMapper {
      * @return 数据库影响行数
      */
     int queryIdExist(Integer id);
+
+    /**
+     * 查询需要发布的文章
+     * @param currentTime 当前日期时间
+     * @return 发布的文章列表
+     */
+    List<Article> queryNeedToPublish(LocalDateTime currentTime);
+
+    /**
+     * 修改文章状态
+     * @param id 文章编号
+     * @param state 文章状态
+     * @return 数据库影响行数
+     */
+    int updateState(Integer id, Integer state);
+
+    
 }

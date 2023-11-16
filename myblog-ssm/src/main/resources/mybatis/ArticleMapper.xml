@@ -17,6 +17,11 @@
         values (#{title}, #{content}, #{uid})
     </insert>
 
+    <insert id="addArticleSchedule">
+        insert into articleinfo(title, content, uid, createtime, state)
+        values (#{title}, #{content}, #{uid}, #{createTime}, #{state})
+    </insert>
+
     <insert id="addDraft">
         insert into articleinfo(title, content, uid, state)
         values (#{title}, #{content}, #{uid}, #{state})
@@ -35,6 +40,14 @@
             updatetime = now()
         where id = #{id}
           and uid = #{uid}
+    </update>
+
+    <update id="updateState">
+        update articleinfo
+        set createtime = now(),
+            updatetime = now(),
+            state      = #{state}
+        where id = #{id}
     </update>
 
     <select id="queryArticleTotalByUid" resultType="java.lang.Integer">
@@ -69,7 +82,13 @@
     <select id="queryArticleById" resultMap="baseMap">
         select *
         from articleinfo
-        where id = #{id};
+        where id = #{id} and state = 1
+    </select>
+
+    <select id="queryArticleByIdUid" resultMap="baseMap">
+        select *
+        from articleinfo
+        where id = #{id} and uid = #{uid}
     </select>
 
     <select id="queryArtList" resultMap="baseMap">
@@ -98,14 +117,16 @@
     <select id="queryArtListByTitle" resultMap="baseMap">
         select *
         from articleinfo
-        where state = 1 and title like CONCAT('%', #{searchInfo}, '%')
+        where state = 1
+          and title like CONCAT('%', #{searchInfo}, '%')
         limit #{pageSize} offset #{startIndex}
     </select>
 
     <select id="queryArtListByTitleSortDate" resultMap="baseMap">
         select *
         from articleinfo
-        where state = 1 and title like CONCAT('%', #{searchInfo}, '%')
+        where state = 1
+          and title like CONCAT('%', #{searchInfo}, '%')
         order by updatetime desc
         limit #{pageSize} offset #{startIndex}
     </select>
@@ -113,7 +134,8 @@
     <select id="queryArtListByTitleSortRCount" resultMap="baseMap">
         select *
         from articleinfo
-        where state = 1 and title like CONCAT('%', #{searchInfo}, '%')
+        where state = 1
+          and title like CONCAT('%', #{searchInfo}, '%')
         order by rcount desc
         limit #{pageSize} offset #{startIndex}
     </select>
@@ -127,7 +149,8 @@
     <select id="queryArticleCountByTitle" resultType="java.lang.Integer">
         select count(*)
         from articleinfo
-        where state = 1 and title like CONCAT('%', #{searchInfo}, '%')
+        where state = 1
+          and title like CONCAT('%', #{searchInfo}, '%')
     </select>
 
     <select id="queryIdExist" resultType="java.lang.Integer">
@@ -135,6 +158,14 @@
         from articleinfo
         where id = #{id}
     </select>
+
+    <select id="queryNeedToPublish" resultMap="baseMap">
+        select *
+        from articleinfo
+        where createtime &lt; #{currentTime}
+          and state = -1
+    </select>
+
 
     <delete id="delArticleById">
         delete

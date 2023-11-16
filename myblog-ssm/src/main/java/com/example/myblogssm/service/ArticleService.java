@@ -3,8 +3,10 @@ package com.example.myblogssm.service;
 import com.example.myblogssm.entity.Article;
 import com.example.myblogssm.mapper.ArticleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -18,6 +20,20 @@ import java.util.List;
 public class ArticleService {
     @Autowired
     ArticleMapper articleMapper;
+
+    // 定时任务，检查需要发布的文章
+    @Scheduled(fixedRate = 300000) // 300000 毫秒 = 5分钟
+    public void checkScheduledArticle() {
+        LocalDateTime currentTime = LocalDateTime.now();
+        List<Article> articlesToPublish = articleMapper.queryNeedToPublish(currentTime);
+        if (articlesToPublish.isEmpty()) {
+            return;
+        }
+        for (Article article : articlesToPublish) {
+            // 修改文章状态为正常
+            articleMapper.updateState(article.getId(), 1);
+        }
+    }
 
     public int queryArticleTotalByUid(Integer uid) {
         return articleMapper.queryArticleTotalByUid(uid);
@@ -47,12 +63,20 @@ public class ArticleService {
         return articleMapper.queryArticleById(id);
     }
 
+    public Article queryArticleByIdUid(Integer id, Integer uid) {
+        return articleMapper.queryArticleByIdUid(id, uid);
+    }
+
     public void updateRCount(Integer id) {
         articleMapper.updateRCount(id);
     }
 
     public int addArticle(Article article) {
         return articleMapper.addArticle(article);
+    }
+
+    public int addArticleSchedule(Article article) {
+        return articleMapper.addArticleSchedule(article);
     }
 
     public int updateArticle(Article article) {

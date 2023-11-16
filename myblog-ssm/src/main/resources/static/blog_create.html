@@ -111,7 +111,9 @@
           // 2.获取文章标题和内容
           let articleTitle = $("#article-title");
           let articleContentValue = editor.getValue();
-          // 2.发送请求
+          // 3.转化将 datetime-local 的值转换为ISO 8601格式
+          let formattedDatetime = selectedDateTime.replace("T", " ") + ":00"; // 添加秒数
+          // 4.发送请求
           $.ajax({
             url: "/article/plansubmit",
             type: "post",
@@ -119,11 +121,12 @@
               id: blogId,
               title: articleTitle.val(),
               content: articleContentValue,
-              selectedDateTime: selectedDateTime,
+              releaseTime: selectedDateTime,
             },
             success: function (result) {
-              if (result != null && result == 200) {
+              if (result != null && result.code == 200 && result.data == 1) {
                 alert("定时发布成功!");
+                location.href = "blog_list.html?sortOption=new";
               } else {
                 alert("定时发布失败请稍后重试！");
               }

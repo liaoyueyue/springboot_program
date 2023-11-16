@@ -149,12 +149,22 @@
                 if(blogItem.state == 0) {
                   blogsDiv += '<span class="blog-state">草稿</span>';
                 }
+                if(blogItem.state == -1) {
+                  blogsDiv += '<span class="blog-state">定时</span>';
+                }
                 blogsDiv += '</div>'
                 blogsDiv += '<div class="desc">' + blogItem.content + "</div>";
                 blogsDiv += '<div class="operations">';
                 if(blogItem.state == 0) {
                   blogsDiv += '<a href="blog_create.html?id=' + blogItem.id + '">继续编写 &gt;&gt; </a>';
                   blogsDiv += '<a href="javascript:delArticle(' + blogItem.id + ')">删除草稿 &gt;&gt; </a>';
+                  blogsDiv += "</div>";
+                  blogsDiv += "</div>";
+                  continue;
+                }
+                if(blogItem.state == -1) {
+                  blogsDiv += '<a href="blog_update.html?id=' + blogItem.id + '">修改文章 &gt;&gt; </a>';
+                  blogsDiv += '<a href="javascript:delArticle(' + blogItem.id + ')">删除文章 &gt;&gt; </a>';
                   blogsDiv += "</div>";
                   blogsDiv += "</div>";
                   continue;

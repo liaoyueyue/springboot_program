@@ -24,5 +24,5 @@ public class Article implements Serializable {
     private LocalDateTime updateTime;
     private Integer uid;
     private Integer rcount;
-    private Integer state; // 正常状态（默认状态）：1 | // 草稿状态: 0
+    private Integer state; // 正常状态（默认状态）：1  // 草稿状态: 0 // 定时发布状态：-1
 }

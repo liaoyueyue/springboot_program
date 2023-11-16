@@ -81,15 +81,22 @@ public class ArticleController {
     }
 
     @PostMapping("/showinfo")
-    public AjaxResult showInfo(Integer id) {
+    public AjaxResult showInfo(HttpServletRequest request, Integer id) {
         if (id == null || id <= 0) {
             return AjaxResult.fail(-1, "illegal request");
         }
         Article article = articleService.queryArticleById(id);
-        if (article == null) {
-            return AjaxResult.fail(-1, "illegal request");
+        if (article != null) {
+            return AjaxResult.success(article);
         }
-        return AjaxResult.success(article);
+        User user = UserSessionUtils.getSessionUser(request);
+        if (user != null) {
+            article = articleService.queryArticleByIdUid(id, user.getId());
+            if (article != null) {
+                return AjaxResult.success(article);
+            }
+        }
+        return AjaxResult.fail(-1, "illegal request");
     }
 
     @PostMapping("/delarticle")
@@ -126,8 +133,28 @@ public class ArticleController {
     }
 
     @PostMapping("/plansubmit")
-    public AjaxResult planSubmit(HttpServletRequest request, Article article, LocalDateTime releaseTime) {
-        return null;
+    public AjaxResult planSubmit(HttpServletRequest request, Article article, String releaseTime) {
+        // 非空验证
+        if (article == null || article.getId() == null || !StringUtils.hasLength(releaseTime) || !StringUtils.hasLength(article.getTitle()) || !StringUtils.hasLength(article.getContent())) {
+            return AjaxResult.fail(-1, "illegal parameter");
+        }
+        // 接收前端传递的日期时间字符串并转换为LocalDateTime
+        LocalDateTime parsedReleaseTime = LocalDateTime.parse(releaseTime);
+        // 获取用户会话信息
+        User user = UserSessionUtils.getSessionUser(request);
+        if (user == null || user.getId() <= 0) {
+            return AjaxResult.fail(-2, "invalid user");
+        }
+        // 判断文章是否存在（草稿）
+        if (article.getId() != -1 && articleService.queryIdExist(article.getId())) {
+            // 存在则删除
+            articleService.delArticleById(article.getId(), user.getId());
+        }
+        // 新文章
+        article.setUid(user.getId());
+        article.setCreateTime(parsedReleaseTime);
+        article.setState(-1);
+        return AjaxResult.success(articleService.addArticleSchedule(article));
     }
 
     @PostMapping("/updatearticle")
