@@ -42,6 +42,20 @@
             &nbsp;&nbsp; 阅读量：<span id="read-count"></span>
           </div>
           <div id="content" class="content"></div>
+          <div id="comment-open-div">
+            <div style="margin-left: 15px; cursor: pointer">> 10条评论</div>
+            <div
+              style="
+                padding: 8px 10px;
+                border: 1px solid;
+                margin-right: 15px;
+                border-radius: 5px;
+                cursor: pointer;
+              "
+            >
+              写评论
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -71,7 +85,6 @@
         }
         return "";
       }
-      
 
       function showArticleInfo(id) {
         if (id == "") {

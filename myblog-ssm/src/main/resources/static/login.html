@@ -33,7 +33,11 @@
         </div>
         <div class="row" id="image-verification-row" style="display: none">
           <span>验证码</span>
-          <input type="text" id="login-img-verification-code" style="width: 70px" />
+          <input
+            type="text"
+            id="login-img-verification-code"
+            style="width: 70px"
+          />
           <img id="image-verification-code" onclick="getImgVerifyCode()" />
         </div>
         <div class="row">
@@ -124,11 +128,14 @@
           url: "/verify/getcode",
           type: "post",
           xhrFields: {
-            responseType: "blob"
+            responseType: "blob",
           },
-          success: function(res) {
-            $("#image-verification-code").attr("src", window.URL.createObjectURL(res));
-          }
+          success: function (res) {
+            $("#image-verification-code").attr(
+              "src",
+              window.URL.createObjectURL(res)
+            );
+          },
         });
       }
 
@@ -242,6 +249,7 @@
         }
         if (imgVerificationCode.val() == "") {
           alert("请先输入验证码！");
+          showImgVerifyCodeInput();
           imgVerificationCode.focus();
           return;
         }
@@ -249,16 +257,26 @@
         $.ajax({
           url: "/user/login",
           type: "post",
-          data: { username: username.val(), password: password.val(), imgVerificationCode: imgVerificationCode.val() },
+          data: {
+            username: username.val(),
+            password: password.val(),
+            imgVerificationCode: imgVerificationCode.val(),
+          },
           success: function (result) {
             // 相应的结果
             if (result != null && result.code == 200 && result.data != null) {
               // 执行成功,跳转到登录页面
               // jQuery(window).attr("location", "blog_list.html");
               location.href = "blog_list_comm.html";
-            } else if(result != null && result.msg == "Verification code error"){
+            } else if (
+              result != null &&
+              result.msg == "Verification code error"
+            ) {
               alert("验证码错误！");
-            } else if(result != null && result.msg == "Verification code expired"){
+            } else if (
+              result != null &&
+              result.msg == "Verification code expired"
+            ) {
               alert("验证码过期！");
             } else {
               alert("登录失败，请检测账号或者密码后重新尝试！");

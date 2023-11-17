@@ -31,6 +31,17 @@ create table articleinfo
     rcount     int          not null default 1,
     state      int                   default 1
 ) default charset 'utf8mb4';
+-- 创建评论表
+drop table if exists commentinfo;
+CREATE TABLE commentinfo
+(
+    id          int primary key auto_increment,
+    aid         int  not null,
+    uid         int  not null,
+    commenttext text not null,
+    createtime  datetime default now(),
+    updatetime  datetime default now()
+) default charset 'utf8mb4';
 -- 创建视频表
 drop table if exists videoinfo;
 create table videoinfo
@@ -95,6 +106,8 @@ C++具有以下特点：
 6. 社区支持：Python拥有庞大活跃的开源社区，提供了大量的教程、文档和开源项目。开发人哦豁,我回答出错了耶~ 你重新试一试呗~
 
 ', 1);
+-- 添加评论
+insert into commentinfo(aid, uid, commenttext) VALUES (1, 1, '写的太好了，支持！');
 -- 添加视频
 insert into videoinfo(vid, title, url, uid)
 values (1, 'baidu title', 'https://www.baidu.com', 1);
