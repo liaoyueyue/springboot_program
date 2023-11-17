@@ -7,6 +7,7 @@ import com.example.myblogssm.entity.vo.UserVo;
 import com.example.myblogssm.service.ArticleService;
 import com.example.myblogssm.service.EmailService;
 import com.example.myblogssm.service.UserService;
+import com.example.myblogssm.service.VerifyService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,6 +42,9 @@ public class UserController {
     @Autowired
     EmailService emailService;
 
+    @Autowired
+    VerifyService verifyService;
+
     @PostMapping("/register")
     public AjaxResult register(User user, String verificationCode) {
         // 1.非空校验
@@ -69,12 +73,21 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public AjaxResult login(HttpServletRequest request, String username, String password) {
-        System.out.println(request.getHeader("User-Agent"));
+    public AjaxResult login(HttpServletRequest request, String username, String password, String imgVerificationCode) {
         // 非空校验
-        if (!StringUtils.hasLength(username) || !StringUtils.hasLength(password)) {
+        if (!StringUtils.hasLength(username) || !StringUtils.hasLength(password) || !StringUtils.hasLength(imgVerificationCode)) {
             return AjaxResult.fail(-1, "illegal request");
         }
+        // 判断图片验证码
+        int codeStatus = verifyService.checkCode(imgVerificationCode, request);
+        if (codeStatus != 1) {
+            if (codeStatus == 0) {
+                return AjaxResult.fail(-1, "Verification code error");
+            }else {
+                return AjaxResult.fail(-1, "Verification code expired");
+            }
+        }
+        // 判断用户有效和密码
         User user = userService.queryUserByName(username);
         if (user != null && user.getId() > 0) {
             // 有效的用户, 判断密码

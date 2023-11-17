@@ -58,6 +58,16 @@
   /* outline: none; */
 }
 
+.dialog-container .row img {
+  margin-left: 5px;
+  opacity: 0.8;
+  width: 105px;
+  height: 40px;
+  font-size: 18px;
+  border-radius: 8px;
+  border: none;
+}
+
 #login-btn,
 #register-btn {
   width: 260px;

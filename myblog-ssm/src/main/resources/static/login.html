@@ -24,7 +24,17 @@
         </div>
         <div class="row">
           <span>密码</span>
-          <input type="password" id="login-password" placeholder="请输入密码" />
+          <input
+            type="password"
+            id="login-password"
+            placeholder="请输入密码"
+            onclick="showImgVerifyCodeInput()"
+          />
+        </div>
+        <div class="row" id="image-verification-row" style="display: none">
+          <span>验证码</span>
+          <input type="text" id="login-img-verification-code" style="width: 70px" />
+          <img id="image-verification-code" onclick="getImgVerifyCode()" />
         </div>
         <div class="row">
           <button id="login-btn" type="submit" onclick="login()">登录</button>
@@ -92,14 +102,38 @@
           flag = 1;
           // 设置flag=1后应改：默认登录功能，注册功能隐藏
           $("#register-dialog").hide();
+          $("#image-verification-row").hide();
           $("#login-dialog").show();
           $(".dialog-container").css("height", "310px");
         }
       }
 
       function showEmailCodeInput() {
-        $(".dialog-container").css("height", "410px");
+        $(".dialog-container").css("height", "+=50px");
         $("#verification-code-row").show();
+      }
+
+      function showImgVerifyCodeInput() {
+        $(".dialog-container").css("height", "+=50px");
+        getImgVerifyCode();
+        $("#image-verification-row").show();
+      }
+
+      function getImgVerifyCode() {
+        var url = "/verify/getcode";
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", url, true);
+        xhr.responseType = "blob";
+        xhr.onload = function () {
+          if (this.status === 200) {
+            var res = this.response;
+            $("#image-verification-code").attr(
+              "src",
+              window.URL.createObjectURL(res)
+            );
+          }
+        };
+        xhr.send();
       }
 
       function sendVerificationCode() {
@@ -199,6 +233,7 @@
         // 1.非空校验
         let username = $("#login-username");
         let password = $("#login-password");
+        let imgVerificationCode = $("#login-img-verification-code");
         if (username.val() == "") {
           alert("请先输入用户名！");
           username.focus();
@@ -209,17 +244,26 @@
           password.focus();
           return;
         }
+        if (imgVerificationCode.val() == "") {
+          alert("请先输入验证码！");
+          imgVerificationCode.focus();
+          return;
+        }
         // 2.提交 ajax 请求
         $.ajax({
           url: "/user/login",
           type: "post",
-          data: { username: username.val(), password: password.val() },
+          data: { username: username.val(), password: password.val(), imgVerificationCode: imgVerificationCode.val() },
           success: function (result) {
             // 相应的结果
             if (result != null && result.code == 200 && result.data != null) {
               // 执行成功,跳转到登录页面
               // jQuery(window).attr("location", "blog_list.html");
               location.href = "blog_list_comm.html";
+            } else if(result != null && result.msg == "Verification code error"){
+              alert("验证码错误！");
+            } else if(result != null && result.msg == "Verification code expired"){
+              alert("验证码过期！");
             } else {
               alert("登录失败，请检测账号或者密码后重新尝试！");
             }
