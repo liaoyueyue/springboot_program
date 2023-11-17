@@ -120,20 +120,16 @@
       }
 
       function getImgVerifyCode() {
-        var url = "/verify/getcode";
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", url, true);
-        xhr.responseType = "blob";
-        xhr.onload = function () {
-          if (this.status === 200) {
-            var res = this.response;
-            $("#image-verification-code").attr(
-              "src",
-              window.URL.createObjectURL(res)
-            );
+        $.ajax({
+          url: "/verify/getcode",
+          type: "post",
+          xhrFields: {
+            responseType: "blob"
+          },
+          success: function(res) {
+            $("#image-verification-code").attr("src", window.URL.createObjectURL(res));
           }
-        };
-        xhr.send();
+        });
       }
 
       function sendVerificationCode() {

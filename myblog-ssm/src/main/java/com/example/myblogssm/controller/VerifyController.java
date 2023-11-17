@@ -24,7 +24,6 @@ import java.util.concurrent.TimeUnit;
  * Time: 20:52
  */
 
-//测试Controller
 @RestController
 @RequestMapping("/verify")
 public class VerifyController {
