@@ -12,9 +12,98 @@
   padding: 10px 0;
 }
 
-.blog-detail .content {
+.blog-detail > .content {
   text-indent: 2em;
   background-color: transparent;
+}
+
+.comment-box {
+  width: 100%;
+  position: relative;
+  background: rgba(245, 246, 247, 0.8);
+  border-radius: 8px;
+  padding: 14px 0;
+  margin: 15px 0;
+}
+
+.comment-box textarea:focus {
+  outline: none;
+}
+
+.comment-content {
+  background: rgba(248, 249, 251, 0.9);
+  border: none;
+  padding: 0 16px;
+  border-radius: 5px;
+  resize: none;
+  height: 90px;
+  width: 100%;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.comment-operate-box {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 16px 0 16px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  transition: display 0.3s ease-in-out;
+}
+
+.comment-wrapper {
+  display: flex;
+  width: 100%;
+}
+
+.comment {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.comment a {
+  display: block;
+  padding-top: 15px;
+  height: 50px;
+  position: relative;
+  text-decoration: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.comment a img {
+  display: block;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #e8e8ed;
+  margin-right: 10px;
+}
+
+.comment .user-box {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.comment .user-box .name,
+.comment .user-box .date {
+  display: flex;
+  max-width: 110px;
+  color: #777888;
+  margin-right: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.comment-btn {
+  padding: 8px 10px;
+  border: 0.5px solid;
+  margin-right: 15px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 #comment-open-div {
@@ -26,4 +115,16 @@
   align-items: center;
   border-radius: 5px;
   box-shadow: 1px 1px 5px 1px #fed6e3;
+}
+
+.modal-content-right::-webkit-scrollbar {
+  width: 4px;
+}
+.modal-content-right::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.2);
+}
+.modal-content-right::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.1);
 }
