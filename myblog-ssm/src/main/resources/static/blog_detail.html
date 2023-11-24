@@ -43,8 +43,8 @@
           </div>
           <div id="content" class="content"></div>
           <div id="comment-open-div">
-            <div style="margin-left: 15px; cursor: pointer">> 10条评论</div>
-            <button id="open-comment" class="comment-btn">写评论</button>
+            <div id="open-comment-1" style="margin-left: 15px; cursor: pointer">>查看评论</div>
+            <button id="open-comment-2" class="comment-btn">写评论</button>
           </div>
         </div>
       </div>
@@ -52,12 +52,12 @@
     <div id="open-comment-container" class="modal-wrapper">
       <div class="modal-content-right">
         <span class="close">&times;</span>
-        <h2>评论 12</h2>
+        <h2>评论数：<span id="comment-count"></span></h2>
         <br />
         <hr />
         <div class="comment-box">
           <textarea
-            class="comment-content"
+            id="comment-content"
             placeholder="在这里评论"
             maxlength="1000"
           ></textarea>
@@ -65,11 +65,11 @@
             <button id="comment-submit" class="comment-btn">评论</button>
           </div>
         </div>
-        <div class="comment-list">
-          <div class="comment-wrapper">
+        <div id="comment-list" class="comment-list">
+          <!-- <div class="comment-wrapper">
             <div class="comment">
               <a class="comment-left" href="">
-                <img src="images/logo.jpg" alt="" />
+                <img src="images/logo.jpg" alt="photo" />
               </a>
               <div class="comment-right">
                 <div class="user-box">
@@ -81,23 +81,7 @@
                 <div class="content">不错的，继续努力</div>
               </div>
             </div>
-          </div>
-          <div class="comment-wrapper">
-            <div class="comment">
-              <a class="comment-left" href="">
-                <img src="images/logo.jpg" alt="" />
-              </a>
-              <div class="comment-right">
-                <div class="user-box">
-                  <div class="name-href">
-                    <span class="name">李四</span>
-                  </div>
-                  <div class="date">8小时前</div>
-                </div>
-                <div class="content">写的太好了，终于知道了</div>
-              </div>
-            </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -113,11 +97,20 @@
         });
       }
 
+      // 文章编号
+      let id = getUrlValue("id");
+
       //初始化评论模态框
       var modal = $("#open-comment-container");
       var closeBtn = $(".modal-content-right .close");
-      $("#open-comment").click(function () {
+      $("#open-comment-1").click(function () {
+        showCommentInfo(id);
         modal.css("display", "block");
+      });
+      $("#open-comment-2").click(function () {
+        showCommentInfo(id);
+        modal.css("display", "block");
+        $("#comment-content").focus();
       });
       $(window).click(function (event) {
         if (event.target == modal[0] || event.target == closeBtn[0]) {
@@ -125,6 +118,61 @@
         }
       });
 
+      // 显示评论信息
+      function showCommentInfo(id) {
+        if (id == "") {
+          alert("illegal parameter");
+          return;
+        }
+        $.ajax({
+          url: "comment/showinfobyid",
+          type: "post",
+          data: { aid: id },
+          success: function (result) {
+            if (
+              result != null &&
+              result.code == 200 &&
+              result.data.commentList.length > 0
+            ) {
+              let commentList = "";
+              for (let i = 0; i < result.data.commentList.length; i++) {
+                let commentItem = result.data.commentList[i];
+                commentList +=
+                  '<div class="comment-wrapper"><div class="comment">';
+                commentList += '<a class="comment-left" href="">';
+                commentList +=
+                  '<img src="' + commentItem.userPhoto + '" alt="photo" /></a>';
+                commentList +=
+                  '<div class="comment-right"><div class="user-box">';
+                commentList +=
+                  '<div class="name-href"><span class="name">' +
+                  commentItem.userName +
+                  "</span></div>";
+                commentList +=
+                  '<div class="date">' + formatTimeDifference(commentItem.updateTime)
+                   +
+                  "</div></div>";
+                commentList +=
+                  '<div class="content">' +
+                  commentItem.ctext +
+                  "</div></div></div></div>";
+              }
+              $("#comment-list").html(commentList);
+              $("#comment-count").text(result.data.commentCount);
+            } else if (
+              result != null &&
+              result.code == -1 &&
+              result.msg == "Comment not found"
+            ) {
+              $("#comment-list").html("<h3>暂无评论</h3>");
+            } else {
+              alert("获取评论失败，请稍后重试！");
+            }
+          },
+        });
+      }
+
+      // 显示文章信息
       function showArticleInfo(id) {
         if (id == "") {
           alert("illegal parameter");
@@ -149,17 +197,14 @@
           },
         });
       }
-      showArticleInfo(getUrlValue("id"));
+      showArticleInfo(id);
 
-      function showUserInfoById(id) {
-        if (id == "") {
-          alert("illegal parameter");
-          return;
-        }
+      // 显示文章作者的信息
+      function showUserInfoById(uid) {
         $.ajax({
           url: "/user/showinfobyid",
           type: "post",
-          data: { id: id },
+          data: { id: uid },
           success: function (result) {
             if (result != null && result.code == 200 && result.data.id > 0) {
               $("#username").text(result.data.username);
@@ -188,6 +233,28 @@
         }
         return "";
       }
+
+      // 格式化时间差
+      function formatTimeDifference(backendTime) {
+      var dateTimeFromBackend = new Date(backendTime);
+      var currentTime = new Date();
+      var timeDifference = currentTime - dateTimeFromBackend;
+      var seconds = Math.floor(timeDifference / 1000);
+      var minutes = Math.floor(seconds / 60);
+      var hours = Math.floor(minutes / 60);
+      var days = Math.floor(hours / 24);
+      var displayText = "";
+      if (days > 0) {
+        displayText = days + "天前";
+      } else if (hours > 0) {
+        displayText = hours + "小时前";
+      } else if (minutes > 0) {
+        displayText = minutes + "分钟前";
+      } else {
+        displayText = "刚刚";
+      }
+      return displayText;
+    }
     </script>
   </body>
 </html>

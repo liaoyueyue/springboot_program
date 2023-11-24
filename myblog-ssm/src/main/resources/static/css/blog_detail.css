@@ -30,7 +30,7 @@
   outline: none;
 }
 
-.comment-content {
+#comment-content {
   background: rgba(248, 249, 251, 0.9);
   border: none;
   padding: 0 16px;

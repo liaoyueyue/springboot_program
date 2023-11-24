@@ -38,7 +38,7 @@ CREATE TABLE commentinfo
     id          int primary key auto_increment,
     aid         int  not null,
     uid         int  not null,
-    commenttext text not null,
+    ctext text not null,
     createtime  datetime default now(),
     updatetime  datetime default now()
 ) default charset 'utf8mb4';
