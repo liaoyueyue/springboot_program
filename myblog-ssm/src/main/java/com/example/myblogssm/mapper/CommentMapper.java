@@ -28,4 +28,13 @@ public interface CommentMapper {
      * @return 返回对应文章的评论列表总数
      */
     int queryCommentTotalByAid(@Param("aid") Integer aid);
+
+    /**
+     * 添加指定文章的评论
+     * @param aid 文章 id
+     * @param uid 用户 id
+     * @param ctext 评论内容
+     * @return 数据库影响行数
+     */
+    int addComment(@Param("aid")Integer aid,@Param("uid") Integer uid,@Param("ctext") String ctext);
 }

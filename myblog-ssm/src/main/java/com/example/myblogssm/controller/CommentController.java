@@ -1,6 +1,7 @@
 package com.example.myblogssm.controller;
 
 import com.example.myblogssm.common.AjaxResult;
+import com.example.myblogssm.common.utils.UserSessionUtils;
 import com.example.myblogssm.entity.Comment;
 import com.example.myblogssm.entity.User;
 import com.example.myblogssm.entity.vo.CommentVo;
@@ -8,9 +9,12 @@ import com.example.myblogssm.service.CommentService;
 import com.example.myblogssm.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +33,7 @@ public class CommentController {
     CommentService commentService;
     @Autowired
     UserService userService;
-    @RequestMapping("/showinfobyid")
+    @PostMapping("/showinfobyid")
     public AjaxResult showInfoById(Integer aid) {
         // 1. 非空验证
         if (aid == null || aid <= 0) {
@@ -57,4 +61,19 @@ public class CommentController {
         return AjaxResult.success(result);
     }
 
+    @PostMapping("/submitcomment")
+    public AjaxResult submitComment(HttpServletRequest request, Integer aid, String ctext) {
+        // 1.非空验证
+        if (aid == null || aid <= 0 || !StringUtils.hasLength(ctext)) {
+            return AjaxResult.fail(-1, "illegal request");
+        }
+        // 2.获取用户编号
+        User user = UserSessionUtils.getSessionUser(request);
+        if (user == null || user.getId() <= 0) {
+            return AjaxResult.fail(-2, "invalid user");
+        }
+        // 3.提交评论
+        int result = commentService.addComment(aid, user.getId(), ctext);
+        return AjaxResult.success(result);
+    }
 }

@@ -51,7 +51,7 @@ public class VerifyController {
                 .setWidth(105)   //设置图片的宽度
                 .setHeight(40)   //设置图片的高度
                 .setSize(6)      //设置字符的个数
-                .setLines(10)    //设置干扰线的条数
+                .setLines(5)    //设置干扰线的条数
                 .setFontSize(25) //设置字体的大小
                 .setTilt(true)   //设置是否需要倾斜
                 .setBackgroundColor(Color.white) //设置验证码的背景颜色

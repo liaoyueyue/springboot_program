@@ -26,4 +26,8 @@ public class CommentService {
     public int queryCommentTotalByAid(Integer aid) {
         return commentMapper.queryCommentTotalByAid(aid);
     }
+
+    public int addComment(Integer aid, Integer uid, String ctext) {
+        return commentMapper.addComment(aid, uid, ctext);
+    }
 }

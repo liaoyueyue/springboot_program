@@ -43,7 +43,9 @@
           </div>
           <div id="content" class="content"></div>
           <div id="comment-open-div">
-            <div id="open-comment-1" style="margin-left: 15px; cursor: pointer">>查看评论</div>
+            <div id="open-comment-1" style="margin-left: 15px; cursor: pointer">
+              >查看评论
+            </div>
             <button id="open-comment-2" class="comment-btn">写评论</button>
           </div>
         </div>
@@ -100,7 +102,7 @@
       // 文章编号
       let id = getUrlValue("id");
 
-      //初始化评论模态框
+      // 初始化评论模态框
       var modal = $("#open-comment-container");
       var closeBtn = $(".modal-content-right .close");
       $("#open-comment-1").click(function () {
@@ -116,6 +118,35 @@
         if (event.target == modal[0] || event.target == closeBtn[0]) {
           modal.css("display", "none");
         }
+      });
+
+      // 提交评论
+      $("#comment-submit").click(function () {
+        if (id == "") {
+          alert("illegal parameter");
+          return;
+        }
+        let ctext = $("#comment-content");
+        if(ctext.val() == ""){
+          alert("请在评论框内输入你的评论！");
+          ctext.focus();
+          return;
+        }
+        $.ajax({
+          url: "/comment/submitcomment",
+          type: "post",
+          data: {aid: id, ctext: ctext.val()},
+          success: function(result) {
+            if(result != null && result.code == 200){
+              alert("评论成功！");
+              showCommentInfo(id);
+            }else{
+              alert("评论失败，请稍后重试！");
+            }
+          }
+
+        });
+
       });
 
       // 显示评论信息
@@ -149,8 +180,8 @@
                   commentItem.userName +
                   "</span></div>";
                 commentList +=
-                  '<div class="date">' + formatTimeDifference(commentItem.updateTime)
-                   +
+                  '<div class="date">' +
+                  formatTimeDifference(commentItem.updateTime) +
                   "</div></div>";
                 commentList +=
                   '<div class="content">' +
@@ -236,25 +267,25 @@
 
       // 格式化时间差
       function formatTimeDifference(backendTime) {
-      var dateTimeFromBackend = new Date(backendTime);
-      var currentTime = new Date();
-      var timeDifference = currentTime - dateTimeFromBackend;
-      var seconds = Math.floor(timeDifference / 1000);
-      var minutes = Math.floor(seconds / 60);
-      var hours = Math.floor(minutes / 60);
-      var days = Math.floor(hours / 24);
-      var displayText = "";
-      if (days > 0) {
-        displayText = days + "天前";
-      } else if (hours > 0) {
-        displayText = hours + "小时前";
-      } else if (minutes > 0) {
-        displayText = minutes + "分钟前";
-      } else {
-        displayText = "刚刚";
+        var dateTimeFromBackend = new Date(backendTime);
+        var currentTime = new Date();
+        var timeDifference = currentTime - dateTimeFromBackend;
+        var seconds = Math.floor(timeDifference / 1000);
+        var minutes = Math.floor(seconds / 60);
+        var hours = Math.floor(minutes / 60);
+        var days = Math.floor(hours / 24);
+        var displayText = "";
+        if (days > 0) {
+          displayText = days + "天前";
+        } else if (hours > 0) {
+          displayText = hours + "小时前";
+        } else if (minutes > 0) {
+          displayText = minutes + "分钟前";
+        } else {
+          displayText = "刚刚";
+        }
+        return displayText;
       }
-      return displayText;
-    }
     </script>
   </body>
 </html>

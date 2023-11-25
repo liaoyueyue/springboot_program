@@ -9,12 +9,18 @@
         <result column="createtime" property="createTime"></result>
         <result column="updatetime" property="updateTime"></result>
     </resultMap>
+    <insert id="addComment">
+        insert into commentinfo(aid, uid, ctext)
+        values (#{aid}, #{uid}, #{ctext})
+    </insert>
     <select id="queryCommentListByAid" resultMap="baseMap">
         select *
         from commentinfo
         where aid = #{aid};
     </select>
     <select id="queryCommentTotalByAid" resultType="java.lang.Integer">
-        select count(*) from commentinfo where aid = #{aid}
+        select count(*)
+        from commentinfo
+        where aid = #{aid}
     </select>
 </mapper>
