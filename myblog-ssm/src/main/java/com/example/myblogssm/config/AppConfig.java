@@ -22,10 +22,10 @@ public class AppConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginInterceptor())
                 .addPathPatterns("/**")
-                .excludePathPatterns("/css/**", "/editor.md/**", "/images/**", "/js/**")
+                .excludePathPatterns("/css/**", "/editor.md/**", "/images/**", "/js/**", "/upload/**")
                 .excludePathPatterns("/favicon.ico", "/login.html", "/blog_list_comm.html", "/blog_detail.html", "/blog_search.html", "/common/navigation.html")
-                .excludePathPatterns("/user/login", "/user/register", "/user/showinfobyid","/user/showinfo")
-                .excludePathPatterns("/article/showinfo", "/article/showinfolistbypage","/article/search","/article/showinfoaddrcount")
+                .excludePathPatterns("/user/login", "/user/register", "/user/showinfobyid", "/user/showinfo")
+                .excludePathPatterns("/article/showinfo", "/article/showinfolistbypage", "/article/search", "/article/showinfoaddrcount")
                 .excludePathPatterns("/email/sendverificationcodeforregister", "/verify/getcode", "/verify/checkcode")
                 .excludePathPatterns("/comment/showinfobyid");
     }

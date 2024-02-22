@@ -107,7 +107,7 @@ C++具有以下特点：
 
 ', 1);
 -- 添加评论
-insert into commentinfo(aid, uid, commenttext) VALUES (1, 1, '写的太好了，支持！');
+insert into commentinfo(aid, uid, ctext) VALUES (1, 1, '写的太好了，支持！');
 -- 添加视频
 insert into videoinfo(vid, title, url, uid)
 values (1, 'baidu title', 'https://www.baidu.com', 1);

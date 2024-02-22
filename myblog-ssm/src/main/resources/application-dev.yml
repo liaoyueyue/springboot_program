@@ -14,3 +14,10 @@ spring:
     username: liaoyueyue.email@qq.com
     password: ipkphrqvhwokbebi
     default-encoding: utf-8
+
+# 日志配置，配置打印 mybatis 执行的 sql
+logging:
+  level:
+    com:
+      example:
+        myblogssm: debug
