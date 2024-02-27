@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.myojssm.mapper.ProblemMapper">
+    <resultMap id="baseMap" type="org.example.myojssm.entity.Problem">
+        <id column="id" property="id"></id>
+        <result column="title" property="title"></result>
+        <result column="level" property="level"></result>
+        <result column="description" property="description"></result>
+        <result column="templateCode" property="templateCode"></result>
+        <result column="testCode" property="testCode"></result>
+    </resultMap>
+    <select id="queryAllProblem" resultMap="baseMap">select * from problems</select>
+</mapper>

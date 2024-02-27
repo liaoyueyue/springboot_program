@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OJ系统</title>
+    <link href="./layui-v2.9.6/layui/css/layui.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/problem_detail.css" />
+  </head>
+
+  <body>
+    <!-- 头部区域 -->
+    <div class="layui-header">
+      <ul class="layui-nav">
+        <li class="layui-nav-item layui-anim layui-anim-scaleSpring">
+          <a href="index.html">我的OJ系统</a>
+        </li>
+        <li class="layui-nav-item layui-this"><a href="">题目名称</a></li>
+      </ul>
+    </div>
+    <!-- 内容主体区域 -->
+    <div class="container">
+      <div class="container-left layui-panel">
+        <div class="problem-detail-container">
+          <div id="problem-detail-div" class="layui-text">
+            <!-- 这里是题目详情区 -->
+          </div>
+        </div>
+      </div>
+      <div class="container-right">
+        <div class="problem-edit-container layui-panel">
+          <div style="padding: 8px; height: 100%; box-sizing: border-box">
+            <!-- 这里是代码编辑区 -->
+            <div id="editor"></div>
+          </div>
+        </div>
+        <div class="problem-result-container layui-panel">
+          <!-- 这里是运行返回区 -->
+          <button type="button" id="problem-submit-btn" class="layui-btn">
+            提交
+          </button>
+          <div id="problem-result-div" class="layui-text">
+            这里是返回的执行结果
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <!-- 代码编辑ace.js   远程  -->
+    <script src="http://cdn.bootcss.com/ace/1.2.4/ace.js"></script>
+    <script src="http://cdn.bootcss.com/ace/1.2.4/ext-language_tools.js"></script>
+    <script>
+      // 初始化Ace
+      function initAce() {
+        let editor = ace.edit("editor");
+        editor.setOptions({
+          enableBasicAutocompletion: true,
+          enableSnippets: true,
+          enableLiveAutocompletion: true,
+        });
+        editor.setTheme("ace/theme/github");
+        editor.session.setMode("ace/mode/java");
+        editor.resize();
+        $("#editor").css("font-size", "15px");
+        return editor;
+      }
+      let editor = initAce();
+      // 获取题目详情
+      function getProblem() {
+        $.ajax({
+          url: "problem" + location.search,
+          type: "get",
+          success: function (data, status) {
+            $("#problem-detail-div").html(
+              "<h1>" +
+                data.id +
+                ". " +
+                data.title +
+                ": " +
+                data.level +
+                "</h1>" +
+                "<p>" +
+                data.description +
+                "</p>"
+            );
+            editor.setValue(data.templateCode);
+            $("#problem-submit-btn").click(function () {
+              // 提交用户解答代码到服务器
+              submitAnswer(data.id);
+            });
+          },
+        });
+      }
+      getProblem();
+      // 提交答案
+      function submitAnswer(problemId) {
+        let userCode = editor.getValue();
+        if (userCode == "" || userCode == null) {
+          alert("提交代码为空！");
+          return;
+        }
+        let body = { id: problemId, code: userCode };
+        $.ajax({
+          url: "compile",
+          type: "post",
+          data: JSON.stringify(body),
+          success: function (data, status) {
+            let problemResult = $("#problem-result-div");
+            if (data.error == 0) {
+              // 编译运行没有问题
+              problemResult.text(data.stdout);
+            } else {
+              problemResult.text(data.reason);
+            }
+          },
+        });
+      }
+    </script>
+  </body>
+</html>
