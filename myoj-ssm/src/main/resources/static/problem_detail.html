@@ -13,7 +13,7 @@
     <div class="layui-header">
       <ul class="layui-nav">
         <li class="layui-nav-item layui-anim layui-anim-scaleSpring">
-          <a href="index.html">我的OJ系统</a>
+          <a href="problem_list.html">我的OJ系统</a>
         </li>
         <li class="layui-nav-item layui-this"><a href="">题目名称</a></li>
       </ul>
@@ -69,26 +69,28 @@
       // 获取题目详情
       function getProblem() {
         $.ajax({
-          url: "problem" + location.search,
+          url: "/problem/detail" + location.search,
           type: "get",
-          success: function (data, status) {
-            $("#problem-detail-div").html(
-              "<h1>" +
-                data.id +
-                ". " +
-                data.title +
-                ": " +
-                data.level +
-                "</h1>" +
-                "<p>" +
-                data.description +
-                "</p>"
-            );
-            editor.setValue(data.templateCode);
-            $("#problem-submit-btn").click(function () {
-              // 提交用户解答代码到服务器
-              submitAnswer(data.id);
-            });
+          success: function (result) {
+            if (result != null && result.code == 200 && result.data != null) {
+              $("#problem-detail-div").html(
+                "<h1>" +
+                  result.data.id +
+                  ". " +
+                  result.data.title +
+                  ": " +
+                  result.data.level +
+                  "</h1>" +
+                  "<p>" +
+                  result.data.description +
+                  "</p>"
+              );
+              editor.setValue(result.data.templateCode);
+              $("#problem-submit-btn").click(function () {
+                // 提交用户解答代码到服务器
+                submitAnswer(result.data.id);
+              });
+            }
           },
         });
       }
@@ -100,18 +102,19 @@
           alert("提交代码为空！");
           return;
         }
-        let body = { id: problemId, code: userCode };
         $.ajax({
-          url: "compile",
+          url: "/compile",
           type: "post",
-          data: JSON.stringify(body),
-          success: function (data, status) {
-            let problemResult = $("#problem-result-div");
-            if (data.error == 0) {
-              // 编译运行没有问题
-              problemResult.text(data.stdout);
-            } else {
-              problemResult.text(data.reason);
+          data: { id: problemId, code: userCode },
+          success: function (result) {
+            if (result != null && result.code == 200 && result.data != null) {
+              let problemResult = $("#problem-result-div");
+              if (result.data.error == 0) {
+                // 编译运行没有问题
+                problemResult.text(result.data.stdout);
+              } else {
+                problemResult.text(result.data.reason);
+              }
             }
           },
         });

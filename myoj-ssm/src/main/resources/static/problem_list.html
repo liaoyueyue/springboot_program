@@ -69,22 +69,28 @@
       // 获取题目列表
       function getProblems() {
         $.ajax({
-          url: "problem",
+          url: "/problem/all",
           type: "get",
-          success: function (data, status) {
-            $.each(data, function (index, item) {
-              $("#problemTable tbody").append(
-                "<tr><td>" +
-                  item.id +
-                  '</td><td><a href="problem_detail.html?id=' +
-                  item.id +
-                  '">' +
-                  item.title +
-                  "</a></td><td>" +
-                  item.level +
-                  "</td></tr>"
-              );
-            });
+          success: function (result) {
+            if (
+              result.data != null &&
+              result.code == 200 &&
+              result.data.length > 0
+            ) {
+              $.each(result.data, function (index, item) {
+                $("#problemTable tbody").append(
+                  "<tr><td>" +
+                    item.id +
+                    '</td><td><a href="problem_detail.html?id=' +
+                    item.id +
+                    '">' +
+                    item.title +
+                    "</a></td><td>" +
+                    item.level +
+                    "</td></tr>"
+                );
+              });
+            }
           },
         });
       }

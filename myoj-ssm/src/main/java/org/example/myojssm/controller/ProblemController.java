@@ -1,7 +1,8 @@
 package org.example.myojssm.controller;
 
+import org.example.myojssm.common.AjaxResult;
 import org.example.myojssm.entity.Problem;
-import org.example.myojssm.service.Problemservice;
+import org.example.myojssm.service.ProblemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,10 +21,23 @@ import java.util.List;
 @RequestMapping("/problem")
 public class ProblemController {
     @Autowired
-    Problemservice problemservice;
+    ProblemService problemservice;
     @GetMapping("/all")
-    public List<Problem> queryAllProblem() {
+    public AjaxResult showProblemList() {
         List<Problem> problems = problemservice.queryAllProblem();
-        return problems;
+        return AjaxResult.success(problems);
+    }
+
+    @GetMapping("/detail")
+    public AjaxResult showProblemById(Integer id) {
+        if (id == null || id <= 0) {
+            return AjaxResult.fail(-1, "illegal request");
+        }
+        Problem problem = problemservice.queryProblemById(id);
+        problem.setTestCode(null);
+        if (problem != null) {
+            return AjaxResult.success(problem);
+        }
+        return AjaxResult.fail(-1, "illegal request");
     }
 }

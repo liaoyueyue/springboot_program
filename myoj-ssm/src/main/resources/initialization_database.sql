@@ -1,7 +1,7 @@
 create database if not exists myoj default character set utf8mb4;
 use myoj;
-drop table if exists problems;
-create table problems
+drop table if exists problem;
+create table problem
 (
     id           int primary key auto_increment,
     title        varchar(50),
@@ -12,7 +12,7 @@ create table problems
 );
 
 
-INSERT INTO myoj.problems (id, title, level, description, templateCode, testCode)
+INSERT INTO myoj.problem (id, title, level, description, templateCode, testCode)
 VALUES (1, '两数之和', '简单',
         '给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 target  的那 两个 整数，并返回它们的数组下标。', 'class Solution {
     public int[] twoSum(int[] nums, int target) {

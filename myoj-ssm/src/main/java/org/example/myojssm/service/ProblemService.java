@@ -16,10 +16,14 @@ import java.util.List;
  */
 
 @Service
-public class Problemservice {
+public class ProblemService {
     @Autowired
     ProblemMapper problemMapper;
     public List<Problem> queryAllProblem() {
         return problemMapper.queryAllProblem();
+    }
+
+    public Problem queryProblemById(Integer id) {
+        return problemMapper.queryProblemById(id);
     }
 }

@@ -15,5 +15,15 @@ import java.util.List;
  */
 @Mapper
 public interface ProblemMapper {
+    /**
+     * 查询全部题目
+     * @return 所有题目
+     */
     List<Problem> queryAllProblem();
+
+    /**
+     * 使用 id 查询题目
+     * @return id 对应题目详情
+     */
+    Problem queryProblemById(@Param("id") Integer id);
 }

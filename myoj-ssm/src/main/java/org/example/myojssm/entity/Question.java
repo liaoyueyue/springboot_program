@@ -1,6 +1,8 @@
 package org.example.myojssm.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,6 +12,8 @@ import lombok.Data;
  * Time: 17:44
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Question {
     private String code;
 }

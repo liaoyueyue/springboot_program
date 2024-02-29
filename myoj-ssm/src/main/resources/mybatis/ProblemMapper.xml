@@ -9,5 +9,10 @@
         <result column="templateCode" property="templateCode"></result>
         <result column="testCode" property="testCode"></result>
     </resultMap>
-    <select id="queryAllProblem" resultMap="baseMap">select * from problems</select>
+    <select id="queryAllProblem" resultMap="baseMap">
+        select id, title, level from problem
+    </select>
+    <select id="queryProblemById" resultMap="baseMap">
+        select * from problem where id = #{id}
+    </select>
 </mapper>
