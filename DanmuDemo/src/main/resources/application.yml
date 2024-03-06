@@ -1,3 +1,8 @@
+#本地资源映射路径
+DanmuPlayer:
+  videoPath: E:\MyUniversity\0_ProgrammingLearning\springboot_program\DanmuDemo\tmp\video\
+  imagePath: E:\MyUniversity\0_ProgrammingLearning\springboot_program\DanmuDemo\tmp\image\
+
 server:
   port: 8080
 spring:
@@ -8,6 +13,17 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   profiles:
     active: dev
+  servlet:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1
 
 mybatis:
   mapper-locations: classpath:mybatis/**Mapper.xml
+
+# 日志配置，配置打印 mybatis 执行的 sql
+logging:
+  level:
+    com:
+      example:
+        danmudemo: debug

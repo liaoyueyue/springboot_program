@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/component/layui/css/layui.css">
+</head>
+<body>
+<nav>
+    <ul class="layui-nav layui-bg-blue">
+        <li class="layui-nav-item"><a href="/index">首页</a></li>
+        <li class="layui-nav-item"><a href="/play">弹幕播放器</a></li>
+        <li class="layui-nav-item"><a href="/admin/add">视频上传页面</a></li>
+    </ul>
+</nav>
+<div class="layui-btn-container" style="margin-top: 20px">
+    <button class="layui-btn layui-btn-normal" id="choose-file-btn">选择文件</button>
+    <button class="layui-btn" id="upload-file-btn">开始上传</button>
+</div>
+<script src="/component/layui/layui.js"></script>
+<script>
+    layui.upload.render({
+        elem: '#choose-file-btn',
+        url: '/admin/uploadvideo',
+        field: 'file', // 指定上传文件的字段名
+        accept: 'video',
+        multiple: false,
+        auto: false,
+        size: 50 * 1024,//单位kb
+        bindAction: '#upload-file-btn',
+        exts: 'mp4',
+        done: res=>{
+            if (res.code === 0) {
+                layer.msg("上传成功");
+            } else {
+                layer.msg("上传失败");
+            }
+        }
+    })
+</script>
+</body>
+</html>

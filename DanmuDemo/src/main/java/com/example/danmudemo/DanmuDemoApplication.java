@@ -26,7 +26,7 @@ public class DanmuDemoApplication {
 		}
 		log.info("\n----------------------------------------------------------\n\t" +
 				"Application  is running! Access URLs:\n\t" +
-				"Local访问网址: \t\thttp://localhost:" + port + path + "\n\t" +
+				"Local访问网址: \t\thttp://localhost:" + port + path + "/index" + "\n\t" +
 				"External访问网址: \thttp://" + ip + ":" + port + path + "\n\t" +
 				"----------------------------------------------------------");
 		String jvmName = ManagementFactory.getRuntimeMXBean().getName();
