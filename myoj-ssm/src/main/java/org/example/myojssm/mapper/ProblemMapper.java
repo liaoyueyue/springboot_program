@@ -25,5 +25,5 @@ public interface ProblemMapper {
      * 使用 id 查询题目
      * @return id 对应题目详情
      */
-    Problem queryProblemById(@Param("id") Integer id);
+    Problem queryOneById(@Param("id") Integer id);
 }

@@ -24,6 +24,6 @@ public class ProblemService {
     }
 
     public Problem queryProblemById(Integer id) {
-        return problemMapper.queryProblemById(id);
+        return problemMapper.queryOneById(id);
     }
 }

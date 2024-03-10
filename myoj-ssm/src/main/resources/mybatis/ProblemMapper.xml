@@ -12,7 +12,7 @@
     <select id="queryAllProblem" resultMap="baseMap">
         select id, title, level from problem
     </select>
-    <select id="queryProblemById" resultMap="baseMap">
+    <select id="queryOneById" resultMap="baseMap">
         select * from problem where id = #{id}
     </select>
 </mapper>
