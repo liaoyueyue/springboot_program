@@ -22,8 +22,4 @@ public class HomeController {
         return "play";
     }
 
-    @RequestMapping("/admin/add")
-    public String admin() {
-        return "admin/add";
-    }
 }

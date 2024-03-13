@@ -24,3 +24,14 @@ create table danmu
 );
 insert into danmu(text, username)
 values ('这是一条弹幕', 'alice');
+
+drop table if exists video;
+create table video
+(
+    id        int primary key auto_increment,
+    title     varchar(64),
+    video_path varchar(128),
+    image_path varchar(128),
+    upload_time timestamp default now()
+);
+insert into video(title, video_path, image_path) values ('这里是我测试的第一个视频', 'yourname.mp4', 'youname.png');

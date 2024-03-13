@@ -1,10 +1,14 @@
 package com.example.danmudemo.controller;
 
 import com.example.danmudemo.common.AjaxResult;
+import com.example.danmudemo.entiy.Video;
+import com.example.danmudemo.mapper.VideoMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,9 +30,20 @@ public class AdminController {
     @Value("${DanmuPlayer.imagePath}")
     private String imagePath;
 
+    @Autowired
+    VideoMapper videoMapper;
+
     @GetMapping("/add")
     public String add() {
         return "admin/add";
+    }
+
+    @PostMapping("/add")
+    RedirectView add(Video video) {
+        // 1.数据校验
+        System.out.println(video.toString());
+        videoMapper.insertVideo(video);
+        return new RedirectView("/");
     }
 
     @PostMapping("/upload/video")
@@ -48,7 +63,7 @@ public class AdminController {
         }
         try {
             file.transferTo(new File(videoPath + fileName));
-            return AjaxResult.success();
+            return AjaxResult.success(fileName);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -71,7 +86,7 @@ public class AdminController {
         }
         try {
             file.transferTo(new File(imagePath + fileName));
-            return AjaxResult.success();
+            return AjaxResult.success(fileName);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

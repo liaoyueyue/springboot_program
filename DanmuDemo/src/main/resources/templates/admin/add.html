@@ -19,13 +19,15 @@
 <br>
 <div class="layui-row">
     <div class="layui-col-md4 layui-col-md-offset4">
-        <form class="layui-form layui-form-pane">
+        <form action="/admin/add" method="post" class="layui-form layui-form-pane">
             <div class="layui-form-item">
                 <label class="layui-form-label">视频名称</label>
                 <div class="layui-input-block">
                     <input type="text" name="title" placeholder="请输入视频名称" class="layui-input">
                 </div>
             </div>
+            <input id="videoPath" type="hidden" name="videoPath">
+            <input id="imagePath" type="hidden" name="imagePath">
             <div class="layui-form-item">
                 <h2>视频上传</h2>
                 <button type="button" class="layui-btn layui-btn-normal" id="choose-video-btn">选择视频</button>
@@ -68,6 +70,7 @@
             done: res => {
                 if (res.code === 0) {
                     layer.msg("上传成功");
+                    $("#videoPath").val(res.msg);
                 } else {
                     layer.msg("上传失败");
                 }
@@ -79,7 +82,7 @@
             field: 'file',
             multiple: false,
             accept: 'images',
-            exts: 'jpg|jpeg|png',
+            exts: 'jpg|png|gif|bmp|jpeg|svg',
             before: function(obj){
                 obj.preview(function(index, file, result){
                     $('#upload-image-preview').append('<img src="'+ result +'" alt="'+ file.name +'" style="width: 90px; height: 90px;">')
@@ -88,6 +91,7 @@
             done: res => {
                 if (res.code === 0) {
                     layer.msg("上传成功");
+                    $("#imagePath").val(res.msg);
                 } else {
                     layer.msg("上传失败");
                 }
