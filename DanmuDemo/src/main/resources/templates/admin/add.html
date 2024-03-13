@@ -16,30 +16,84 @@
         <li class="layui-nav-item"><a href="/admin/add">视频上传页面</a></li>
     </ul>
 </nav>
-<div class="layui-btn-container" style="margin-top: 20px">
-    <button class="layui-btn layui-btn-normal" id="choose-file-btn">选择文件</button>
-    <button class="layui-btn" id="upload-file-btn">开始上传</button>
+<br>
+<div class="layui-row">
+    <div class="layui-col-md4 layui-col-md-offset4">
+        <form class="layui-form layui-form-pane">
+            <div class="layui-form-item">
+                <label class="layui-form-label">视频名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" placeholder="请输入视频名称" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <h2>视频上传</h2>
+                <button type="button" class="layui-btn layui-btn-normal" id="choose-video-btn">选择视频</button>
+                <button type="button" class="layui-btn" id="upload-video-btn">上传视频</button>
+            </div>
+            <div class="layui-form-item">
+                <h2>图片上传</h2>
+                <button type="button" class="layui-btn" id="upload-image-btn">
+                    <i class="layui-icon layui-icon-upload"></i>开始上传
+                </button>
+                <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 11px;">
+                    预览图：
+                    <div class="layui-upload-list" id="upload-image-preview"></div>
+                </blockquote>
+            </div>
+            <div class="layui-form-item">
+                <button type="submit" class="layui-btn">提交</button>
+            </div>
+        </form>
+    </div>
 </div>
+
 <script src="/component/layui/layui.js"></script>
 <script>
-    layui.upload.render({
-        elem: '#choose-file-btn',
-        url: '/admin/uploadvideo',
-        field: 'file', // 指定上传文件的字段名
-        accept: 'video',
-        multiple: false,
-        auto: false,
-        size: 50 * 1024,//单位kb
-        bindAction: '#upload-file-btn',
-        exts: 'mp4',
-        done: res=>{
-            if (res.code === 0) {
-                layer.msg("上传成功");
-            } else {
-                layer.msg("上传失败");
+    layui.use(function() {
+        var upload = layui.upload;
+        var layer = layui.layer;
+        var $ = layui.$;
+
+        upload.render({
+            elem: '#choose-video-btn',
+            url: '/admin/upload/video',
+            field: 'file',
+            accept: 'video',
+            multiple: false,
+            auto: false,
+            size: 50 * 1024,//单位kb
+            bindAction: '#upload-video-btn',
+            exts: 'mp4',
+            done: res => {
+                if (res.code === 0) {
+                    layer.msg("上传成功");
+                } else {
+                    layer.msg("上传失败");
+                }
             }
-        }
-    })
+        });
+        upload.render({
+            elem: '#upload-image-btn',
+            url: '/admin/upload/image',
+            field: 'file',
+            multiple: false,
+            accept: 'images',
+            exts: 'jpg|jpeg|png',
+            before: function(obj){
+                obj.preview(function(index, file, result){
+                    $('#upload-image-preview').append('<img src="'+ result +'" alt="'+ file.name +'" style="width: 90px; height: 90px;">')
+                });
+            },
+            done: res => {
+                if (res.code === 0) {
+                    layer.msg("上传成功");
+                } else {
+                    layer.msg("上传失败");
+                }
+            }
+        });
+    });
 </script>
 </body>
 </html>

@@ -23,19 +23,22 @@ public class AdminController {
 
     @Value("${DanmuPlayer.videoPath}")
     private String videoPath;
+    @Value("${DanmuPlayer.imagePath}")
+    private String imagePath;
+
     @GetMapping("/add")
     public String add() {
         return "admin/add";
     }
 
-    @PostMapping("/uploadvideo")
+    @PostMapping("/upload/video")
     @ResponseBody
-    public AjaxResult uploadVideo(@RequestParam("file") MultipartFile video) {
-        if (video.isEmpty()) {
+    public AjaxResult uploadVideo(@RequestParam("file") MultipartFile file) {
+        if (file.isEmpty()) {
             return AjaxResult.fail("没有文件");
         }
         // 获取用户上传的文件名
-        String fileName = video.getOriginalFilename();
+        String fileName = file.getOriginalFilename();
         // 获取文件后缀名
         String suffixName = fileName.substring(fileName.lastIndexOf("."));
         fileName = UUID.randomUUID().toString().replace("-", "") + suffixName;
@@ -44,7 +47,30 @@ public class AdminController {
             filePath.getParentFile().mkdirs();
         }
         try {
-            video.transferTo(new File(videoPath + fileName));
+            file.transferTo(new File(videoPath + fileName));
+            return AjaxResult.success();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PostMapping("/upload/image")
+    @ResponseBody
+    public AjaxResult uploadImage(@RequestParam("file") MultipartFile file) {
+        if (file.isEmpty()) {
+            return AjaxResult.fail("没有文件");
+        }
+        // 获取用户上传的文件名
+        String fileName = file.getOriginalFilename();
+        // 获取文件后缀名
+        String suffixName = fileName.substring(fileName.lastIndexOf("."));
+        fileName = UUID.randomUUID().toString().replace("-", "") + suffixName;
+        File filePath = new File(imagePath, fileName);
+        if (!filePath.getParentFile().exists()) {
+            filePath.getParentFile().mkdirs();
+        }
+        try {
+            file.transferTo(new File(imagePath + fileName));
             return AjaxResult.success();
         } catch (IOException e) {
             throw new RuntimeException(e);
