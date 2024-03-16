@@ -1,7 +1,8 @@
-package org.example.myojssm.common;
+package org.example.myojssm.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import org.example.myojssm.common.AjaxResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;

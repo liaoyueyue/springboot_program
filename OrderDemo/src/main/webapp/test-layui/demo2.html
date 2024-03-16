@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css" />
+    <script
+      src="https://kit.fontawesome.com/72eb9d17a2.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <a href="https://www.baidu.com" class="layui-btn">百度</a>
+    <button type="button" class="layui-btn layui-btn-normal">登录</button>
+    <hr />
+    <div class="layui-btn-container">
+      <button type="button" class="layui-btn layui-btn-lg">大型按钮</button>
+      <button type="button" class="layui-btn">默认按钮</button>
+      <button type="button" class="layui-btn layui-btn-sm">小型按钮</button>
+      <button type="button" class="layui-btn layui-btn-xs">迷你按钮</button>
+    </div>
+    <hr />
+    <div class="layui-btn-container">
+      <button
+        type="button"
+        class="layui-btn layui-btn-lg layui-btn-primary layui-btn-radius"
+      >
+        大型加圆角
+      </button>
+      <a href="#" class="layui-btn" target="_blank">跳转的按钮</a>
+      <button type="button" class="layui-btn layui-btn-sm layui-btn-normal">
+        <i class="layui-icon layui-icon-delete"></i> 删除
+      </button>
+      <button type="button" class="layui-btn layui-btn-xs layui-btn-disabled">
+        <i class="layui-icon layui-icon-share"></i> 分享
+      </button>
+    </div>
+    <hr />
+    <div class="layui-btn-group">
+      <button type="button" class="layui-btn layui-btn-primary layui-btn-sm">
+        文字
+      </button>
+      <button type="button" class="layui-btn layui-btn-primary layui-btn-sm">
+        <i class="layui-icon layui-icon-add-1"></i>
+      </button>
+      <button type="button" class="layui-btn layui-btn-primary layui-btn-sm">
+        <i class="layui-icon layui-icon-edit"></i>
+      </button>
+      <button type="button" class="layui-btn layui-btn-primary layui-btn-sm">
+        <i class="layui-icon layui-icon-delete"></i>
+      </button>
+    </div>
+    <br />
+    <br />
+    <div>
+      <i class="fa-solid fa-brands fa-tiktok fa-3x">抖音记录美好生活</i>
+    </div>
+    <br />
+    <div><i class="fa-solid fa-car fa-3x">嘀嘀打车</i></div>
+
+    <script src="/static/layui/layui.js"></script>
+    <script>
+      layui.use(function () {
+        var layer = layui.layer;
+        layer.msg('<i class="layui-icon layui-icon-moon"></i>代表我的心');
+      });
+    </script>
+  </body>
+</html>

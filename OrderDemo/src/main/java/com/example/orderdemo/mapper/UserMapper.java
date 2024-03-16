@@ -1,6 +1,6 @@
-package org.example.orderdemo.mapper;
+package com.example.orderdemo.mapper;
 
-import org.example.orderdemo.entity.User;
+import com.example.orderdemo.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

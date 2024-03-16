@@ -26,6 +26,6 @@ mybatis:
 # 日志配置，配置打印 mybatis 执行的 sql
 logging:
   level:
-    org:
+    com:
       example:
         orderdemo: debug

@@ -5,16 +5,27 @@
 <mapper namespace="org.example.myojssm.mapper.UserMapper">
 
     <resultMap id="BaseResultMap" type="org.example.myojssm.entity.User">
-            <id property="id" column="id" jdbcType="INTEGER"/>
-            <result property="username" column="username" jdbcType="VARCHAR"/>
-            <result property="password" column="password" jdbcType="VARCHAR"/>
-            <result property="nickname" column="nickname" jdbcType="VARCHAR"/>
-            <result property="email" column="email" jdbcType="VARCHAR"/>
-            <result property="phone" column="phone" jdbcType="VARCHAR"/>
-            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="nickname" column="nickname" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
     </resultMap>
+    <insert id="addUser">
+        insert into user(username, password, nickname, email, phone)
+        values (#{username}, #{password}, #{nickname}, #{email}, #{phone})
+    </insert>
     <select id="queryOneByUsername" resultMap="BaseResultMap">
-        select * from user where username = #{username};
+        select *
+        from user
+        where username = #{username};
+    </select>
+    <select id="queryUsernameExist" resultType="java.lang.Integer">
+        select count(*)
+        from user
+        where username = #{username};
     </select>
 
 </mapper>

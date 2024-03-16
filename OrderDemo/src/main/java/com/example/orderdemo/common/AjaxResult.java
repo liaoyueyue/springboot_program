@@ -1,4 +1,4 @@
-package org.example.orderdemo.common;
+package com.example.orderdemo.common;
 
 import lombok.Data;
 

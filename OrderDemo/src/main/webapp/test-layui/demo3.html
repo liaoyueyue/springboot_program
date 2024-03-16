@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css" />
+    <style>
+      .demo-login-container {
+        width: 320px;
+        margin: 200px auto 0;
+      }
+      .demo-login-other .layui-icon {
+        position: relative;
+        display: inline-block;
+        margin: 0 2px;
+        top: 2px;
+        font-size: 26px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layui-form">
+      <div class="demo-login-container">
+        <div class="layui-form-item">
+          <div class="layui-input-wrap">
+            <div class="layui-input-prefix">
+              <i class="layui-icon layui-icon-username"></i>
+            </div>
+            <input
+              type="text"
+              name="username"
+              value=""
+              lay-verify="required"
+              placeholder="用户名"
+              lay-reqtext="请填写用户名"
+              class="layui-input"
+              lay-affix="clear"
+            />
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <div class="layui-input-wrap">
+            <div class="layui-input-prefix">
+              <i class="layui-icon layui-icon-password"></i>
+            </div>
+            <input
+              type="password"
+              name="password"
+              value=""
+              lay-verify="required"
+              placeholder="密   码"
+              lay-reqtext="请填写密码"
+              class="layui-input"
+              lay-affix="eye"
+            />
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <button
+            class="layui-btn layui-btn-fluid"
+            lay-submit
+            lay-filter="demo-login"
+          >
+            登录
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="/static/layui/layui.js"></script>
+    <script>
+      layui.use(function () {});
+    </script>
+  </body>
+</html>

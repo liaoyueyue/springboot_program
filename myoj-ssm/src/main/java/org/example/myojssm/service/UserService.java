@@ -1,6 +1,6 @@
 package org.example.myojssm.service;
 
-import jakarta.annotation.Resource;
+import org.apache.ibatis.annotations.Param;
 import org.example.myojssm.entity.User;
 import org.example.myojssm.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,4 +22,14 @@ public class UserService {
         return userMapper.queryOneByUsername(username);
     }
 
+    public boolean addUser(User user){
+        if (userMapper.addUser(user) > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public int queryUsernameExist(String username) {
+        return userMapper.queryUsernameExist(username);
+    }
 }

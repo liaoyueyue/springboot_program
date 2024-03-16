@@ -1,6 +1,9 @@
 package org.example.myojssm.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.example.myojssm.common.AjaxResult;
+import org.example.myojssm.common.utils.UniqueUsernameUtil;
+import org.example.myojssm.common.utils.UserSessionUtil;
 import org.example.myojssm.entity.User;
 import org.example.myojssm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +26,13 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/login")
-    public AjaxResult login(String username, String password, String captcha) {
+    public AjaxResult login(HttpServletRequest request, String username, String password, String captcha) {
         // 1.非空校验
         if (!StringUtils.hasLength(username) || !StringUtils.hasLength(password) || !StringUtils.hasLength(captcha)) {
             return AjaxResult.fail(-1, "illegal request");
         }
         // 2.判断验证码 --这里暂时做简单判断
-        if (!captcha.equals("abcd")) {
+        if (captcha.equals(" ")) {
             return AjaxResult.fail(-1, "captcha error");
         }
         // 3.判断用户有效和密码是否正确
@@ -38,6 +41,7 @@ public class UserController {
             // 有效用户判断密码
             if (user.getPassword().equals(password)) {
                 user.setPassword("");
+                UserSessionUtil.setSessionUser(request, user);
                 return AjaxResult.success(user);
             }
         }
@@ -45,8 +49,19 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public AjaxResult register(String nickname, String password) {
-        System.out.println(nickname + " | " + password);
-        return AjaxResult.success(nickname + " | " + password);
+    public AjaxResult register(User user, String vercode) {
+        // 1.非空验证
+        if (!StringUtils.hasLength(user.getEmail()) || !StringUtils.hasLength(vercode) || !StringUtils.hasLength(user.getPassword()) || !StringUtils.hasLength(user.getNickname())) {
+            return AjaxResult.fail(-1, "illegal request");
+        }
+        // 2.判断邮箱验证码 --这里暂时做简单判断
+        if (vercode.equals(" ")) {
+            return AjaxResult.fail(-1, "vercode error");
+        }
+        // 3.尝试创建用户
+        String uniqueUsername = UniqueUsernameUtil.getUsername(user.getNickname(), userService);
+        user.setUsername(uniqueUsername);
+        boolean isAddUser = userService.addUser(user);
+        return AjaxResult.success(isAddUser);
     }
 }

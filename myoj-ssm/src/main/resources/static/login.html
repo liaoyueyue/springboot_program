@@ -124,7 +124,7 @@
         </div>
         <div class="layui-form-item">
             <button
-                    class="layui-btn layui-btn-fluid"
+                    class="layui-btn layui-btn-fluid layui-bg-blue"
                     lay-submit
                     lay-filter="user-login"
             >
@@ -168,7 +168,7 @@
                         <div class="layui-input-prefix">
                             <i class="layui-icon layui-icon-email"></i>
                         </div>
-                        <input type="text" name="email" value="" lay-verify="required|email" placeholder="邮箱" lay-reqtext="请填写手机号" autocomplete="off" class="layui-input" id="reg-email">
+                        <input type="text" name="email" value="" lay-verify="required|email" placeholder="邮箱" lay-reqtext="请填写邮箱" autocomplete="off" class="layui-input" id="reg-email">
                     </div>
                 </div>
                 <div class="layui-col-xs5">
@@ -282,6 +282,7 @@
                         result.data != null
                     ) {
                         layer.msg("登录成功" + JSON.stringify(result.data), {icon: 6});
+                        location.href = '/problem_list.html';
                     } else if (result != null && result.msg === 'captcha error') {
                         layer.msg("请检查验证码", {icon: 2});
                     } else if (result != null && result.msg === 'illegal username or password') {
@@ -327,8 +328,9 @@
                 type: "post",
                 data: field,
                 success: function (result) {
-                    if (result != null && result.code === 200 && result.data != null) {
+                    if (result != null && result.code === 200 && result.data === true) {
                         layer.msg("注册成功" + result.data, {icon: 1});
+                        location.reload();
                     } else {
                         layer.alert("注册失败，请稍后重试", {icon: 2});
                     }
@@ -344,7 +346,7 @@
                 var isvalid = form.validate('#reg-email'); // 主动触发验证，v2.7.0 新增
                 // 验证通过
                 if (isvalid) {
-                    layer.msg('手机号规则验证通过');
+                    layer.msg('邮箱规则验证通过');
                     // 此处可继续书写「发送验证码」等后续逻辑
                     // …
                 }

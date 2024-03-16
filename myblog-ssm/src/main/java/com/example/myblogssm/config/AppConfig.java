@@ -18,6 +18,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 public class AppConfig implements WebMvcConfigurer {
+    /**
+     * 添加拦截器
+     * @param registry 登记处
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginInterceptor())
@@ -35,7 +39,7 @@ public class AppConfig implements WebMvcConfigurer {
      * 由于在浏览器界面上传图片，而SpringBoot程序是感知不到的，因此需要自定义资源映射
      * addResourceHandler("/upload/**")：表示访问的时候路径上要加上 upload
      * addResourceLocations("classpath:upload/")：classpath:：表示资源位于classpath（类路径）下，通常是在src/main/resources/目录中。
-     * @param registry
+     * @param registry 登记处
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

@@ -1,4 +1,4 @@
-package org.example.orderdemo.entity;
+package com.example.orderdemo.entity;
 
 import java.io.Serializable;
 import java.util.Date;
