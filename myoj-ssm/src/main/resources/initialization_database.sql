@@ -25,11 +25,11 @@ create table problem
     title        varchar(100) not null,
     level        varchar(50),
     description  varchar(4090),
-    templateCode varchar(4090),
-    testCode     varchar(4090),
+    template_code varchar(4090),
+    test_code     varchar(4090),
     create_time  timestamp default now()
 );
-insert into myoj.problem (title, level, description, templateCode, testCode)
+insert into myoj.problem (title, level, description, template_code, test_code)
 values ('两数之和', '简单',
         '给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 target  的那 两个 整数，并返回它们的数组下标。', 'class Solution {
     public int[] twoSum(int[] nums, int target) {
@@ -166,10 +166,8 @@ create table submission
     language        varchar(50),
     code            text,
     status          enum ('pending', 'judging', 'accepted', 'wrong answer', 'runtime error', 'time limit exceeded', 'memory limit exceeded'), -- '待处理', '评判中', '已接受', '答案错误', '运行时错误', '超时', '内存超限'
-    execution_time  int,                                                                                                                      -- 执行时间
-    memory_usage    int,                                                                                                                      -- 内存使用
-    foreign key (user_id) references user (id),
-    foreign key (problem_id) references problem (id)
+    execution_time  int,  -- 执行时间
+    memory_usage    int   -- 内存使用
 );
 insert into submission (user_id, problem_id, language, code, status, execution_time, memory_usage)
 values (1, 1, 'Java', 'class Solution {

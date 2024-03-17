@@ -29,7 +29,7 @@ public class UserController {
     public AjaxResult login(HttpServletRequest request, String username, String password, String captcha) {
         // 1.非空校验
         if (!StringUtils.hasLength(username) || !StringUtils.hasLength(password) || !StringUtils.hasLength(captcha)) {
-            return AjaxResult.fail(-1, "illegal request");
+            return AjaxResult.fail();
         }
         // 2.判断验证码 --这里暂时做简单判断
         if (captcha.equals(" ")) {
@@ -52,7 +52,7 @@ public class UserController {
     public AjaxResult register(User user, String vercode) {
         // 1.非空验证
         if (!StringUtils.hasLength(user.getEmail()) || !StringUtils.hasLength(vercode) || !StringUtils.hasLength(user.getPassword()) || !StringUtils.hasLength(user.getNickname())) {
-            return AjaxResult.fail(-1, "illegal request");
+            return AjaxResult.fail();
         }
         // 2.判断邮箱验证码 --这里暂时做简单判断
         if (vercode.equals(" ")) {

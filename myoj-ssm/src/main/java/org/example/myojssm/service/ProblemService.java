@@ -19,11 +19,20 @@ import java.util.List;
 public class ProblemService {
     @Autowired
     ProblemMapper problemMapper;
+
     public List<Problem> queryAllProblem() {
         return problemMapper.queryAllProblem();
     }
 
     public Problem queryProblemById(Integer id) {
         return problemMapper.queryOneById(id);
+    }
+
+    public List<Problem> queryAllByLevel(String level) {
+        return problemMapper.queryAllByLevel(level);
+    }
+
+    public List<Problem> queryAllByCriteria(String level, String title) {
+        return problemMapper.queryAllByCriteria(level, title);
     }
 }

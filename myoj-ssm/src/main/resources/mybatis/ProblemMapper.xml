@@ -6,13 +6,33 @@
         <result column="title" property="title"></result>
         <result column="level" property="level"></result>
         <result column="description" property="description"></result>
-        <result column="templateCode" property="templateCode"></result>
-        <result column="testCode" property="testCode"></result>
+        <result column="template_code" property="templateCode"></result>
+        <result column="test_code" property="testCode"></result>
+        <result column="create_time" property="createTime"></result>
     </resultMap>
     <select id="queryAllProblem" resultMap="baseMap">
         select id, title, level from problem
     </select>
-    <select id="queryOneById" resultMap="baseMap">
-        select * from problem where id = #{id}
+
+    <select id="queryAllByLevel" resultMap="baseMap">
+        select * from problem where level = #{level}
     </select>
+
+    <select id="queryOneById" resultMap="baseMap">
+        select id, title, level from problem where id = #{id}
+    </select>
+
+    <select id="queryAllByCriteria" resultMap="baseMap">
+        select id, title, level from problem
+        <where>
+            <if test="level != null">
+                and level = #{level}
+            </if>
+            <if test="title != null">
+                and title like concat('%', #{title}, '%')
+            </if>
+        </where>
+    </select>
+
+
 </mapper>

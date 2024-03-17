@@ -58,4 +58,16 @@ public class AjaxResult {
         result.setData(null);
         return result;
     }
+
+    /**
+     * 返回失败结果
+     * @return 返回的数据
+     */
+    public static AjaxResult fail() {
+        AjaxResult result = new AjaxResult();
+        result.setCode(-1);
+        result.setMsg("illegal request");
+        result.setData(null);
+        return result;
+    }
 }
