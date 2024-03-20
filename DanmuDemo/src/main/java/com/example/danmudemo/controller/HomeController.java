@@ -1,6 +1,8 @@
 package com.example.danmudemo.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -17,8 +19,9 @@ public class HomeController {
         return "index";
     }
 
-    @RequestMapping("/play")
-    public String play() {
+    @RequestMapping("/play/{videoPath}")
+    public String play(@PathVariable String videoPath, Model model) {
+        model.addAttribute(videoPath);
         return "play";
     }
 

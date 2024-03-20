@@ -19,7 +19,8 @@ spring:
       max-request-size: -1
 
 mybatis:
-  mapper-locations: classpath:mapper/**Mapper.xml
+  configuration:
+    map-underscore-to-camel-case: true
 
 # 日志配置，配置打印 mybatis 执行的 sql
 logging:

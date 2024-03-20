@@ -1,0 +1,86 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>视频管理</title>
+    <link rel="stylesheet" href="/component/layui/css/layui.css">
+</head>
+<body>
+<nav>
+    <ul class="layui-nav layui-bg-blue">
+        <li class="layui-nav-item"><a href="/index">首页</a></li>
+        <li class="layui-nav-item"><a href="/admin/index">管理员首页</a></li>
+        <li class="layui-nav-item "><a href="/admin/add">管理员添加视频页面</a></li>
+        <li class="layui-nav-item"><a href="/play">弹幕播放器</a></li>
+        <li class="layui-nav-item layui-layout-right"><a href="/account/logout">注销</a></li>
+    </ul>
+</nav>
+<div style="width: 800px; margin: 50px">
+    <a href="/admin/add">
+        <button type="button" class="layui-btn">
+            添加视频
+        </button>
+    </a>
+    <table class="layui-table" >
+        <colgroup>
+            <col width="150">
+            <col width="150">
+            <col>
+        </colgroup>
+        <thead>
+        <tr>
+            <td>编号</td>
+            <td>标题</td>
+            <td>图片路径</td>
+            <td>视频路径</td>
+            <td>操作</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="video:${videos}">
+            <td th:text="${video.id}"></td>
+            <td th:text="${video.title}"></td>
+            <td th:text="${video.imagePath}"></td>
+            <td th:text="${video.videoPath}"></td>
+            <td>
+                <button type="button" class="layui-btn layui-btn-xs" th:onclick="editVideo([[${video.id}]])">编辑</button>
+                <button type="button" class="layui-btn layui-btn-xs layui-bg-red" th:onclick="deleteVideo([[${video.id}]])">删除</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="/component/layui/layui.js"></script>
+<script>
+    function editVideo(id) {
+        location.href = "/admin/edit/" + id;
+    }
+
+    function deleteVideo(id) {
+        layer.confirm("确定删除id为" + id + "的视频吗?", (index) => {
+            fetch("/admin/delete/" + id, { method: "post" })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json(); // 如果后端返回json，可以添加这一行
+                })
+                .then(data => {
+                    // 在请求成功后执行重新加载页面的操作
+                    location.reload();
+                })
+                .catch(error => {
+                    // 处理错误
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+            layer.close(index);
+        });
+    }
+
+</script>
+</body>
+</html>

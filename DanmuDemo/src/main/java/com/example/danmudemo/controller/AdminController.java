@@ -6,12 +6,14 @@ import com.example.danmudemo.mapper.VideoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -25,25 +27,53 @@ import java.util.UUID;
 @RequestMapping("/admin")
 public class AdminController {
 
+    @Autowired
+    VideoMapper videoMapper;
+
     @Value("${DanmuPlayer.videoPath}")
     private String videoPath;
     @Value("${DanmuPlayer.imagePath}")
     private String imagePath;
 
-    @Autowired
-    VideoMapper videoMapper;
+    @GetMapping("/index")
+    public String index(Model model) {
+        List<Video> videos = videoMapper.getVideoList();
+        model.addAttribute("videos", videos);
+        return "admin/index";
+    }
 
     @GetMapping("/add")
     public String add() {
         return "admin/add";
     }
 
+    @GetMapping("/edit/{videoId}")
+    public String edit(@PathVariable int videoId, Model model) {
+        Video video = videoMapper.getVideoById(videoId);
+        model.addAttribute(video);
+        return "admin/edit";
+    }
+
+    @PostMapping("/delete/{videoId}")
+    public AjaxResult delete(@PathVariable int videoId) {
+        System.out.println("进入删除接口");
+        videoMapper.delVideoById(videoId);
+        return AjaxResult.success();
+    }
+
+    @PostMapping("/edit")
+    public RedirectView edit(Video video) {
+        System.out.println("修改的视频信息：" + video.toString());
+        videoMapper.updateVideoById(video.getId(), video.getTitle(), video.getVideoPath(), video.getImagePath());
+        return new RedirectView("/admin/index");
+
+    }
+
     @PostMapping("/add")
-    RedirectView add(Video video) {
-        // 1.数据校验
-        System.out.println(video.toString());
+    public RedirectView add(Video video) {
+        System.out.println("添加的视频信息：" + video.toString());
         videoMapper.insertVideo(video);
-        return new RedirectView("/");
+        return new RedirectView("/admin/index");
     }
 
     @PostMapping("/upload/video")
@@ -91,4 +121,5 @@ public class AdminController {
             throw new RuntimeException(e);
         }
     }
+
 }
