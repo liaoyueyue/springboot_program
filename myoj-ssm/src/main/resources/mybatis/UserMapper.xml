@@ -13,7 +13,7 @@
         <result property="phone" column="phone" jdbcType="VARCHAR"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
     </resultMap>
-    <insert id="addUser">
+    <insert id="addOne">
         insert into user(username, password, nickname, email, phone)
         values (#{username}, #{password}, #{nickname}, #{email}, #{phone})
     </insert>
@@ -21,6 +21,11 @@
         select *
         from user
         where username = #{username};
+    </select>
+    <select id="queryOneByEmail" resultMap="BaseResultMap">
+        select *
+        from user
+        where email = #{email};
     </select>
     <select id="queryUsernameExist" resultType="java.lang.Integer">
         select count(*)

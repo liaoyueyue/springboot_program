@@ -1,10 +1,10 @@
 package org.example.myojssm.service;
 
-import org.apache.ibatis.annotations.Param;
 import org.example.myojssm.entity.User;
 import org.example.myojssm.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,12 +18,18 @@ public class UserService {
     @Autowired
     UserMapper userMapper;
 
-    public User queryOneByUsername(String username) {
-        return userMapper.queryOneByUsername(username);
+    public User login(String email, String username) {
+        User user;
+        if (StringUtils.hasLength(email)) {
+            user = userMapper.queryOneByEmail(email);
+        } else {
+            user = userMapper.queryOneByUsername(username);
+        }
+        return user;
     }
 
     public boolean addUser(User user){
-        if (userMapper.addUser(user) > 0) {
+        if (userMapper.addOne(user) > 0) {
             return true;
         }
         return false;

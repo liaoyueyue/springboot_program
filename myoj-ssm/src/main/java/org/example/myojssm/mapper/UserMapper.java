@@ -18,12 +18,14 @@ public interface UserMapper {
      */
     User queryOneByUsername(@Param("username") String username);
 
+    User queryOneByEmail(@Param("email") String email);
+
     /**
      * 添加新用户
      * @param user 新用户实体
      * @return 数据库返回数字
      */
-    int addUser(User user);
+    int addOne(User user);
 
     /**
      * 查询用户名是否已经存在

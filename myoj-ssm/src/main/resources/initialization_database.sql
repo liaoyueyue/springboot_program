@@ -13,8 +13,8 @@ create table user
     phone       varchar(20),
     create_time timestamp default now()
 );
-insert into myoj.user(username, password, nickname)
-values ('admin', '123', '管理员的昵称');
+insert into myoj.user(username, password, nickname, email)
+values ('admin', '123', '管理员的昵称', 'admin@email.com');
 
 
 # 题目表

@@ -26,9 +26,9 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/login")
-    public AjaxResult login(HttpServletRequest request, String username, String password, String captcha) {
+    public AjaxResult login(HttpServletRequest request, String username, String email, String password, String captcha) {
         // 1.非空校验
-        if (!StringUtils.hasLength(username) || !StringUtils.hasLength(password) || !StringUtils.hasLength(captcha)) {
+        if (!((StringUtils.hasLength(username) || StringUtils.hasLength(email)) && StringUtils.hasLength(password) && StringUtils.hasLength(captcha))) {
             return AjaxResult.fail();
         }
         // 2.判断验证码 --这里暂时做简单判断
@@ -36,7 +36,7 @@ public class UserController {
             return AjaxResult.fail(-1, "captcha error");
         }
         // 3.判断用户有效和密码是否正确
-        User user = userService.queryOneByUsername(username);
+        User user = userService.login(email, username);
         if (user != null && user.getId() > 0) {
             // 有效用户判断密码
             if (user.getPassword().equals(password)) {
@@ -45,7 +45,7 @@ public class UserController {
                 return AjaxResult.success(user);
             }
         }
-        return AjaxResult.fail(-1, "illegal username or password");
+        return AjaxResult.fail(-1, "illegal account or password");
     }
 
     @PostMapping("/register")
