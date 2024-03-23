@@ -24,6 +24,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User login(HttpServletRequest request, @NotBlank String account, @NotBlank @Pattern(regexp = "^\\S{6,16}$") String password) {
+        // 判断用户有效和密码是否正确
         User user = userMapper.queryUserByEmailOrUsername(account);
         if (user != null) {
             // 有效用户判断密码

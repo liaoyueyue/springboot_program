@@ -36,7 +36,7 @@ public class UserController {
         if (captcha.equals(" ")) {
             return Result.fail("captcha error");
         }
-        // 2.判断用户有效和密码是否正确
+        // 2.执行用户登录
         User user = userService.login(request, account, password);
         if (user != null) {
             return Result.success(user);
