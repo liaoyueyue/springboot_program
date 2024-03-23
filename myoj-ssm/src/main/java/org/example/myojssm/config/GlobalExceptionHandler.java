@@ -1,5 +1,6 @@
 package org.example.myojssm.config;
 
+import jakarta.validation.ConstraintViolationException;
 import org.example.myojssm.common.Result;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,6 +18,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public Result exceptionAdvice(Exception e) {
         e.printStackTrace();
-        return Result.fail(StringUtils.hasLength(e.getMessage())?e.getMessage():"操作失败");
+        return Result.fail(StringUtils.hasLength(e.getMessage())?e.getMessage():"Operation failed");
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    public Result nullPointerExceptionAdvice(NullPointerException e) {
+        e.printStackTrace();
+        return Result.fail(StringUtils.hasLength(e.getMessage())?e.getMessage():"Operation failed");
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public Result constraintViolationExceptionAdvice(ConstraintViolationException e) {
+        e.printStackTrace();
+        return Result.fail(StringUtils.hasLength(e.getMessage())?"Illegal parameters":"Operation failed");
     }
 }

@@ -19,7 +19,7 @@ import java.util.List;
 @Service
 public class ProblemServiceImpl implements ProblemService {
     @Autowired
-    ProblemMapper problemMapper;
+    private ProblemMapper problemMapper;
 
     @Override
     public List<Problem> queryAllProblem() {

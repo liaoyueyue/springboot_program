@@ -1,5 +1,7 @@
 package org.example.myojssm.service;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.constraints.NotBlank;
 import org.example.myojssm.entity.User;
 
 /**
@@ -10,9 +12,11 @@ import org.example.myojssm.entity.User;
  * Time: 13:27
  */
 public interface UserService {
-    User login(String email, String username);
+    User login(HttpServletRequest request, String account, String password);
 
     boolean addUser(User user);
 
-    int queryUsernameExist(String username);
+    boolean queryUsernameExist(String username);
+
+    boolean queryEmailExist(String email);
 }

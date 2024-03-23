@@ -4,12 +4,14 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
  * @TableName user
  */
 @Data
+@AllArgsConstructor
 public class User implements Serializable {
     private Integer id;
     private String username;

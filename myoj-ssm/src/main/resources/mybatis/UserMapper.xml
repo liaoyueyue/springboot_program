@@ -12,24 +12,35 @@
         <result property="email" column="email" jdbcType="VARCHAR"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
     </resultMap>
-    <insert id="addOne">
+    <insert id="addUser">
         insert into user(username, password, nickname, email)
         values (#{username}, #{password}, #{nickname}, #{email})
     </insert>
-    <select id="queryOneByUsername" resultMap="BaseResultMap">
+    <select id="queryUserByUsername" resultMap="BaseResultMap">
         select *
         from user
         where username = #{username};
     </select>
-    <select id="queryOneByEmail" resultMap="BaseResultMap">
+    <select id="queryUserByEmail" resultMap="BaseResultMap">
         select *
         from user
         where email = #{email};
+    </select>
+    <select id="queryUserByEmailOrUsername" resultMap="BaseResultMap">
+        select *
+        from user
+        where email = #{account} or username = #{account};
     </select>
     <select id="queryUsernameExist" resultType="java.lang.Integer">
         select count(*)
         from user
         where username = #{username};
     </select>
+    <select id="queryEmailExist" resultType="java.lang.Integer">
+        select count(*)
+        from user
+        where email = #{email};
+    </select>
+
 
 </mapper>
