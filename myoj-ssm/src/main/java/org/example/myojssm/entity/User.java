@@ -12,19 +12,14 @@ import lombok.Data;
 @Data
 public class User implements Serializable {
     private Integer id;
-
     private String username;
-
     private String password;
-
     private String nickname;
-
     private String email;
-
-    private String phone;
-
+    private String userPic;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
-
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date updateTime;
     private static final long serialVersionUID = 1L;
 }

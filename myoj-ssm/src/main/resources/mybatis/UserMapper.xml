@@ -10,12 +10,11 @@
         <result property="password" column="password" jdbcType="VARCHAR"/>
         <result property="nickname" column="nickname" jdbcType="VARCHAR"/>
         <result property="email" column="email" jdbcType="VARCHAR"/>
-        <result property="phone" column="phone" jdbcType="VARCHAR"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
     </resultMap>
     <insert id="addOne">
-        insert into user(username, password, nickname, email, phone)
-        values (#{username}, #{password}, #{nickname}, #{email}, #{phone})
+        insert into user(username, password, nickname, email)
+        values (#{username}, #{password}, #{nickname}, #{email})
     </insert>
     <select id="queryOneByUsername" resultMap="BaseResultMap">
         select *

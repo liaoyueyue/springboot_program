@@ -3,7 +3,7 @@ package org.example.myojssm.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
-import org.example.myojssm.common.AjaxResult;
+import org.example.myojssm.common.Result;
 import org.example.myojssm.common.exception.CodeVaildException;
 import org.example.myojssm.common.exception.ProblemNotFoundException;
 import org.example.myojssm.entity.Answer;
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CompileController {
     @Autowired
-    ProblemService problemService;
+    private ProblemService problemService;
 
     @AllArgsConstructor
     static class CompileRequest {
@@ -41,7 +41,7 @@ public class CompileController {
     }
 
     @PostMapping("/compile")
-    public AjaxResult compileProblem(HttpServletRequest req, HttpServletResponse resp, int id, String code) {
+    public Result compileProblem(HttpServletRequest req, HttpServletResponse resp, int id, String code) {
         CompileRequest compileRequest = null;
         CompileResponse compileResponse = new CompileResponse();
         try {
@@ -74,7 +74,7 @@ public class CompileController {
             compileResponse.error = 3;
             compileResponse.reason = "提交的代码不符合要求！";
         } finally {
-            return AjaxResult.success(compileResponse);
+            return Result.success(compileResponse);
         }
     }
 

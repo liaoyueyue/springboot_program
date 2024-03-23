@@ -10,8 +10,9 @@ create table user
     password    varchar(30) not null,
     nickname    varchar(50),
     email       varchar(50),
-    phone       varchar(20),
-    create_time timestamp default now()
+    user_pic    varchar(128),
+    create_time datetime default now(),
+    update_time datetime default now()
 );
 insert into myoj.user(username, password, nickname, email)
 values ('admin', '123', '管理员的昵称', 'admin@email.com');

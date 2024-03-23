@@ -2,7 +2,7 @@ package org.example.myojssm.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
-import org.example.myojssm.common.AjaxResult;
+import org.example.myojssm.common.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -31,12 +31,12 @@ public class ResponseAdvice implements ResponseBodyAdvice {
     @SneakyThrows
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-        if (body instanceof AjaxResult) {
+        if (body instanceof Result) {
             return body;
         }
         if (body instanceof String) {
-            return objectMapper.writeValueAsString(AjaxResult.success(body));
+            return objectMapper.writeValueAsString(Result.success(body));
         }
-        return AjaxResult.success(body);
+        return Result.success(body);
     }
 }
