@@ -39,7 +39,7 @@ public interface UserMapper {
      * @param user 新用户实体
      * @return 数据库返回数字
      */
-    int addUser(User user);
+    int insertUser(User user);
 
     /**
      * 查询用户名是否已经存在

@@ -1,5 +1,6 @@
 package org.example.myojssm.config;
 
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import jakarta.validation.ConstraintViolationException;
 import org.example.myojssm.common.Result;
 import org.springframework.util.StringUtils;

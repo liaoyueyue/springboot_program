@@ -5,14 +5,15 @@
 <mapper namespace="org.example.myojssm.mapper.UserMapper">
 
     <resultMap id="BaseResultMap" type="org.example.myojssm.entity.User">
-        <id property="id" column="id" jdbcType="INTEGER"/>
-        <result property="username" column="username" jdbcType="VARCHAR"/>
-        <result property="password" column="password" jdbcType="VARCHAR"/>
-        <result property="nickname" column="nickname" jdbcType="VARCHAR"/>
-        <result property="email" column="email" jdbcType="VARCHAR"/>
-        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="nickname" column="nickname"/>
+        <result property="email" column="email"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time" />
     </resultMap>
-    <insert id="addUser">
+    <insert id="insertUser">
         insert into user(username, password, nickname, email)
         values (#{username}, #{password}, #{nickname}, #{email})
     </insert>

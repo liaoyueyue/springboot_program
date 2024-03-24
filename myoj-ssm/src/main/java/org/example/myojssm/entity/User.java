@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -15,6 +16,7 @@ import lombok.Data;
 public class User implements Serializable {
     private Integer id;
     private String username;
+    @JsonIgnore
     private String password;
     private String nickname;
     private String email;

@@ -1,3 +1,8 @@
+#自定义配置
+jwt:
+  header-key: Authorization #TOKEN_HEADER_KEY JWT请求头KEY
+
+#SpringBoot配置
 server:
   port: 8080
 
@@ -12,6 +17,7 @@ mybatis:
   mapper-locations: classpath:mybatis/**Mapper.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
 
 logging:
   level:

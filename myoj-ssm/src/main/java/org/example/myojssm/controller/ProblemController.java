@@ -1,6 +1,8 @@
 package org.example.myojssm.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.example.myojssm.common.Result;
+import org.example.myojssm.common.utils.JWTUtil;
 import org.example.myojssm.entity.Problem;
 import org.example.myojssm.enums.ProblemLevelEnum;
 import org.example.myojssm.service.ProblemService;
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,7 +25,8 @@ import java.util.List;
 public class ProblemController {
     @Autowired
     ProblemService problemservice;
-    @GetMapping("/all")
+
+    @GetMapping("/list")
     public Result showProblemList() {
         List<Problem> problems = problemservice.queryAllProblem();
         return Result.success(problems);
@@ -46,7 +50,7 @@ public class ProblemController {
         if (level == null || title == null) {
             return Result.fail();
         }
-        List<Problem> problems = problemservice.queryAllByCriteria(level.toString(), title.isEmpty()?null:title);
+        List<Problem> problems = problemservice.queryAllByCriteria(level.toString(), title.isEmpty() ? null : title);
         if (problems != null) {
             return Result.success(problems);
         }

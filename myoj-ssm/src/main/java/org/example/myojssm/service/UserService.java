@@ -1,8 +1,8 @@
 package org.example.myojssm.service;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.constraints.NotBlank;
 import org.example.myojssm.entity.User;
+
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,9 +12,17 @@ import org.example.myojssm.entity.User;
  * Time: 13:27
  */
 public interface UserService {
-    User login(HttpServletRequest request, String account, String password);
+    /**
+     * 用户登录
+     * @param account 用户账号
+     * @param password 用户密码
+     * @return token - JWT令牌
+     */
+    String login(String account, String password);
 
-    boolean addUser(User user);
+    String addUser(String email, String password, String nickname);
+
+    User queryUserByUsername(String username);
 
     boolean queryUsernameExist(String username);
 
