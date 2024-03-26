@@ -1,8 +1,10 @@
 package org.example.myojssm.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,19 +15,13 @@ import java.io.Serializable;
  */
 @Data
 public class Problem implements Serializable {
-    private int id;
-
+    private Integer id;
     private String title;
-
     private String level;
-
     private String description;
-
     private String templateCode;
-
     private String testCode;
-
-    private String createTime;
-
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private LocalDateTime createTime;
     private static final long serialVersionUID = 1L;
 }

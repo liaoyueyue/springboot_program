@@ -6,17 +6,23 @@
 
     <resultMap id="BaseResultMap" type="org.example.myojssm.entity.User">
         <id property="id" column="id"/>
-        <result property="username" column="username"/>
-        <result property="password" column="password"/>
-        <result property="nickname" column="nickname"/>
-        <result property="email" column="email"/>
-        <result property="createTime" column="create_time"/>
-        <result property="updateTime" column="update_time" />
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="nickname" property="nickname"/>
+        <result column="email" property="email"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
     </resultMap>
     <insert id="insertUser">
         insert into user(username, password, nickname, email)
         values (#{username}, #{password}, #{nickname}, #{email})
     </insert>
+    <update id="updateUser">
+        update user set nickname = #{nickname}, email = #{email}, update_time= now() where id = #{id}
+    </update>
+    <update id="updateAvatar">
+        update user set user_pic = #{avatarUrl}, update_time = now() where id = #{id}
+    </update>
     <select id="queryUserByUsername" resultMap="BaseResultMap">
         select *
         from user
@@ -30,7 +36,8 @@
     <select id="queryUserByEmailOrUsername" resultMap="BaseResultMap">
         select *
         from user
-        where email = #{account} or username = #{account};
+        where email = #{account}
+           or username = #{account};
     </select>
     <select id="queryUsernameExist" resultType="java.lang.Integer">
         select count(*)

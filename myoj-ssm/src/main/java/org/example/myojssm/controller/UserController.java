@@ -1,11 +1,10 @@
 package org.example.myojssm.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import org.example.myojssm.common.Result;
-import org.example.myojssm.common.utils.JWTUtil;
+import org.example.myojssm.common.utils.ThreadLocalUtil;
 import org.example.myojssm.entity.User;
 import org.example.myojssm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,10 +55,20 @@ public class UserController {
     }
 
     @GetMapping("/userinfo")
-    public Result getUserinfo(@RequestHeader(name = "Authorization") String token) {
-        Map<String, Object> parseToken = JWTUtil.parseToken(token);
-        String username = (String) parseToken.get("username");
+    public Result getUserInfo() {
+        Map<String, Object> claims = ThreadLocalUtil.get();
+        String username = (String) claims.get("username");
         User user = userService.queryUserByUsername(username);
         return Result.success(user);
+    }
+
+    @PostMapping("/update")
+    public Result updateUserInfo(@RequestBody @Validated User user) {
+        return userService.updateUserInfo(user) > 0 ? Result.success() : Result.fail("Update failed");
+    }
+
+    @PatchMapping("/updateAvatar")
+    public Result updateAvatar(String avatarUrl) {
+        return userService.updateAvatar(avatarUrl) > 0 ? Result.success() : Result.fail("Update failed");
     }
 }

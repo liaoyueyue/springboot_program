@@ -2,6 +2,7 @@ package org.example.myojssm.service.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.example.myojssm.common.utils.JWTUtil;
+import org.example.myojssm.common.utils.ThreadLocalUtil;
 import org.example.myojssm.common.utils.UniqueUsernameUtil;
 import org.example.myojssm.entity.User;
 import org.example.myojssm.mapper.UserMapper;
@@ -9,6 +10,8 @@ import org.example.myojssm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,5 +64,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean queryEmailExist(String email) {
         return userMapper.queryEmailExist(email) > 0;
+    }
+
+    @Override
+    public int updateUserInfo(User user) {
+        return userMapper.updateUser(user);
+    }
+
+    @Override
+    public int updateAvatar(String avatarUrl) {
+        Map<String, Object> claims = ThreadLocalUtil.get();
+        Integer id = (Integer) claims.get("id");
+        return userMapper.updateAvatar(avatarUrl, id);
     }
 }

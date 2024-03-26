@@ -3,9 +3,12 @@ package org.example.myojssm.config.interceptors;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.myojssm.common.utils.JWTUtil;
+import org.example.myojssm.common.utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
+
+import java.util.Map;
 
 
 /**
@@ -23,12 +26,18 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         try {
             String token = request.getHeader(TOKEN_HEADER_KEY);
-            JWTUtil.parseToken(token);
+            Map<String, Object> claims = JWTUtil.parseToken(token);
+            ThreadLocalUtil.set(claims);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
             response.setStatus(401);
             return false;
         }
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        ThreadLocalUtil.remove();
     }
 }

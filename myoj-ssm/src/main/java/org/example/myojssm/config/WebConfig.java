@@ -23,4 +23,5 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**") // 拦截所有接口
                 .excludePathPatterns("/user/login", "/user/register");  //排除接口
     }
+
 }
