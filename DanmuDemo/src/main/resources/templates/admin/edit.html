@@ -14,7 +14,6 @@
         <li class="layui-nav-item"><a href="/index">首页</a></li>
         <li class="layui-nav-item "><a href="/admin/index">管理员首页</a></li>
         <li class="layui-nav-item "><a href="/admin/add">管理员添加视频页面</a></li>
-        <li class="layui-nav-item"><a href="/play">弹幕播放器</a></li>
         <li class="layui-nav-item layui-layout-right"><a href="/account/logout">注销</a></li>
     </ul>
 </nav>
@@ -25,7 +24,8 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">视频名称</label>
                 <div class="layui-input-block">
-                    <input type="text" name="title" placeholder="请输入视频名称" class="layui-input" th:value="${video.title}">
+                    <input type="text" name="title" placeholder="请输入视频名称" class="layui-input"
+                           th:value="${video.title}">
                 </div>
             </div>
             <input id="id" type="hidden" name="id" th:value="${video.id}">
@@ -34,9 +34,8 @@
             <div class="layui-form-item">
                 <h2>视频上传</h2>
                 <div class="layui-btn-container">
-                        <button type="button" class="layui-btn layui-btn-normal" id="choose-video-btn">选择视频</button>
+                    <button type="button" class="layui-btn layui-btn-normal" id="choose-video-btn">选择视频</button>
                     <button type="button" class="layui-btn" id="upload-video-btn">上传视频</button>
-                    <button type="button" class="layui-btn" th:onclick="previewVideo([[${video.videoPath}]])">视频预览</button>
                 </div>
             </div>
             <div class="layui-form-item">
@@ -58,7 +57,7 @@
 
 <script src="/component/layui/layui.js"></script>
 <script>
-    layui.use(function() {
+    layui.use(function () {
         var upload = layui.upload;
         var layer = layui.layer;
         var $ = layui.$;
@@ -89,9 +88,9 @@
             multiple: false,
             accept: 'images',
             exts: 'jpg|png|gif|bmp|jpeg|svg',
-            before: function(obj){
-                obj.preview(function(index, file, result){
-                    $('#upload-image-preview').append('<img src="'+ result +'" alt="'+ file.name +'" style="width: 90px; height: 90px;">')
+            before: function (obj) {
+                obj.preview(function (index, file, result) {
+                    $('#upload-image-preview').append('<img src="' + result + '" alt="' + file.name + '" style="width: 90px; height: 90px;">')
                 });
             },
             done: res => {
@@ -105,9 +104,6 @@
         });
     });
 
-    function previewVideo(videoPath) {
-        location.href = "/play/" + videoPath;
-    }
 
 </script>
 </body>
