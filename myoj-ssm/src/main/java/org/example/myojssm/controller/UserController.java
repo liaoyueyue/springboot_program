@@ -57,8 +57,7 @@ public class UserController {
 
     @GetMapping("/userinfo")
     public Result getUserInfo() {
-        User user = userService.getUserInfo();
-        return Result.success(user);
+        return Result.success(userService.getUserInfo());
     }
 
     @PostMapping("/updateinfo")
@@ -72,14 +71,7 @@ public class UserController {
     }
 
     @PatchMapping("/updatePwd")
-    public Result updatePwd(@RequestBody Map<String, String> params) {
-        String oldPwd = params.get("old_pwd");
-        String newPwd = params.get("new_pwd");
-        // 1.参数校验
-        if (!StringUtils.hasLength(oldPwd) || !StringUtils.hasLength(newPwd)) {
-            return Result.fail();
-        }
-        // 2.更新密码
+    public Result updatePwd(@NotBlank @Pattern(regexp = "^\\S{6,16}$") @RequestParam("old_pwd") String oldPwd, @NotBlank @Pattern(regexp = "^\\S{6,16}$") @RequestParam("new_pwd") String newPwd) {
         return userService.updatePassword(oldPwd, newPwd) > 0 ? Result.success() : Result.fail("Update failed, Check old password");
     }
 }
