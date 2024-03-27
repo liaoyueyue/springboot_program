@@ -8,6 +8,7 @@ import org.example.myojssm.common.utils.ThreadLocalUtil;
 import org.example.myojssm.entity.User;
 import org.example.myojssm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,25 +51,35 @@ public class UserController {
             return Result.fail("Vercode error");
         }
         // 3.尝试创建用户， 如果创建成功则返回用户名
-        String username = userService.addUser(email, password, nickname);
+        String username = userService.register(email, password, nickname);
         return username != null ? Result.success(username) : Result.fail("Username exist");
     }
 
     @GetMapping("/userinfo")
     public Result getUserInfo() {
-        Map<String, Object> claims = ThreadLocalUtil.get();
-        String username = (String) claims.get("username");
-        User user = userService.queryUserByUsername(username);
+        User user = userService.getUserInfo();
         return Result.success(user);
     }
 
-    @PostMapping("/update")
+    @PostMapping("/updateinfo")
     public Result updateUserInfo(@RequestBody @Validated User user) {
-        return userService.updateUserInfo(user) > 0 ? Result.success() : Result.fail("Update failed");
+        return userService.updateUserInfo(user) > 0 ? Result.success() : Result.fail("Update failed, Check if it is the current user");
     }
 
     @PatchMapping("/updateAvatar")
     public Result updateAvatar(String avatarUrl) {
         return userService.updateAvatar(avatarUrl) > 0 ? Result.success() : Result.fail("Update failed");
+    }
+
+    @PatchMapping("/updatePwd")
+    public Result updatePwd(@RequestBody Map<String, String> params) {
+        String oldPwd = params.get("old_pwd");
+        String newPwd = params.get("new_pwd");
+        // 1.参数校验
+        if (!StringUtils.hasLength(oldPwd) || !StringUtils.hasLength(newPwd)) {
+            return Result.fail();
+        }
+        // 2.更新密码
+        return userService.updatePassword(oldPwd, newPwd) > 0 ? Result.success() : Result.fail("Update failed, Check old password");
     }
 }

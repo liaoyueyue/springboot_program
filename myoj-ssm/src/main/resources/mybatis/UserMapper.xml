@@ -18,15 +18,33 @@
         values (#{username}, #{password}, #{nickname}, #{email})
     </insert>
     <update id="updateUser">
-        update user set nickname = #{nickname}, email = #{email}, update_time= now() where id = #{id}
+        update user
+        set nickname   = #{nickname},
+            email      = #{email},
+            update_time= now()
+        where id = #{id}
     </update>
     <update id="updateAvatar">
-        update user set user_pic = #{avatarUrl}, update_time = now() where id = #{id}
+        update user
+        set user_pic    = #{avatarUrl},
+            update_time = now()
+        where id = #{id}
+    </update>
+    <update id="updatePwd">
+        update user
+        set password    = #{newPwd},
+            update_time = now()
+        where id = #{id}
     </update>
     <select id="queryUserByUsername" resultMap="BaseResultMap">
         select *
         from user
         where username = #{username};
+    </select>
+    <select id="queryUserById" resultMap="BaseResultMap">
+        select *
+        from user
+        where id = #{id};
     </select>
     <select id="queryUserByEmail" resultMap="BaseResultMap">
         select *
@@ -49,6 +67,5 @@
         from user
         where email = #{email};
     </select>
-
 
 </mapper>

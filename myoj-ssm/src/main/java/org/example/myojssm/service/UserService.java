@@ -1,12 +1,11 @@
 package org.example.myojssm.service;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.example.myojssm.entity.User;
 
 
 /**
  * Created with IntelliJ IDEA.
- * Description:
+ * Description: 用户服务层
  * User: liaoyueyue
  * Date: 2024-03-23
  * Time: 13:27
@@ -27,7 +26,7 @@ public interface UserService {
      * @param nickname 昵称
      * @return 新用户的用户名
      */
-    String addUser(String email, String password, String nickname);
+    String register(String email, String password, String nickname);
 
     /**
      * 查询用户使用用户名
@@ -35,6 +34,13 @@ public interface UserService {
      * @return 用户实体
      */
     User queryUserByUsername(String username);
+
+    /**
+     * 查询用户使用编号
+     * @param id 编号
+     * @return 用户实体
+     */
+    User queryUserById(int id);
 
     /**
      * 查询用户名是否已经存在
@@ -63,4 +69,18 @@ public interface UserService {
      * @return 数据库影响行数
      */
     int updateAvatar(String avatarUrl);
+
+    /**
+     * 更新用户密码
+     * @param oldPwd 旧密码
+     * @param newPwd 新密码
+     * @return 数据库影响行数
+     */
+    int updatePassword(String oldPwd, String newPwd);
+
+    /**
+     * 获取当前用户信息
+     * @return 对应用户信息
+     */
+    User getUserInfo();
 }
