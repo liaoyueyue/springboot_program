@@ -7,11 +7,14 @@ drop table if exists user;
 create table user
 (
     id          int primary key auto_increment,
-    name        varchar(64),
-    password    varchar(64),
-    create_time timestamp default now()
+    username    varchar(64) unique not null ,
+    password    varchar(64) not null,
+    email       varchar(64),
+    phone       varchar(64),
+    create_time datetime default now(),
+    update_time datetime default now()
 );
-insert into user(name, password)
-values ('alice', '123'),
-       ('mike', '123'),
-       ('franklin', '123');
+insert into user(username, password)
+values ('admin', '123'),
+       ('alice', '123'),
+       ('mike', '123');

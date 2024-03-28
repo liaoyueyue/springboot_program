@@ -11,17 +11,12 @@ spring:
     password: 123456
   profiles:
     active: dev
-  # 配置 webapp 和 jsp
-  mvc:
-    view:
-      prefix: /view/
-      suffix: .jsp
 
 # 配置 MyBatis 配置路径
 mybatis:
-  mapper-locations: classpath:mybatis/**Mapper.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
 
 # 日志配置，配置打印 mybatis 执行的 sql
 logging:
