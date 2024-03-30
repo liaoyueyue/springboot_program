@@ -4,15 +4,11 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import org.example.myojssm.common.Result;
-import org.example.myojssm.common.utils.ThreadLocalUtil;
 import org.example.myojssm.entity.User;
 import org.example.myojssm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -35,8 +31,7 @@ public class UserController {
             return Result.fail("captcha error");
         }
         // 2.执行用户登录
-        String token = userService.login(account, password);
-        return token != null ? Result.success(token) : Result.fail("illegal account or password");
+        return userService.login(account, password);
     }
 
     @PostMapping("/register")
@@ -51,8 +46,7 @@ public class UserController {
             return Result.fail("Vercode error");
         }
         // 3.尝试创建用户， 如果创建成功则返回用户名
-        String username = userService.register(email, password, nickname);
-        return username != null ? Result.success(username) : Result.fail("Username exist");
+        return userService.register(email, password, nickname);
     }
 
     @GetMapping("/userinfo")
@@ -62,16 +56,16 @@ public class UserController {
 
     @PostMapping("/updateinfo")
     public Result updateUserInfo(@RequestBody @Validated User user) {
-        return userService.updateUserInfo(user) > 0 ? Result.success() : Result.fail("Update failed, Check if it is the current user");
+        return userService.updateUserInfo(user);
     }
 
     @PatchMapping("/updateAvatar")
     public Result updateAvatar(String avatarUrl) {
-        return userService.updateAvatar(avatarUrl) > 0 ? Result.success() : Result.fail("Update failed");
+        return userService.updateAvatar(avatarUrl);
     }
 
     @PatchMapping("/updatePwd")
     public Result updatePwd(@NotBlank @Pattern(regexp = "^\\S{6,16}$") @RequestParam("old_pwd") String oldPwd, @NotBlank @Pattern(regexp = "^\\S{6,16}$") @RequestParam("new_pwd") String newPwd) {
-        return userService.updatePassword(oldPwd, newPwd) > 0 ? Result.success() : Result.fail("Update failed, Check old password");
+        return userService.updatePwd(oldPwd, newPwd);
     }
 }

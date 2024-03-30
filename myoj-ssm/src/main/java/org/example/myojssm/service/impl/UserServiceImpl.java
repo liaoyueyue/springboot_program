@@ -1,6 +1,5 @@
 package org.example.myojssm.service.impl;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.example.myojssm.common.Result;
 import org.example.myojssm.common.utils.JWTUtil;
 import org.example.myojssm.common.utils.ThreadLocalUtil;
@@ -10,10 +9,7 @@ import org.example.myojssm.mapper.UserMapper;
 import org.example.myojssm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,7 +26,7 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Override
-    public String login(String account, String password) {
+    public Result login(String account, String password) {
         // 判断用户有效和密码是否正确
         User user = userMapper.queryUserByEmailOrUsername(account);
         if (user != null) {
@@ -40,17 +36,17 @@ public class UserServiceImpl implements UserService {
                 Map<String, Object> claims = new HashMap<>();
                 claims.put("id", user.getId());
                 claims.put("username", user.getUsername());
-                return JWTUtil.genToken(claims);
+                return Result.success(JWTUtil.genToken(claims));
             }
         }
-        return null;
+        return Result.fail("illegal account or password");
     }
 
     @Override
-    public String register(String email, String password, String nickname) {
+    public Result register(String email, String password, String nickname) {
         String uniqueUsername = UniqueUsernameUtil.getUsername(nickname);
         User user = new User(null, uniqueUsername, password, nickname, email, null, null, null);
-        return userMapper.insertUser(user) > 0 ? uniqueUsername : null;
+        return userMapper.insertUser(user) > 0 ? Result.success(uniqueUsername) : Result.fail("Username exist");
     }
 
     @Override
@@ -74,29 +70,29 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int updateUserInfo(User user) {
+    public Result updateUserInfo(User user) {
         // 判断是否为当前用户
         User loginUser = getUserInfo();
         if (!loginUser.getId().equals(user.getId())) {
-            return 0;
+            return Result.fail();
         }
-        return userMapper.updateUser(user);
+        return userMapper.updateUser(user) > 0 ? Result.success() : Result.fail("Update failed, Check if it is the current user");
     }
 
     @Override
-    public int updateAvatar(String avatarUrl) {
+    public Result updateAvatar(String avatarUrl) {
         Map<String, Object> claims = ThreadLocalUtil.get();
         Integer id = (Integer) claims.get("id");
-        return userMapper.updateAvatar(avatarUrl, id);
+        return userMapper.updateAvatar(avatarUrl, id) > 0 ? Result.success() : Result.fail("Update failed");
     }
 
     @Override
-    public int updatePassword(String oldPwd, String newPwd) {
+    public Result updatePwd(String oldPwd, String newPwd) {
         User loginUser = getUserInfo();
         if (!loginUser.getPassword().equals(oldPwd)) { // 密码没有加密，这里简单判断
-            return 0;
+            Result.fail("Update failed, Check old password");
         }
-        return userMapper.updatePwd(loginUser.getId(), newPwd);
+        return userMapper.updatePwd(loginUser.getId(), newPwd) > 0 ? Result.success() : Result.fail("Update failed");
     }
 
     @Override

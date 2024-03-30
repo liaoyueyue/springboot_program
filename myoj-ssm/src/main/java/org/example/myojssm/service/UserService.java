@@ -1,5 +1,6 @@
 package org.example.myojssm.service;
 
+import org.example.myojssm.common.Result;
 import org.example.myojssm.entity.User;
 
 
@@ -17,16 +18,17 @@ public interface UserService {
      * @param password 用户密码
      * @return token - JWT令牌
      */
-    String login(String account, String password);
+    Result login(String account, String password);
 
     /**
      * 用户注册
-     * @param email 邮箱
+     *
+     * @param email    邮箱
      * @param password 密码
      * @param nickname 昵称
      * @return 新用户的用户名
      */
-    String register(String email, String password, String nickname);
+    Result register(String email, String password, String nickname);
 
     /**
      * 查询用户使用用户名
@@ -58,25 +60,28 @@ public interface UserService {
 
     /**
      * 更新用户信息
+     *
      * @param user 用户实体
-     * @return 数据库影响行数
+     * @return 是否更新成功
      */
-    int updateUserInfo(User user);
+    Result updateUserInfo(User user);
 
     /**
      * 更新用户头像
+     *
      * @param avatarUrl 头像地址
-     * @return 数据库影响行数
+     * @return 是否更新成功
      */
-    int updateAvatar(String avatarUrl);
+    Result updateAvatar(String avatarUrl);
 
     /**
      * 更新用户密码
+     *
      * @param oldPwd 旧密码
      * @param newPwd 新密码
-     * @return 数据库影响行数
+     * @return 是否更新成功
      */
-    int updatePassword(String oldPwd, String newPwd);
+    Result updatePwd(String oldPwd, String newPwd);
 
     /**
      * 获取当前用户信息
