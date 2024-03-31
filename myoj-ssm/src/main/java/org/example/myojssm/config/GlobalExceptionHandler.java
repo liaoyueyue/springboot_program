@@ -4,6 +4,7 @@ import com.auth0.jwt.exceptions.JWTDecodeException;
 import jakarta.validation.ConstraintViolationException;
 import org.example.myojssm.common.Result;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -33,4 +34,11 @@ public class GlobalExceptionHandler {
         e.printStackTrace();
         return Result.fail(StringUtils.hasLength(e.getMessage())?"Illegal parameters":"Operation failed");
     }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Result methodArgumentNotValidExceptionAdvice(MethodArgumentNotValidException e) {
+        e.printStackTrace();
+        return Result.fail(StringUtils.hasLength(e.getMessage())?"Illegal parameters":"Operation failed");
+    }
+
 }

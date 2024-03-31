@@ -5,14 +5,30 @@
 <mapper namespace="org.example.myojssm.mapper.CategoryMapper">
 
     <resultMap id="BaseResultMap" type="org.example.myojssm.entity.Category">
-            <id property="id" column="id" jdbcType="INTEGER"/>
-            <result property="name" column="name" jdbcType="VARCHAR"/>
-            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="description" property="description"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
     </resultMap>
-
-    <sql id="Base_Column_List">
-        id,name,create_time,
-        update_time
-    </sql>
+    <insert id="insertCategory">
+        insert into category(name, description)
+        values (#{name}, #{description});
+    </insert>
+    <update id="updateCategoryById">
+        update category
+        set name        = #{name},
+            description = #{description},
+            update_time = now()
+        where id = #{id}
+    </update>
+    <select id="queryAllCategory" resultMap="BaseResultMap">
+        select *
+        from category
+    </select>
+    <select id="queryCategoryById" resultMap="BaseResultMap">
+        select *
+        from category
+        where id = #{id}
+    </select>
 </mapper>

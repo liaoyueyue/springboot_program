@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 public class UserController {
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @PostMapping("/login")
     public Result login(@NotBlank @Pattern(regexp = "^\\S{2,25}$") String account, @NotBlank @Pattern(regexp = "^\\S{6,16}$") String password, @NotBlank @Pattern(regexp = "^\\S{4,6}$") String captcha) {

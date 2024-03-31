@@ -15,7 +15,7 @@ create table user
     update_time datetime default now()
 );
 insert into myoj.user(username, password, nickname, email)
-values ('admin', '123', '管理员的昵称', 'admin@email.com');
+values ('admin', '123456', '管理员的昵称', 'admin@email.com');
 
 # 题目分类表
 drop table if exists category;
@@ -23,11 +23,12 @@ create table category
 (
     id          int primary key auto_increment,
     name        varchar(50) not null unique,
+    description varchar(4090),
     create_time datetime default now(),
     update_time datetime default now()
 );
-insert into category (name)
-values ('JAVA基础题');
+insert into category (name, description)
+values ('JAVA基础题', '一些JAVA初学者练习题');
 
 # 题目表
 drop table if exists problem;
@@ -176,7 +177,7 @@ create table submission
     id              int auto_increment primary key,
     user_id         int,
     problem_id      int,
-    submission_time timestamp default now(),
+    submission_time datetime default now(),
     language        varchar(50),
     code            text,
     status          enum ('pending', 'judging', 'accepted', 'wrong answer', 'runtime error', 'time limit exceeded', 'memory limit exceeded'), -- '待处理', '评判中', '已接受', '答案错误', '运行时错误', '超时', '内存超限'

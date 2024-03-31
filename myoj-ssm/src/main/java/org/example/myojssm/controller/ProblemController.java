@@ -24,7 +24,7 @@ import java.util.Map;
 @CrossOrigin
 public class ProblemController {
     @Autowired
-    ProblemService problemservice;
+    private ProblemService problemservice;
 
     @GetMapping("/list")
     public Result showProblemList() {

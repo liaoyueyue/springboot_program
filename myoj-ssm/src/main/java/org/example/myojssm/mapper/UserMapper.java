@@ -14,7 +14,6 @@ import org.example.myojssm.entity.User;
 public interface UserMapper {
     /**
      * 添加新用户
-     *
      * @param user 新用户实体
      * @return 数据库影响行数
      */
@@ -22,7 +21,6 @@ public interface UserMapper {
 
     /**
      * 更新用户信息
-     *
      * @param user 用户实体
      * @return 数据库影响行数
      */
@@ -30,7 +28,6 @@ public interface UserMapper {
 
     /**
      * 查询用户使用用户名
-     *
      * @param username 用户名
      * @return 用户实体
      */
@@ -38,7 +35,6 @@ public interface UserMapper {
 
     /**
      * 查询用户使用编号
-     *
      * @param id 编号
      * @return 用户实体
      */
@@ -46,7 +42,6 @@ public interface UserMapper {
 
     /**
      * 使用 email 查询用户
-     *
      * @param email 邮箱
      * @return email 对应用户信息
      */
@@ -54,7 +49,6 @@ public interface UserMapper {
 
     /**
      * 使用 username 或者 email  查询用户
-     *
      * @param account 邮箱或者用户名
      * @return username 或者 email 对应用户信息
      */
@@ -62,7 +56,6 @@ public interface UserMapper {
 
     /**
      * 查询用户名是否已经存在
-     *
      * @param username 用户名
      * @return 数据库影响行数
      */
@@ -70,7 +63,6 @@ public interface UserMapper {
 
     /**
      * 查询邮箱是否已经存在
-     *
      * @param email 邮箱
      * @return 数据库影响行数
      */
@@ -78,7 +70,6 @@ public interface UserMapper {
 
     /**
      * 更新用户头像
-     *
      * @param avatarUrl 头像地址
      * @param id 用户编号
      * @return 数据库影响行数
