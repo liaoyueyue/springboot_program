@@ -18,15 +18,15 @@ insert into myoj.user(username, password, nickname, email)
 values ('admin', '123', '管理员的昵称', 'admin@email.com');
 
 # 题目分类表
-drop table if exists problem_category;
-create table problem_category
+drop table if exists category;
+create table category
 (
     id          int primary key auto_increment,
     name        varchar(50) not null unique,
     create_time datetime default now(),
     update_time datetime default now()
 );
-insert into problem_category (name)
+insert into category (name)
 values ('JAVA基础题');
 
 # 题目表
