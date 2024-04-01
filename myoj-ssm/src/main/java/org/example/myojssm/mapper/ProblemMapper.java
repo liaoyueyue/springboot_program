@@ -16,6 +16,12 @@ import java.util.List;
 @Mapper
 public interface ProblemMapper {
     /**
+     * 新增题目
+     * @return 数据库影响行数
+     */
+    int insertProblem();
+
+    /**
      * 查询全部题目
      * @return 所有题目
      */
@@ -40,4 +46,5 @@ public interface ProblemMapper {
      * @return 符合条件的题目列表
      */
     List<Problem> queryAllByCriteria(@Param("level") String level, @Param("title") String title);
+
 }

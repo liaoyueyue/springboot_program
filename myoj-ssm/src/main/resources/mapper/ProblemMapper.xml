@@ -2,26 +2,36 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.example.myojssm.mapper.ProblemMapper">
     <resultMap id="baseMap" type="org.example.myojssm.entity.Problem">
-        <id column="id" property="id"></id>
-        <result column="title" property="title"></result>
-        <result column="level" property="level"></result>
-        <result column="category_id" property="categoryId"></result>
-        <result column="description" property="description"></result>
-        <result column="template_code" property="templateCode"></result>
-        <result column="test_code" property="testCode"></result>
-        <result column="create_time" property="createTime"></result>
-        <result column="update_time" property="updateTime"></result>
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="level" property="level"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="description" property="description"/>
+        <result column="template_code" property="templateCode"/>
+        <result column="test_code" property="testCode"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
     </resultMap>
+    <insert id="insertProblem">
+        insert into problem(title, level, category_id, description, template_code, test_code)
+        values (#{title}, #{level}, #{category_id}, #{description}, #{template_code}, #{test_code})
+    </insert>
+
     <select id="queryAllProblem" resultMap="baseMap">
-        select id, title, level from problem
+        select id, title, level
+        from problem
     </select>
 
     <select id="queryAllByLevel" resultMap="baseMap">
-        select * from problem where level = #{level}
+        select *
+        from problem
+        where level = #{level}
     </select>
 
     <select id="queryOneById" resultMap="baseMap">
-        select id, title, level from problem where id = #{id}
+        select id, title, level
+        from problem
+        where id = #{id}
     </select>
 
     <select id="queryAllByCriteria" resultMap="baseMap">

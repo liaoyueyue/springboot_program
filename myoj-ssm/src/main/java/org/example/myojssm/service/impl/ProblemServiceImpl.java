@@ -1,5 +1,6 @@
 package org.example.myojssm.service.impl;
 
+import org.example.myojssm.common.Result;
 import org.example.myojssm.entity.Problem;
 import org.example.myojssm.mapper.ProblemMapper;
 import org.example.myojssm.service.ProblemService;
@@ -39,5 +40,10 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public List<Problem> queryAllByCriteria(String level, String title) {
         return problemMapper.queryAllByCriteria(level, title);
+    }
+
+    @Override
+    public Result addProblem() {
+        return problemMapper.insertProblem()>0?Result.success():Result.fail();
     }
 }
