@@ -45,6 +45,17 @@
             </if>
         </where>
     </select>
+    <select id="queryCategoryList" resultMap="baseMap">
+        select id, title, level from problem
+        <where>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+            <if test="level != null">
+                and level = #{level}
+            </if>
+        </where>
+    </select>
 
 
 </mapper>

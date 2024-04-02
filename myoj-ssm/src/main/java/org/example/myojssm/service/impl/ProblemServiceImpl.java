@@ -1,6 +1,9 @@
 package org.example.myojssm.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.example.myojssm.common.Result;
+import org.example.myojssm.entity.PageBean;
 import org.example.myojssm.entity.Problem;
 import org.example.myojssm.mapper.ProblemMapper;
 import org.example.myojssm.service.ProblemService;
@@ -45,5 +48,16 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public Result addProblem() {
         return problemMapper.insertProblem()>0?Result.success():Result.fail();
+    }
+
+    @Override
+    public Result list(Integer pageNum, Integer pageSize, Integer categoryId, String level) {
+        if (pageNum < 1 || pageSize > 5) {
+            return Result.fail("Illegal parameters");
+        }
+        PageHelper.startPage(pageNum, pageSize);
+        List<Problem> problems = problemMapper.queryCategoryList(categoryId, level);
+        Page<Problem> page = (Page<Problem>) problems;
+        return Result.success(new PageBean<>(page.getTotal(), page.getResult()));
     }
 }
