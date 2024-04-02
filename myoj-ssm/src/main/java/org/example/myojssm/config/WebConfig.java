@@ -2,8 +2,10 @@ package org.example.myojssm.config;
 
 import org.example.myojssm.config.interceptors.LoginInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
@@ -15,6 +17,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+    @Value("${filePath}")
+    private String filePath;
+
     @Autowired
     private LoginInterceptor LoginInterceptor;
     @Override
@@ -22,7 +27,12 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(LoginInterceptor)
                 .addPathPatterns("/**") // 拦截所有接口
                 .excludePathPatterns("/user/login", "/user/register")  //排除接口
-                .excludePathPatterns("/problem/all", "/problem/list");  //排除接口
+                .excludePathPatterns("/problem/all", "/problem/list")  //排除接口
+                .excludePathPatterns("/file/**");  //排除接口
     }
 
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/file/**").addResourceLocations("file:" + filePath);
+    }
 }

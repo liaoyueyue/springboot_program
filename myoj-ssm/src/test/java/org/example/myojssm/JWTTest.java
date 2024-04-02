@@ -38,7 +38,7 @@ public class JWTTest {
     @Test
     public void testParse() {
         // 定义字符串， 模拟用户传递过来的token
-        String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6ImFkbWluIn0sImV4cCI6MTcxMTI5NzcyOX0.RjpCcICehSQ8J8gHEIwqjDptwymp6qijHJJ0vfeK1RY";
+        String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6ImFkbWluIn0sImV4cCI6MTcxMjExNzczNn0.ME3dmWKtekZIk34nobNCQl-lmcvqCYRs0xyDBngQHsg";
         JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(secret)).build(); // JWTVerifier JWT验证者
         DecodedJWT decodedJWT = jwtVerifier.verify(token); // 验证token， 生成一个解析后的JWT对象
         Map<String, Claim> claims = decodedJWT.getClaims();
