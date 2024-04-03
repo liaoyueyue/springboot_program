@@ -1,6 +1,5 @@
 package com.example.danmudemo.entiy;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -11,8 +10,12 @@ import lombok.Data;
  * Time: 10:28
  */
 @Data
-@AllArgsConstructor
 public class Danmu {
+    Integer id;
+    Integer videoId;
     String text;
     Double time;
+    Integer mode;
+    Boolean border;
+    String color;
 }

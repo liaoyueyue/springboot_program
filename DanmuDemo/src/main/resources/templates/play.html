@@ -43,11 +43,35 @@
         muted: true,
         plugins: [
             artplayerPluginDanmuku({
-                danmuku:()=>{
-                    fetch('/getDanmu').then(res=>res.json())
+                danmuku: () => {
+                    return fetch('/getDanmu/' + videoId)
+                        .then(res => res.json())
+                        .then(data => {
+                            // 如果获取到的数据不是数组，将其包装成数组返回
+                            if (!Array.isArray(data)) {
+                                data = [data];
+                            }
+                            return data;
+                        })
+                        .catch(error => {
+                            console.error('获取弹幕数据失败：', error);
+                            // 如果请求失败，返回一个空数组
+                            return [];
+                        });
                 }
             })
         ]
+    });
+    art.on('artplayerPluginDanmuku:emit', danmu=>{
+        danmu.videoId = videoId;
+        fetch("/emitDanmu", {
+            method: "post",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify(danmu)
+        })
+        console.log(danmu)
     });
 </script>
 </body>

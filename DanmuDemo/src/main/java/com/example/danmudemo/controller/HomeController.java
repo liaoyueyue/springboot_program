@@ -1,7 +1,9 @@
 package com.example.danmudemo.controller;
 
+import com.example.danmudemo.common.AjaxResult;
 import com.example.danmudemo.entiy.Danmu;
 import com.example.danmudemo.entiy.Video;
+import com.example.danmudemo.mapper.DanmuMapper;
 import com.example.danmudemo.mapper.VideoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,8 @@ import java.util.List;
 public class HomeController {
     @Autowired
     VideoMapper videoMapper;
+    @Autowired
+    DanmuMapper danmuMapper;
 
     @RequestMapping("/index")
     public String index(Model model) {
@@ -38,13 +42,19 @@ public class HomeController {
     }
 
     @ResponseBody
-    @RequestMapping("/getDanmu")
-    List<Danmu> getDanmu() {
-        List<Danmu> danmus = new ArrayList<>();
-        danmus.add(new Danmu("Test1", 1.0));
-        danmus.add(new Danmu("Test2", 2.0));
-        danmus.add(new Danmu("Test3", 3.0));
+    @RequestMapping("/getDanmu/{videoId}")
+    List<Danmu> getDanmu(@PathVariable String videoId, Model model) {
+        List<Danmu> danmus = danmuMapper.getDanmuLIstByVideoId(Long.valueOf(videoId));
         return danmus;
+    }
+
+
+    @ResponseBody
+    @PostMapping("/emitDanmu")
+    AjaxResult emitDanmu(@RequestBody Danmu danmu) {
+        danmu.setBorder(false);
+        danmuMapper.insertDanmu(danmu);
+        return AjaxResult.success();
     }
 
 }
