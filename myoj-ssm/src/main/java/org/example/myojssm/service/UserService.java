@@ -2,6 +2,7 @@ package org.example.myojssm.service;
 
 import org.example.myojssm.common.Result;
 import org.example.myojssm.entity.User;
+import org.springframework.web.multipart.MultipartFile;
 
 
 /**
@@ -69,10 +70,10 @@ public interface UserService {
     /**
      * 更新用户头像
      *
-     * @param avatarUrl 头像地址
+     * @param avatarFile 头像文件
      * @return 是否更新成功
      */
-    Result updateAvatar(String avatarUrl);
+    Result updateAvatar(MultipartFile avatarFile);
 
     /**
      * 更新用户密码
@@ -88,4 +89,10 @@ public interface UserService {
      * @return 对应用户信息
      */
     User getUserInfo();
+
+    /**
+     * 获取当前用户编号
+     * @return 用户编号
+     */
+    Integer getUserId();
 }

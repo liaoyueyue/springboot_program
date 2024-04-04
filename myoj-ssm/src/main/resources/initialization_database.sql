@@ -10,7 +10,7 @@ create table user
     password    varchar(30) not null,
     nickname    varchar(50),
     email       varchar(50) not null unique,
-    user_pic    varchar(128),
+    user_pic    varchar(128) default 'default_avatar.jpg',
     create_time datetime default now(),
     update_time datetime default now()
 );

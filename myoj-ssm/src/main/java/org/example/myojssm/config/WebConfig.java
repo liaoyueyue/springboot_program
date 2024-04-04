@@ -17,8 +17,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-    @Value("${filePath}")
-    private String filePath;
+    @Value("${avatar-path}")
+    private String AVATAR_PATH;
 
     @Autowired
     private LoginInterceptor LoginInterceptor;
@@ -33,6 +33,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/file/**").addResourceLocations("file:" + filePath);
+        registry.addResourceHandler("/avatar/**").addResourceLocations("file:" + AVATAR_PATH);
     }
 }

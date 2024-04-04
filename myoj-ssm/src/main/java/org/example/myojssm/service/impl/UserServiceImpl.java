@@ -8,10 +8,15 @@ import org.example.myojssm.entity.User;
 import org.example.myojssm.mapper.UserMapper;
 import org.example.myojssm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,6 +27,9 @@ import java.util.Map;
  */
 @Service
 public class UserServiceImpl implements UserService {
+    @Value("${avatar-path}")
+    private String AVATAR_PATH;
+
     @Autowired
     private UserMapper userMapper;
 
@@ -71,19 +79,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Result updateUserInfo(User user) {
-        // 判断是否为当前用户
-        User loginUser = getUserInfo();
-        if (!loginUser.getId().equals(user.getId())) {
-            return Result.fail();
-        }
-        return userMapper.updateUser(user) > 0 ? Result.success() : Result.fail("Update failed, Check if it is the current user");
+        user.setId(getUserId());
+        return userMapper.updateUser(user) > 0 ? Result.success() : Result.fail("Update failed");
     }
 
     @Override
-    public Result updateAvatar(String avatarUrl) {
-        Map<String, Object> claims = ThreadLocalUtil.get();
-        Integer id = (Integer) claims.get("id");
-        return userMapper.updateAvatar(avatarUrl, id) > 0 ? Result.success() : Result.fail("Update failed");
+    public Result updateAvatar(MultipartFile avatarFile) {
+        String originalFilename = avatarFile.getOriginalFilename();
+        String avatarName = UUID.randomUUID().toString().replace("-", "") + originalFilename.substring(originalFilename.lastIndexOf("."));
+        try {
+            avatarFile.transferTo(new File(AVATAR_PATH + avatarName));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Integer id = getUserId();
+        return userMapper.updateAvatar(avatarName, id) > 0 ? Result.success("/avatar/" + avatarName) : Result.fail("Update failed");
     }
 
     @Override
@@ -97,9 +107,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserInfo() {
-        Map<String, Object> claims = ThreadLocalUtil.get();
-        Integer id = (Integer) claims.get("id");
-        return userMapper.queryUserById(id);
+        return userMapper.queryUserById(getUserId());
     }
 
+    @Override
+    public Integer getUserId() {
+        Map<String, Object> claims = ThreadLocalUtil.get();
+        return (Integer) claims.get("id");
+    }
 }

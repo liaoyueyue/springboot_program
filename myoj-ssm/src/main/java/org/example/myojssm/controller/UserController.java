@@ -2,14 +2,20 @@ package org.example.myojssm.controller;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.example.myojssm.common.Result;
 import org.example.myojssm.entity.User;
 import org.example.myojssm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/user")
 @Validated
 public class UserController {
+
     @Autowired
     private UserService userService;
 
@@ -61,8 +68,8 @@ public class UserController {
     }
 
     @PatchMapping("/updateAvatar")
-    public Result updateAvatar(String avatarUrl) {
-        return userService.updateAvatar(avatarUrl);
+    public Result updateAvatar(@NotNull MultipartFile avatarFile) {
+        return userService.updateAvatar(avatarFile);
     }
 
     @PatchMapping("/updatePwd")
