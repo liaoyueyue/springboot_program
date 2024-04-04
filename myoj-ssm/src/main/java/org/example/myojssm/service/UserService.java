@@ -80,9 +80,10 @@ public interface UserService {
      *
      * @param oldPwd 旧密码
      * @param newPwd 新密码
+     * @param oldToken 旧 token
      * @return 是否更新成功
      */
-    Result updatePwd(String oldPwd, String newPwd);
+    Result updatePwd(String oldPwd, String newPwd, String oldToken);
 
     /**
      * 获取当前用户信息

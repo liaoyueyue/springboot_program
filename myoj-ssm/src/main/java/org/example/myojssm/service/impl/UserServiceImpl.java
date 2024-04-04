@@ -9,6 +9,8 @@ import org.example.myojssm.mapper.UserMapper;
 import org.example.myojssm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,6 +19,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created with IntelliJ IDEA.
@@ -32,6 +35,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     @Override
     public Result login(String account, String password) {
@@ -44,7 +49,11 @@ public class UserServiceImpl implements UserService {
                 Map<String, Object> claims = new HashMap<>();
                 claims.put("id", user.getId());
                 claims.put("username", user.getUsername());
-                return Result.success(JWTUtil.genToken(claims));
+                String token = JWTUtil.genToken(claims);
+                // 把 token 存储到 redis
+                ValueOperations<String, String> operations = stringRedisTemplate.opsForValue();
+                operations.set(user.getUsername(), token, 1, TimeUnit.HOURS);
+                return Result.success(token);
             }
         }
         return Result.fail("illegal account or password");
@@ -97,12 +106,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Result updatePwd(String oldPwd, String newPwd) {
+    public Result updatePwd(String oldPwd, String newPwd, String oldToken) {
         User loginUser = getUserInfo();
-        if (!loginUser.getPassword().equals(oldPwd)) { // 密码没有加密，这里简单判断
-            Result.fail("Update failed, Check old password");
+        if (oldPwd.equals(newPwd)) {
+            return Result.fail("The old password is the same as the new password");
         }
-        return userMapper.updatePwd(loginUser.getId(), newPwd) > 0 ? Result.success() : Result.fail("Update failed");
+        if (!loginUser.getPassword().equals(oldPwd)) { // 密码没有加密，这里简单判断
+            return Result.fail("Update failed, Check old password");
+        }
+        if (userMapper.updatePwd(loginUser.getId(), newPwd) > 0) {
+            stringRedisTemplate.delete(loginUser.getUsername()); // 删除旧 token
+            return Result.success();
+        }
+        return Result.fail("Update failed");
     }
 
     @Override

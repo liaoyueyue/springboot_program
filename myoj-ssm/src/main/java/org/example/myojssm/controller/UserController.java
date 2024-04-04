@@ -73,7 +73,7 @@ public class UserController {
     }
 
     @PatchMapping("/updatePwd")
-    public Result updatePwd(@NotBlank @Pattern(regexp = "^\\S{6,16}$") @RequestParam("old_pwd") String oldPwd, @NotBlank @Pattern(regexp = "^\\S{6,16}$") @RequestParam("new_pwd") String newPwd) {
-        return userService.updatePwd(oldPwd, newPwd);
+    public Result updatePwd(@NotBlank @Pattern(regexp = "^\\S{6,16}$") @RequestParam("old_pwd") String oldPwd, @NotBlank @Pattern(regexp = "^\\S{6,16}$") @RequestParam("new_pwd") String newPwd, @RequestHeader("Authorization") String oldToken) {
+        return userService.updatePwd(oldPwd, newPwd, oldToken);
     }
 }

@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class JWTUtil {
     private static final String KEY = "MY_JWT_SECRET_KEY";
-    private static final int EXPIRES = 60;
+    private static final int EXPIRES = 60; //分钟
 
     // claims 主张、要求、获取
     public static String genToken(Map<String, Object> claims) {
