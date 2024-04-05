@@ -17,9 +17,9 @@ create table user
 insert into myoj.user(username, password, nickname, email)
 values ('admin', '123456', '管理员的昵称', 'admin@email.com');
 
-# 题目分类表
-drop table if exists category;
-create table category
+# 题目合集表
+drop table if exists collection;
+create table collection
 (
     id          int primary key auto_increment,
     name        varchar(50) not null unique,
@@ -27,7 +27,7 @@ create table category
     create_time datetime default now(),
     update_time datetime default now()
 );
-insert into category (name, description)
+insert into collection (name, description)
 values ('JAVA基础题', '一些JAVA初学者练习题');
 
 # 题目表
@@ -37,14 +37,14 @@ create table problem
     id            int primary key auto_increment,
     title         varchar(100) not null,
     level         varchar(50),
-    category_id   int,
+    collection_id   int,
     description   varchar(4090),
     template_code varchar(4090),
     test_code     varchar(4090),
     create_time   datetime default now(),
     update_time   datetime default now()
 );
-insert into myoj.problem (title, level, category_id, description, template_code, test_code)
+insert into myoj.problem (title, level, collection_id, description, template_code, test_code)
 values ('两数之和', '简单', 1,
         '给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 target  的那 两个 整数，并返回它们的数组下标。', 'class Solution {
     public int[] twoSum(int[] nums, int target) {

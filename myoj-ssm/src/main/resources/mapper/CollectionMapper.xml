@@ -2,33 +2,33 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.example.myojssm.mapper.CategoryMapper">
+<mapper namespace="org.example.myojssm.mapper.CollectionMapper">
 
-    <resultMap id="BaseResultMap" type="org.example.myojssm.entity.Category">
+    <resultMap id="BaseResultMap" type="org.example.myojssm.entity.Collection">
         <id column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="description" property="description"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
     </resultMap>
-    <insert id="insertCategory">
-        insert into category(name, description)
+    <insert id="insertCollection">
+        insert into collection(name, description)
         values (#{name}, #{description});
     </insert>
-    <update id="updateCategoryById">
-        update category
+    <update id="updateCollectionById">
+        update collection
         set name        = #{name},
             description = #{description},
             update_time = now()
         where id = #{id}
     </update>
-    <select id="queryAllCategory" resultMap="BaseResultMap">
+    <select id="queryAllCollection" resultMap="BaseResultMap">
         select *
-        from category
+        from collection
     </select>
-    <select id="queryCategoryById" resultMap="BaseResultMap">
+    <select id="queryCollectionById" resultMap="BaseResultMap">
         select *
-        from category
+        from collection
         where id = #{id}
     </select>
 </mapper>

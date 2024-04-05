@@ -18,9 +18,10 @@ public interface ProblemMapper {
     /**
      * 新增题目
      *
+     * @param problem 题目实体
      * @return 数据库影响行数
      */
-    int insertProblem();
+    int insertProblem(Problem problem);
 
     /**
      * 查询全部题目
@@ -53,11 +54,11 @@ public interface ProblemMapper {
     List<Problem> queryAllByCriteria(@Param("level") String level, @Param("title") String title);
 
     /**
-     * 查询题目列表通过类别等级
+     * 查询题目列表通过合集等级
      *
-     * @param categoryId 题目类别编号
-     * @param level      题目等级
+     * @param collectionId 题目合集编号
+     * @param level        题目等级
      * @return 符合条件的题目列表
      */
-    List<Problem> queryCategoryList(@Param("categoryId") Integer categoryId, @Param("level") String level);
+    List<Problem> queryCollectionList(@Param("collectionId") Integer collectionId, @Param("level") String level);
 }

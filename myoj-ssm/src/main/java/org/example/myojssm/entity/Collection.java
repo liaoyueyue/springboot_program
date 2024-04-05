@@ -9,10 +9,10 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
- * @TableName category
+ * @TableName collection
  */
 @Data
-public class Category implements Serializable {
+public class Collection implements Serializable {
     @NotNull(groups = Update.class)
     private Integer id;
     @NotEmpty(groups = {Add.class, Update.class})

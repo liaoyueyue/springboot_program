@@ -28,7 +28,7 @@ public class ProblemController {
 
     @GetMapping("/add")
     public Result addProblem(@Validated(Problem.Add.class) Problem problem) {
-        return problemservice.addProblem();
+        return problemservice.addProblem(problem);
     }
 
     @GetMapping("/all")
@@ -51,7 +51,7 @@ public class ProblemController {
     }
 
     @GetMapping("/list")
-    public Result showProblemListByCategoryOrLevel(@NotNull Integer pageNum, @NotNull Integer pageSize, @RequestParam(required = false) Integer categoryId, @RequestParam(required = false) String level) {
-        return problemservice.list(pageNum, pageSize, categoryId, level);
+    public Result showProblemListByCollectionOrLevel(@NotNull Integer pageNum, @NotNull Integer pageSize, @RequestParam(required = false) Integer collectionId, @RequestParam(required = false) String level) {
+        return problemservice.list(pageNum, pageSize, collectionId, level);
     }
 }

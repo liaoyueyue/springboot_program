@@ -46,17 +46,17 @@ public class ProblemServiceImpl implements ProblemService {
     }
 
     @Override
-    public Result addProblem() {
-        return problemMapper.insertProblem()>0?Result.success():Result.fail();
+    public Result addProblem(Problem problem) {
+        return problemMapper.insertProblem(problem)>0?Result.success():Result.fail();
     }
 
     @Override
-    public Result list(Integer pageNum, Integer pageSize, Integer categoryId, String level) {
+    public Result list(Integer pageNum, Integer pageSize, Integer collectionId, String level) {
         if (pageNum < 1 || pageSize > 5) {
             return Result.fail("Illegal parameters");
         }
         PageHelper.startPage(pageNum, pageSize);
-        List<Problem> problems = problemMapper.queryCategoryList(categoryId, level);
+        List<Problem> problems = problemMapper.queryCollectionList(collectionId, level);
         Page<Problem> page = (Page<Problem>) problems;
         return Result.success(new PageBean<>(page.getTotal(), page.getResult()));
     }

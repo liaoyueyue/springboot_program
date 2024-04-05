@@ -43,18 +43,19 @@ public interface ProblemService {
 
     /**
      * 添加题目
+     * @param problem 题目实体
      * @return 是否添加成功
      */
-    Result addProblem();
+    Result addProblem(Problem problem);
 
     /**
      * 查询不同类别的题目库
      *
      * @param pageNum    页码
      * @param pageSize   一页题目大小
-     * @param categoryId 题目分类编号
+     * @param collectionId 题目合集编号
      * @param level      题目等级
      * @return 题目分页实体
      */
-    Result list(Integer pageNum, Integer pageSize, Integer categoryId, String level);
+    Result list(Integer pageNum, Integer pageSize, Integer collectionId, String level);
 }

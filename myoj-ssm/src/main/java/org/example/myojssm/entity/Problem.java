@@ -27,7 +27,7 @@ public class Problem implements Serializable {
     @Level
     private String level;
     @NotEmpty(groups = {Problem.Add.class, Problem.Update.class})
-    private Integer categoryId;
+    private Integer collectionId;
     @NotEmpty(groups = {Problem.Add.class, Problem.Update.class})
     private String description;
     @NotEmpty(groups = {Problem.Add.class, Problem.Update.class})

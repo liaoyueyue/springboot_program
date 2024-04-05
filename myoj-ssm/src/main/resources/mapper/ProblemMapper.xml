@@ -5,7 +5,7 @@
         <id column="id" property="id"/>
         <result column="title" property="title"/>
         <result column="level" property="level"/>
-        <result column="category_id" property="categoryId"/>
+        <result column="collection_id" property="collectionId"/>
         <result column="description" property="description"/>
         <result column="template_code" property="templateCode"/>
         <result column="test_code" property="testCode"/>
@@ -13,8 +13,8 @@
         <result column="update_time" property="updateTime"/>
     </resultMap>
     <insert id="insertProblem">
-        insert into problem(title, level, category_id, description, template_code, test_code)
-        values (#{title}, #{level}, #{category_id}, #{description}, #{template_code}, #{test_code})
+        insert into problem(title, level, collection_id, description, template_code, test_code)
+        values (#{title}, #{level}, #{collectionId}, #{description}, #{templateCode}, #{testCode})
     </insert>
 
     <select id="queryAllProblem" resultMap="baseMap">
@@ -45,11 +45,11 @@
             </if>
         </where>
     </select>
-    <select id="queryCategoryList" resultMap="baseMap">
+    <select id="queryCollectionList" resultMap="baseMap">
         select id, title, level from problem
         <where>
-            <if test="categoryId != null">
-                and category_id = #{categoryId}
+            <if test="collectionId != null">
+                and collection_id = #{collectionId}
             </if>
             <if test="level != null">
                 and level = #{level}
