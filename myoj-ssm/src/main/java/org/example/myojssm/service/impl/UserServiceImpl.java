@@ -30,8 +30,8 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 public class UserServiceImpl implements UserService {
-    @Value("${avatar-path}")
-    private String AVATAR_PATH;
+    @Value("${file-path}")
+    private String FILE_PATH;
 
     @Autowired
     private UserMapper userMapper;
@@ -92,12 +92,15 @@ public class UserServiceImpl implements UserService {
         return userMapper.updateUser(user) > 0 ? Result.success() : Result.fail("Update failed");
     }
 
+    /**
+     * 等待更新
+     */
     @Override
     public Result updateAvatar(MultipartFile avatarFile) {
         String originalFilename = avatarFile.getOriginalFilename();
         String avatarName = UUID.randomUUID().toString().replace("-", "") + originalFilename.substring(originalFilename.lastIndexOf("."));
         try {
-            avatarFile.transferTo(new File(AVATAR_PATH + avatarName));
+            avatarFile.transferTo(new File(FILE_PATH + avatarName));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

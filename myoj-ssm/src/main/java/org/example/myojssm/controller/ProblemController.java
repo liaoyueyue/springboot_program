@@ -21,7 +21,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/problem")
-@CrossOrigin
 public class ProblemController {
     @Autowired
     private ProblemService problemservice;

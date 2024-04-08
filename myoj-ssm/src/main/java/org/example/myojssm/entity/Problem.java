@@ -1,6 +1,7 @@
 package org.example.myojssm.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -33,6 +34,7 @@ public class Problem implements Serializable {
     @NotEmpty(groups = {Problem.Add.class, Problem.Update.class})
     private String templateCode;
     @NotEmpty(groups = {Problem.Add.class, Problem.Update.class})
+    @JsonIgnore
     private String testCode;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime createTime;

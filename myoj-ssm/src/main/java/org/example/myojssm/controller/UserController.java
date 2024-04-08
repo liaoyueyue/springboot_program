@@ -43,7 +43,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public Result register(@NotBlank @Email String email, @NotBlank @Pattern(regexp = "^\\S{2,16}$") String nickname, @NotBlank @Pattern(regexp = "^\\S{6,16}$") String password, @NotBlank @Pattern(regexp = "^\\S{4,6}$") String vercode) {
+    public Result register(@NotBlank @Email String email, @NotBlank @Pattern(regexp = "^\\S{4,6}$") String vercode, @NotBlank @Pattern(regexp = "^\\S{6,16}$") String password, @NotBlank @Pattern(regexp = "^\\S{2,16}$") String nickname) {
         // 1.判断邮箱是否存在
         boolean isEmailExist = userService.queryEmailExist(email);
         if (isEmailExist) {

@@ -1,5 +1,5 @@
 #文件地址映射
-avatar-path: E:\MyUniversity\0_ProgrammingLearning\springboot_program\myoj-ssm\tmp\avatar\
+file-path: E:\MyUniversity\0_ProgrammingLearning\springboot_program\myoj-ssm\tmp\files\
 
 spring:
   datasource:
@@ -12,3 +12,20 @@ spring:
       database: 0
       host: localhost
       port: 6379
+  # 文件上传大小限制
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+
+# 阿里云OSS配置
+aliyun:
+  oss:
+    # 地域节点
+    end-point: https://oss-cn-hangzhou.aliyuncs.com
+    # OSS的Bucket名称
+    bucket-name: lyyoj
+    # Bucket 域名
+    url-prefix: https://lyyoj.oss-cn-hangzhou.aliyuncs.com/
+    # 目标文件夹
+    file-host: avatar/
