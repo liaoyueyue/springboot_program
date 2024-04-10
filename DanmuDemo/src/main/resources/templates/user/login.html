@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>登录</title>
+    <link rel="stylesheet" href="/component/layui/css/layui.css">
+</head>
+<body>
+<nav>
+    <ul class="layui-nav layui-bg-blue">
+        <li class="layui-nav-item"><a href="/index">首页</a></li>
+        <li class="layui-nav-item "><a href="/admin/index">管理员首页</a></li>
+        <li class="layui-nav-item layui-layout-right"><a href="/user/logout">注销</a></li>
+    </ul>
+</nav>
+<div class="layui-row" style="margin-top: 200px;">
+    <div class="layui-col-md2 layui-col-md-offset5">
+        <div class="layui-form layui-form-pane">
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户名 </label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input" id="username" >
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">密码 </label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input" id="password" >
+                </div>
+            </div>
+            <button class="layui-btn layui-btn-fluid" onclick="login()">登录</button>
+        </div>
+    </div>
+</div>
+<script src="/component/layui/layui.js"></script>
+<script>
+    function login(){
+        var username = document.querySelector("#username").value;
+        var password = document.querySelector("#password").value;
+
+        var data = {
+            username: username,
+            password: password
+        };
+
+        fetch("/user/login", {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        }).then(res => res.json()).then(data => {
+            if (data.code === 0) {
+                location.assign("/admin/index");
+            } else {
+                layer.msg("登录失败");
+            }
+        }).catch(e => {
+            console.log(e);
+        });
+    }
+</script>
+</body>
+</html>

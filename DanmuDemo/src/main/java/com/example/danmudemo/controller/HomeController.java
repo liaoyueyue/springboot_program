@@ -1,7 +1,10 @@
 package com.example.danmudemo.controller;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.stp.StpUtil;
 import com.example.danmudemo.common.AjaxResult;
 import com.example.danmudemo.entiy.Danmu;
+import com.example.danmudemo.entiy.User;
 import com.example.danmudemo.entiy.Video;
 import com.example.danmudemo.mapper.DanmuMapper;
 import com.example.danmudemo.mapper.VideoMapper;
@@ -57,4 +60,14 @@ public class HomeController {
         return AjaxResult.success();
     }
 
+    @GetMapping("/user/login")
+    public String login(User user) {
+        return "user/login";
+    }
+
+    @GetMapping("/user/logout")
+    public String logout() {
+        StpUtil.logout();
+        return "/user/login";
+    }
 }

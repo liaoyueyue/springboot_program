@@ -1,5 +1,6 @@
 package com.example.danmudemo.controller;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
 import com.example.danmudemo.common.AjaxResult;
 import com.example.danmudemo.entiy.Video;
 import com.example.danmudemo.mapper.VideoMapper;
@@ -23,6 +24,7 @@ import java.util.UUID;
  * Date: 2024-03-06
  * Time: 11:00
  */
+@SaCheckLogin
 @Controller
 @RequestMapping("/admin")
 public class AdminController {

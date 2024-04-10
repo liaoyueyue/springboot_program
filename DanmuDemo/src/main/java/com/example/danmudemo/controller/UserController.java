@@ -1,24 +1,45 @@
 package com.example.danmudemo.controller;
 
+import cn.dev33.satoken.stp.StpUtil;
+import com.example.danmudemo.common.AjaxResult;
 import com.example.danmudemo.entiy.User;
 import com.example.danmudemo.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.util.StringUtils;
 
-import java.util.List;
-
-@Controller
-@ResponseBody
+@RestController
 @RequestMapping("/user")
 public class UserController {
     @Autowired
     UserMapper userMapper;
 
-    @RequestMapping("/all")
-    public List<User> questUserList() {
-        List<User> users = userMapper.getAllUser();
-        return users;
+    @PostMapping("/login")
+    public AjaxResult login(@RequestBody User loginUser) {
+        User user = userMapper.queryUserByUsername(loginUser.getUsername());
+        if (user != null && user.getPassword().equals(loginUser.getPassword())) {
+            StpUtil.login(user.getId());
+            return AjaxResult.success("Login success");
+        }
+        return AjaxResult.fail("Account or password error");
+    }
+    @RequestMapping("/isLogin")
+    public String isLogin() {
+        return "当前会话是否登录：" + StpUtil.isLogin();
+    }
+
+    @PostMapping("/register")
+    public AjaxResult register(String username, String password) {
+        if (!StringUtils.isEmpty(username) || !StringUtils.isEmpty(password)) {
+            return AjaxResult.fail();
+        }
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
+        int count = userMapper.insertUser(user);
+        if (count > 0) {
+            return AjaxResult.success("Register success");
+        }
+        return AjaxResult.fail("Register failed");
     }
 }
