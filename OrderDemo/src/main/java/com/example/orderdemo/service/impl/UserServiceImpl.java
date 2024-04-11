@@ -25,9 +25,9 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.queryUserByUsername(username);
         if (user != null) {
             if (user.getPassword().equals(password)) {
-                return Result.success("Login succeeded");
+                return Result.success(user);
             }
         }
-        return Result.fail("Password error");
+        return Result.fail("账号或者密码错误");
     }
 }
