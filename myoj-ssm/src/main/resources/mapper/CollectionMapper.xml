@@ -22,7 +22,7 @@
             update_time = now()
         where id = #{id}
     </update>
-    <select id="queryCollectionByName" resultMap="BaseResultMap">
+    <select id="queryCollectionListByName" resultMap="BaseResultMap">
         select *
         from collection
         <where>

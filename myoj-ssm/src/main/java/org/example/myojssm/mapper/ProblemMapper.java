@@ -60,5 +60,5 @@ public interface ProblemMapper {
      * @param level        题目等级
      * @return 符合条件的题目列表
      */
-    List<Problem> queryCollectionListByColAndLevel(@Param("collectionId") Integer collectionId, @Param("level") String level);
+    List<Problem> queryProblemListByColAndLevel(@Param("collectionId") Integer collectionId, @Param("level") String level);
 }

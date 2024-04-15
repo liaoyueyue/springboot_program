@@ -35,7 +35,7 @@ public class CollectionServiceImpl implements CollectionService {
             return Result.fail("Illegal parameters");
         }
         PageHelper.startPage(pageNum, pageSize);
-        List<Collection> collections = collectionMapper.queryCollectionByName(collectionName);
+        List<Collection> collections = collectionMapper.queryCollectionListByName(collectionName);
         Page<Collection> page = (Page<Collection>) collections;
         return Result.success(new PageBean<>(page.getTotal(), page.getResult()));
     }

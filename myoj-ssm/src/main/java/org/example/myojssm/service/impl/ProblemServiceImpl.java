@@ -56,7 +56,7 @@ public class ProblemServiceImpl implements ProblemService {
             return Result.fail("Illegal parameters");
         }
         PageHelper.startPage(pageNum, pageSize);
-        List<Problem> problems = problemMapper.queryCollectionListByColAndLevel(collectionId, level);
+        List<Problem> problems = problemMapper.queryProblemListByColAndLevel(collectionId, level);
         Page<Problem> page = (Page<Problem>) problems;
         return Result.success(new PageBean<>(page.getTotal(), page.getResult()));
     }

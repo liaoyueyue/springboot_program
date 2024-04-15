@@ -45,7 +45,7 @@
             </if>
         </where>
     </select>
-    <select id="queryCollectionListByColAndLevel" resultMap="baseMap">
+    <select id="queryProblemListByColAndLevel" resultMap="baseMap">
         select id, title, level from problem
         <where>
             <if test="collectionId != null">

@@ -29,7 +29,7 @@ public interface CollectionMapper {
      * @param collectionName 合集名称
      * @return 符合条件合集列表
      */
-    List<Collection> queryCollectionByName(@Param("collectionName") String collectionName);
+    List<Collection> queryCollectionListByName(@Param("collectionName") String collectionName);
 
     /**
      * 查询合集使用编号
