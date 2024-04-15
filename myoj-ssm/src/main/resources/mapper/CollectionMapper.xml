@@ -22,9 +22,14 @@
             update_time = now()
         where id = #{id}
     </update>
-    <select id="queryAllCollection" resultMap="BaseResultMap">
+    <select id="queryCollectionByName" resultMap="BaseResultMap">
         select *
         from collection
+        <where>
+            <if test="collectionName != null">
+                name like concat('%', #{collectionName}, '%')
+            </if>
+        </where>
     </select>
     <select id="queryCollectionById" resultMap="BaseResultMap">
         select *

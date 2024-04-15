@@ -9,7 +9,6 @@ import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.aliyun.oss.model.PutObjectResult;
 
-import java.io.File;
 import java.io.InputStream;
 
 /**

@@ -57,5 +57,5 @@ public interface ProblemService {
      * @param level      题目等级
      * @return 题目分页实体
      */
-    Result list(Integer pageNum, Integer pageSize, Integer collectionId, String level);
+    Result getProblemList(Integer pageNum, Integer pageSize, Integer collectionId, String level);
 }

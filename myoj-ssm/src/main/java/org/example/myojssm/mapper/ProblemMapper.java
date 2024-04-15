@@ -54,11 +54,11 @@ public interface ProblemMapper {
     List<Problem> queryAllByCriteria(@Param("level") String level, @Param("title") String title);
 
     /**
-     * 查询题目列表通过合集等级
+     * 查询题目列表 通过合集编号等级
      *
      * @param collectionId 题目合集编号
      * @param level        题目等级
      * @return 符合条件的题目列表
      */
-    List<Problem> queryCollectionList(@Param("collectionId") Integer collectionId, @Param("level") String level);
+    List<Problem> queryCollectionListByColAndLevel(@Param("collectionId") Integer collectionId, @Param("level") String level);
 }

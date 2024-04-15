@@ -1,11 +1,16 @@
 package org.example.myojssm.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.example.myojssm.common.Result;
 import org.example.myojssm.entity.Collection;
+import org.example.myojssm.entity.PageBean;
 import org.example.myojssm.mapper.CollectionMapper;
 import org.example.myojssm.service.CollectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,8 +29,15 @@ public class CollectionServiceImpl implements CollectionService {
         return collectionMapper.insertCollection(collection) > 0 ? Result.success() : Result.fail();
     }
 
-    public Result getCollectionList() {
-        return Result.success(collectionMapper.queryAllCollection());
+    @Override
+    public Result getCollectionList(Integer pageNum, Integer pageSize, String collectionName) {
+        if (pageNum < 1 || pageSize > 5) {
+            return Result.fail("Illegal parameters");
+        }
+        PageHelper.startPage(pageNum, pageSize);
+        List<Collection> collections = collectionMapper.queryCollectionByName(collectionName);
+        Page<Collection> page = (Page<Collection>) collections;
+        return Result.success(new PageBean<>(page.getTotal(), page.getResult()));
     }
 
     @Override

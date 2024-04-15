@@ -1,9 +1,7 @@
 package org.example.myojssm.controller;
 
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.example.myojssm.common.Result;
-import org.example.myojssm.entity.PageBean;
 import org.example.myojssm.entity.Problem;
 import org.example.myojssm.service.ProblemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +49,6 @@ public class ProblemController {
 
     @GetMapping("/list")
     public Result showProblemListByCollectionOrLevel(@NotNull Integer pageNum, @NotNull Integer pageSize, @RequestParam(required = false) Integer collectionId, @RequestParam(required = false) String level) {
-        return problemservice.list(pageNum, pageSize, collectionId, level);
+        return problemservice.getProblemList(pageNum, pageSize, collectionId, level);
     }
 }

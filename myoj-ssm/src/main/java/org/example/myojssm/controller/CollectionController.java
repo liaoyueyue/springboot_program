@@ -1,14 +1,12 @@
 package org.example.myojssm.controller;
 
+import jakarta.validation.constraints.NotNull;
 import org.example.myojssm.common.Result;
 import org.example.myojssm.entity.Collection;
 import org.example.myojssm.service.CollectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -29,8 +27,8 @@ public class CollectionController {
     }
 
     @GetMapping("/list")
-    public Result getCollectionList() {
-        return collectionService.getCollectionList();
+    public Result getCollectionList(@NotNull Integer pageNum, @NotNull Integer pageSize, @RequestParam(required = false) String collectionName) {
+        return collectionService.getCollectionList(pageNum, pageSize, collectionName);
     }
 
     @PostMapping("/update")
