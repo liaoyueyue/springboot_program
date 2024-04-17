@@ -28,18 +28,18 @@ public class UserController {
         return "当前会话是否登录：" + StpUtil.isLogin();
     }
 
-    @PostMapping("/register")
-    public AjaxResult register(String username, String password) {
-        if (!StringUtils.isEmpty(username) || !StringUtils.isEmpty(password)) {
-            return AjaxResult.fail();
-        }
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(password);
-        int count = userMapper.insertUser(user);
-        if (count > 0) {
-            return AjaxResult.success("Register success");
-        }
-        return AjaxResult.fail("Register failed");
-    }
+//    @PostMapping("/register")
+//    public AjaxResult register(String username, String password) {
+//        if (!StringUtils.isEmpty(username) || !StringUtils.isEmpty(password)) {
+//            return AjaxResult.fail();
+//        }
+//        User user = new User();
+//        user.setUsername(username);
+//        user.setPassword(password);
+//        int count = userMapper.insertUser(user);
+//        if (count > 0) {
+//            return AjaxResult.success("Register success");
+//        }
+//        return AjaxResult.fail("Register failed");
+//    }
 }
