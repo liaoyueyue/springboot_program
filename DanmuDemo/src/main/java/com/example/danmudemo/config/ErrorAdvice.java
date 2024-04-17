@@ -24,6 +24,6 @@ public class ErrorAdvice {
     @ExceptionHandler(NotLoginException.class)
     @ResponseBody
     public Object exceptionAdvice(NotLoginException e) {
-        return AjaxResult.fail("没有登录");
+        return AjaxResult.fail("没有登录，请跳转至/user/login");
     }
 }

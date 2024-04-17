@@ -12,7 +12,7 @@ create table user
     create_time timestamp default now()
 );
 insert into user(username, password)
-values ('alice', '123');
+values ('admin', '123');
 
 drop table if exists video;
 create table video

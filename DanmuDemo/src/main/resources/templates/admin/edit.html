@@ -23,14 +23,15 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">视频名称修改</label>
                 <div class="layui-input-block">
-                    <input type="text" name="title" placeholder="请输入视频名称" class="layui-input"
+                    <input id="title" type="text" name="title" placeholder="请输入视频名称" class="layui-input"
                            th:value="${video.title}">
                 </div>
             </div>
             <input id="id" type="hidden" name="id" th:value="${video.id}">
             <div class="layui-form-item">
                 <h2>视频修改</h2>
-                <input id="videoPath" disabled name="videoPath" th:value="${video.videoPath}"><br><br>
+                <span>原：</span><span id="videoPath-span" th:text="${video.videoPath}"></span><br><br>
+                <input id="videoPath" type="hidden" name="videoPath" th:value="${video.videoPath}">
                 <div><video th:src="'/video/' + ${video.videoPath}" style="height: 200px" controls></video></div>
                 <div class="layui-btn-container">
                     <button type="button" class="layui-btn layui-btn-normal" id="choose-video-btn">选择视频</button>
@@ -39,7 +40,8 @@
             </div>
             <div class="layui-form-item">
                 <h2>图片修改</h2>
-                <input id="imagePath" disabled name="imagePath" th:value="${video.imagePath}"><br><br>
+                <span>原：</span><span id="imagePath-span" th:text="${video.imagePath}"></span><br><br>
+                <input id="imagePath" type="hidden" name="imagePath" th:value="${video.imagePath}">
                 <div><img th:src="'/image/' +${video.imagePath}" style="height: 100px"></div>
                 <button type="button" class="layui-btn" id="upload-image-btn">
                     <i class="layui-icon layui-icon-upload"></i>开始上传
@@ -76,7 +78,7 @@
             done: res => {
                 if (res.code === 0) {
                     layer.msg("上传成功");
-                    $("#videoPath").val(res.msg);
+                    $("#videoPath-span").text(res.msg);
                 } else {
                     layer.msg("上传失败");
                 }
@@ -97,7 +99,7 @@
             done: res => {
                 if (res.code === 0) {
                     layer.msg("上传成功");
-                    $("#imagePath").val(res.msg);
+                    $("#imagePath-span").text(res.msg);
                 } else {
                     layer.msg("上传失败");
                 }
