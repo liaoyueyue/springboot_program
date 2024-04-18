@@ -30,4 +30,15 @@ public class UserServiceImpl implements UserService {
         }
         return Result.fail("账号或者密码错误");
     }
+
+    @Override
+    public Result updateUserInfo(User user) {
+        try {
+            userMapper.updateUser(user);
+            User user1 = userMapper.queryUserByUsername(user.getUsername());
+            return Result.success("修改成功").setData(user1);
+        } catch (Exception e) {
+            return Result.fail("修改失败");
+        }
+    }
 }

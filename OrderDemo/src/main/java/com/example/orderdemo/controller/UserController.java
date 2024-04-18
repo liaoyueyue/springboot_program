@@ -1,5 +1,7 @@
 package com.example.orderdemo.controller;
 
+import com.example.orderdemo.common.Result;
+import com.example.orderdemo.entity.User;
 import com.example.orderdemo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +23,12 @@ public class UserController {
     @GetMapping("/profile")
     public String profile() {
         return "view/user/profile";
+    }
+
+    @ResponseBody
+    @PostMapping("/update")
+    public Result updateProfile(User user) {
+        return userService.updateUserInfo(user);
     }
 
 }

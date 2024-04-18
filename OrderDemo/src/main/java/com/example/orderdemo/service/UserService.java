@@ -1,6 +1,7 @@
 package com.example.orderdemo.service;
 
 import com.example.orderdemo.common.Result;
+import com.example.orderdemo.entity.User;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,4 +12,6 @@ import com.example.orderdemo.common.Result;
  */
 public interface UserService {
     Result login(String username, String password);
+
+    public Result updateUserInfo(User user);
 }

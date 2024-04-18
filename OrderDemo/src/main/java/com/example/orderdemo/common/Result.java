@@ -2,6 +2,7 @@ package com.example.orderdemo.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,6 +13,7 @@ import lombok.Data;
  */
 @AllArgsConstructor
 @Data
+@Accessors(chain = true)
 public class Result {
     // 状态码
     private Integer code;

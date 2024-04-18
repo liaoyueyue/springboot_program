@@ -3,6 +3,7 @@ package com.example.orderdemo.mapper;
 import com.example.orderdemo.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -14,11 +15,13 @@ import java.util.List;
 */
 @Mapper
 public interface UserMapper {
-    @Select("select * from user")
-    List<User> queryAllUser();
-
+    //根据用户名查询用户
     @Select("select * from user where username = #{username}")
     User queryUserByUsername(String username);
+
+    //修改用户个人信息
+    @Update("update user set username = #{username}, name = #{name}, gender = #{gender}, permission = #{permission}, remark = #{remark} where id = #{id}")
+    void updateUser(User user);
 }
 
 
