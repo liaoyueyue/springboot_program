@@ -56,14 +56,14 @@ public class UserServiceImpl implements UserService {
                 return Result.success(token);
             }
         }
-        return Result.fail("illegal account or password");
+        return Result.fail("登录失败，请检查账号或者密码");
     }
 
     @Override
     public Result register(String email, String password, String nickname) {
         String uniqueUsername = UniqueUsernameUtil.getUsername(nickname);
         User user = new User(null, uniqueUsername, password, nickname, email, null, null, null);
-        return userMapper.insertUser(user) > 0 ? Result.success(uniqueUsername) : Result.fail("Username exist");
+        return userMapper.insertUser(user) > 0 ? Result.success(uniqueUsername) : Result.fail("用户名存在");
     }
 
     @Override

@@ -26,12 +26,12 @@ public class CollectionServiceImpl implements CollectionService {
 
     @Override
     public Result addCollection(Collection collection) {
-        return collectionMapper.insertCollection(collection) > 0 ? Result.success() : Result.fail();
+        return collectionMapper.insertCollection(collection) > 0 ? Result.success() : Result.fail("添加合集失败");
     }
 
     @Override
     public Result getCollectionList(Integer pageNum, Integer pageSize, String collectionName) {
-        if (pageNum < 1 || pageSize > 5) {
+        if (pageNum < 1 || pageSize > 20) {
             return Result.fail("Illegal parameters");
         }
         PageHelper.startPage(pageNum, pageSize);

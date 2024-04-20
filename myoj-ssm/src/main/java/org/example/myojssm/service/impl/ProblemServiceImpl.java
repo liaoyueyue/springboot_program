@@ -52,7 +52,7 @@ public class ProblemServiceImpl implements ProblemService {
 
     @Override
     public Result getProblemList(Integer pageNum, Integer pageSize, Integer collectionId, String level) {
-        if (pageNum < 1 || pageSize > 5) {
+        if (pageNum < 1 || pageSize > 20) {
             return Result.fail("Illegal parameters");
         }
         PageHelper.startPage(pageNum, pageSize);
