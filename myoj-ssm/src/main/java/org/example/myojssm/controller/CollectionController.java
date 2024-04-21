@@ -22,7 +22,7 @@ public class CollectionController {
     private CollectionService collectionService;
 
     @PostMapping("/add")
-    public Result addCollection(@Validated(Collection.Add.class) Collection collection) {
+    public Result addCollection(@RequestBody @Validated(Collection.Add.class) Collection collection) {
         return collectionService.addCollection(collection);
     }
 
@@ -32,7 +32,7 @@ public class CollectionController {
     }
 
     @PostMapping("/update")
-    public Result updateCollection(@Validated(Collection.Update.class) Collection collection) {
+    public Result updateCollection(@RequestBody @Validated(Collection.Update.class) Collection collection) {
         return collectionService.updateCollection(collection);
     }
 }
