@@ -53,9 +53,9 @@ public interface ProblemService {
      *
      * @param pageNum    页码
      * @param pageSize   一页题目大小
-     * @param collectionId 题目合集编号
+     * @param collectionName     题目合集名称
      * @param level      题目等级
      * @return 题目分页实体
      */
-    Result getProblemList(Integer pageNum, Integer pageSize, Integer collectionId, String level);
+    Result getProblemList(Integer pageNum, Integer pageSize, String collectionName, String level);
 }

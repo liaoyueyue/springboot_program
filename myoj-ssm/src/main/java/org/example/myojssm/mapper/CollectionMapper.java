@@ -24,6 +24,22 @@ public interface CollectionMapper {
     int insertCollection(Collection collection);
 
     /**
+     * 通过 编号 删除合集
+     *
+     * @param id 合集编号
+     * @return 是否删除成功
+     */
+    int deleteCollectionById(@Param("id")int id);
+
+    /**
+     * 更新合集使用编号
+     *
+     * @param collection 合集实体
+     * @return 数据库影响行数
+     */
+    int updateCollectionById(Collection collection);
+
+    /**
      * 查询合集列表
      *
      * @param collectionName 合集名称
@@ -38,14 +54,6 @@ public interface CollectionMapper {
      * @return 编号对应合集
      */
     Collection queryCollectionById(@Param("id") int id);
-
-    /**
-     * 更新合集使用编号
-     *
-     * @param collection 合集实体
-     * @return 数据库影响行数
-     */
-    int updateCollectionById(Collection collection);
 
 }
 

@@ -15,6 +15,11 @@
         insert into collection(name, description)
         values (#{name}, #{description});
     </insert>
+    <delete id="deleteCollectionById">
+        delete
+        from collection
+        where id = #{id};
+    </delete>
     <update id="updateCollectionById">
         update collection
         set name        = #{name},

@@ -3,6 +3,7 @@ package org.example.myojssm.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.example.myojssm.entity.Problem;
+import org.example.myojssm.entity.vo.ProblemVo;
 
 import java.util.List;
 
@@ -54,11 +55,11 @@ public interface ProblemMapper {
     List<Problem> queryAllByCriteria(@Param("level") String level, @Param("title") String title);
 
     /**
-     * 查询题目列表 通过合集编号等级
+     * 查询题目列表 通过合集名称等级
      *
-     * @param collectionId 题目合集编号
-     * @param level        题目等级
+     * @param collectionName 题目合集名称
+     * @param level          题目等级
      * @return 符合条件的题目列表
      */
-    List<Problem> queryProblemListByColAndLevel(@Param("collectionId") Integer collectionId, @Param("level") String level);
+    List<ProblemVo> queryProblemListByColAndLevel(@Param("collectionName") String collectionName, @Param("level") String level);
 }

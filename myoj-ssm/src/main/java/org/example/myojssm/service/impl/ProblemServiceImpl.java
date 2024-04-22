@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import org.example.myojssm.common.Result;
 import org.example.myojssm.entity.PageBean;
 import org.example.myojssm.entity.Problem;
+import org.example.myojssm.entity.vo.ProblemVo;
 import org.example.myojssm.mapper.ProblemMapper;
 import org.example.myojssm.service.ProblemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,13 +52,13 @@ public class ProblemServiceImpl implements ProblemService {
     }
 
     @Override
-    public Result getProblemList(Integer pageNum, Integer pageSize, Integer collectionId, String level) {
+    public Result getProblemList(Integer pageNum, Integer pageSize, String collectionName, String level) {
         if (pageNum < 1 || pageSize > 20) {
             return Result.fail("Illegal parameters");
         }
         PageHelper.startPage(pageNum, pageSize);
-        List<Problem> problems = problemMapper.queryProblemListByColAndLevel(collectionId, level);
-        Page<Problem> page = (Page<Problem>) problems;
+        List<ProblemVo> problems = problemMapper.queryProblemListByColAndLevel(collectionName, level);
+        Page<ProblemVo> page = (Page<ProblemVo>) problems;
         return Result.success(new PageBean<>(page.getTotal(), page.getResult()));
     }
 }

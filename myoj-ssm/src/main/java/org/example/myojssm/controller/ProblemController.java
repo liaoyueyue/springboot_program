@@ -48,7 +48,7 @@ public class ProblemController {
     }
 
     @GetMapping("/list")
-    public Result showProblemListByCollectionOrLevel(@NotNull Integer pageNum, @NotNull Integer pageSize, @RequestParam(required = false) Integer collectionId, @RequestParam(required = false) String level) {
-        return problemservice.getProblemList(pageNum, pageSize, collectionId, level);
+    public Result showProblemListByCollectionOrLevel(@NotNull Integer pageNum, @NotNull Integer pageSize, @RequestParam(required = false) String collectionName, @RequestParam(required = false) String level) {
+        return problemservice.getProblemList(pageNum, pageSize, collectionName, level);
     }
 }

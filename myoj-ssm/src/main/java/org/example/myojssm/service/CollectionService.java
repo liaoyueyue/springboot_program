@@ -1,9 +1,7 @@
 package org.example.myojssm.service;
 
-import jakarta.validation.constraints.NotNull;
 import org.example.myojssm.common.Result;
 import org.example.myojssm.entity.Collection;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,8 +22,8 @@ public interface CollectionService {
     /**
      * 获取合集列表
      *
-     * @param pageNum    页码
-     * @param pageSize   一页题目大小
+     * @param pageNum        页码
+     * @param pageSize       一页题目大小
      * @param collectionName 合集名称
      * @return 符合条件合集列表
      */
@@ -46,4 +44,13 @@ public interface CollectionService {
      * @return 是否更新成功
      */
     Result updateCollection(Collection collection);
+
+
+    /**
+     * 通过 编号 删除合集
+     *
+     * @param id 合集编号
+     * @return 是否删除成功
+     */
+    Result deleteCollection(int id);
 }

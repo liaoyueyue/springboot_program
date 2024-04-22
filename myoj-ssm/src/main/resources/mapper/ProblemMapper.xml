@@ -40,22 +40,22 @@
             <if test="level != null">
                 and level = #{level}
             </if>
-            <if test="title != null">
+            <if test="title != null and title != ''">
                 and title like concat('%', #{title}, '%')
             </if>
         </where>
     </select>
-    <select id="queryProblemListByColAndLevel" resultMap="baseMap">
-        select id, title, level from problem
+    <select id="queryProblemListByColAndLevel" resultType="org.example.myojssm.entity.vo.ProblemVo">
+        select p.id, p.title, c.name as collectionName, p.update_time, p.level
+        from problem p
+        join collection c on c.id = p.collection_id
         <where>
-            <if test="collectionId != null">
-                and collection_id = #{collectionId}
+            <if test="collectionName != null and collectionName != ''">
+                and c.name like concat('%', #{collectionName}, '%')
             </if>
             <if test="level != null">
-                and level = #{level}
+                and p.level = #{level}
             </if>
         </where>
     </select>
-
-
 </mapper>

@@ -31,8 +31,13 @@ public class CollectionController {
         return collectionService.getCollectionList(pageNum, pageSize, collectionName);
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     public Result updateCollection(@RequestBody @Validated(Collection.Update.class) Collection collection) {
         return collectionService.updateCollection(collection);
+    }
+
+    @DeleteMapping("/delete")
+    public Result deleteCollection(@RequestParam @NotNull int id) {
+        return collectionService.deleteCollection(id);
     }
 }

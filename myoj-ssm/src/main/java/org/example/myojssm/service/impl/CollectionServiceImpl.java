@@ -51,6 +51,11 @@ public class CollectionServiceImpl implements CollectionService {
 
     @Override
     public Result updateCollection(Collection collection) {
-        return collectionMapper.updateCollectionById(collection)>0?Result.success():Result.fail();
+        return collectionMapper.updateCollectionById(collection) > 0 ? Result.success() : Result.fail();
+    }
+
+    @Override
+    public Result deleteCollection(int id) {
+        return collectionMapper.deleteCollectionById(id) > 0 ? Result.success() : Result.fail("删除失败，请检查合集编号");
     }
 }
