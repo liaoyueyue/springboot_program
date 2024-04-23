@@ -31,7 +31,7 @@
         select *
         from collection
         <where>
-            <if test="collectionName != null">
+            <if test="collectionName != null and collectionName != ''">
                 name like concat('%', #{collectionName}, '%')
             </if>
         </where>

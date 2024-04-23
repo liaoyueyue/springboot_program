@@ -37,7 +37,7 @@
     <select id="queryAllByCriteria" resultMap="baseMap">
         select id, title, level from problem
         <where>
-            <if test="level != null">
+            <if test="level != null and level != ''">
                 and level = #{level}
             </if>
             <if test="title != null and title != ''">
@@ -53,7 +53,7 @@
             <if test="collectionName != null and collectionName != ''">
                 and c.name like concat('%', #{collectionName}, '%')
             </if>
-            <if test="level != null">
+            <if test="level != null and level != ''">
                 and p.level = #{level}
             </if>
         </where>
