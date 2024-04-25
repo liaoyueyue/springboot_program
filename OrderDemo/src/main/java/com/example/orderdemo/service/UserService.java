@@ -13,5 +13,5 @@ import com.example.orderdemo.entity.User;
 public interface UserService {
     Result login(String username, String password);
 
-    public Result updateUserInfo(User user);
+    Result updateUserInfo(User user);
 }

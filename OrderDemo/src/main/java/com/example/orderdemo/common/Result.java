@@ -22,6 +22,15 @@ public class Result {
     // 返回的数据
     private Object data;
 
+    // 记录数据库总量
+    private Integer count;
+
+    public Result(Integer code, String msg, Object data) {
+        this.code = code;
+        this.msg = msg;
+        this.data = data;
+    }
+
     /**
      * 返回成功结果-带响应数据
      * @param data 操作成功响应数据

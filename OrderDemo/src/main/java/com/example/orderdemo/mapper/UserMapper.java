@@ -16,11 +16,11 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
     //根据用户名查询用户
-    @Select("select * from user where username = #{username}")
+    @Select("select * from usertbl where username = #{username}")
     User queryUserByUsername(String username);
 
     //修改用户个人信息
-    @Update("update user set username = #{username}, name = #{name}, gender = #{gender}, permission = #{permission}, remark = #{remark} where id = #{id}")
+    @Update("update usertbl set username = #{username}, name = #{name}, gender = #{gender}, permission = #{permission}, remark = #{remark} where id = #{id}")
     void updateUser(User user);
 }
 
