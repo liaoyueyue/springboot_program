@@ -23,8 +23,9 @@ public class ProblemController {
     @Autowired
     private ProblemService problemservice;
 
-    @GetMapping("/add")
-    public Result addProblem(@Validated(Problem.Add.class) Problem problem) {
+    @PostMapping("/add")
+    public Result addProblem(@RequestBody @Validated(Problem.Add.class) Problem problem) {
+        System.out.println(problem);
         return problemservice.addProblem(problem);
     }
 
