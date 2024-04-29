@@ -43,7 +43,7 @@ public interface ProblemMapper {
      *
      * @return id 对应题目详情
      */
-    Problem queryOneById(@Param("id") Integer id);
+    Problem queryProblemById(@Param("id") Integer id);
 
     /**
      * 多条件查询题目列表
@@ -62,4 +62,18 @@ public interface ProblemMapper {
      * @return 符合条件的题目列表
      */
     List<ProblemVo> queryProblemListByColAndLevel(@Param("collectionName") String collectionName, @Param("level") String level);
+
+    /**
+     * 删除题目 通过编号
+     * @param id 编号
+     * @return 是否删除成功
+     */
+    int deleteProblemById(int id);
+
+    /**
+     * 更新题目
+     * @param problem 题目实体类
+     * @return 是否更新成功
+     */
+    int updateProblemById(Problem problem);
 }

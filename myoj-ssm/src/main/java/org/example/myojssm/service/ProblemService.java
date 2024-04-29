@@ -58,4 +58,18 @@ public interface ProblemService {
      * @return 题目分页实体
      */
     Result getProblemList(Integer pageNum, Integer pageSize, String collectionName, String level);
+
+    /**
+     * 删除题目 通过编号
+     * @param id 编号
+     * @return 是否删除成功
+     */
+    Result deleteProblem(int id);
+
+    /**
+     * 更新题目
+     * @param problem 题目实体类
+     * @return 是否更新成功
+     */
+    Result updateProblem(Problem problem);
 }

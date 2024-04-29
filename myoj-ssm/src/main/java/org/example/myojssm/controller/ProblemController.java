@@ -29,6 +29,21 @@ public class ProblemController {
         return problemservice.addProblem(problem);
     }
 
+    @DeleteMapping("/delete")
+    public Result deleteProblem(@RequestParam @NotNull int id) {
+        return problemservice.deleteProblem(id);
+    }
+
+    @PutMapping("/update")
+    public Result updateProblem(@RequestBody @Validated(Problem.Update.class) Problem problem) {
+        return problemservice.updateProblem(problem);
+    }
+
+    @GetMapping("/list")
+    public Result showProblemListByCollectionOrLevel(@NotNull Integer pageNum, @NotNull Integer pageSize, @RequestParam(required = false) String collectionName, @RequestParam(required = false) String level) {
+        return problemservice.getProblemList(pageNum, pageSize, collectionName, level);
+    }
+
     @GetMapping("/all")
     public Result showAllProblem() {
         List<Problem> problems = problemservice.queryAllProblem();
@@ -36,20 +51,9 @@ public class ProblemController {
     }
 
     @GetMapping("/detail")
-    public Result showProblemById(Integer id) {
-        if (id == null || id <= 0) {
-            return Result.fail();
-        }
+    public Result showProblemById(@RequestParam @NotNull int id) {
         Problem problem = problemservice.queryProblemById(id);
-        problem.setTestCode(null);
-        if (problem != null) {
-            return Result.success(problem);
-        }
-        return Result.fail();
+        return problem != null ? Result.success(problem) : Result.fail();
     }
 
-    @GetMapping("/list")
-    public Result showProblemListByCollectionOrLevel(@NotNull Integer pageNum, @NotNull Integer pageSize, @RequestParam(required = false) String collectionName, @RequestParam(required = false) String level) {
-        return problemservice.getProblemList(pageNum, pageSize, collectionName, level);
-    }
 }

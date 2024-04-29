@@ -26,9 +26,9 @@ public class CollectionController {
         return collectionService.addCollection(collection);
     }
 
-    @GetMapping("/list")
-    public Result getCollectionList(@NotNull Integer pageNum, @NotNull Integer pageSize, @RequestParam(required = false) String collectionName) {
-        return collectionService.getCollectionList(pageNum, pageSize, collectionName);
+    @DeleteMapping("/delete")
+    public Result deleteCollection(@RequestParam @NotNull int id) {
+        return collectionService.deleteCollection(id);
     }
 
     @PutMapping("/update")
@@ -36,8 +36,9 @@ public class CollectionController {
         return collectionService.updateCollection(collection);
     }
 
-    @DeleteMapping("/delete")
-    public Result deleteCollection(@RequestParam @NotNull int id) {
-        return collectionService.deleteCollection(id);
+    @GetMapping("/list")
+    public Result getCollectionList(@NotNull Integer pageNum, @NotNull Integer pageSize, @RequestParam(required = false) String collectionName) {
+        return collectionService.getCollectionList(pageNum, pageSize, collectionName);
     }
+
 }

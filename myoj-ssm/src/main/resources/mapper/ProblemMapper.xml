@@ -17,6 +17,22 @@
         values (#{title}, #{level}, #{collectionId}, #{description}, #{templateCode}, #{testCode})
     </insert>
 
+    <delete id="deleteProblemById">
+        delete from problem where id = #{id}
+    </delete>
+
+    <update id="updateProblemById">
+        update problem
+        set title         = #{title},
+            level         = #{level},
+            collection_id = #{collectionId},
+            description   = #{description},
+            template_code = #{templateCode},
+            test_code     = #{testCode},
+            update_time   = now()
+        where id = #{id}
+    </update>
+
     <select id="queryAllProblem" resultMap="baseMap">
         select id, title, level
         from problem
@@ -28,8 +44,8 @@
         where level = #{level}
     </select>
 
-    <select id="queryOneById" resultMap="baseMap">
-        select id, title, level
+    <select id="queryProblemById" resultMap="baseMap">
+        select *
         from problem
         where id = #{id}
     </select>

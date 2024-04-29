@@ -33,7 +33,7 @@ public class ProblemServiceImpl implements ProblemService {
 
     @Override
     public Problem queryProblemById(Integer id) {
-        return problemMapper.queryOneById(id);
+        return problemMapper.queryProblemById(id);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class ProblemServiceImpl implements ProblemService {
 
     @Override
     public Result addProblem(Problem problem) {
-        return problemMapper.insertProblem(problem)>0?Result.success():Result.fail();
+        return problemMapper.insertProblem(problem) > 0 ? Result.success() : Result.fail();
     }
 
     @Override
@@ -60,5 +60,18 @@ public class ProblemServiceImpl implements ProblemService {
         List<ProblemVo> problems = problemMapper.queryProblemListByColAndLevel(collectionName, level);
         Page<ProblemVo> page = (Page<ProblemVo>) problems;
         return Result.success(new PageBean<>(page.getTotal(), page.getResult()));
+    }
+
+    @Override
+    public Result deleteProblem(int id) {
+        if (id <= 0) {
+            return Result.fail();
+        }
+        return problemMapper.deleteProblemById(id) > 0 ? Result.success() : Result.fail();
+    }
+
+    @Override
+    public Result updateProblem(Problem problem) {
+        return problemMapper.updateProblemById(problem) > 0 ? Result.success() : Result.fail();
     }
 }
