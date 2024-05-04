@@ -19,21 +19,31 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class User implements Serializable {
-    @NotNull
+    @NotNull(groups = {User.Update.class})
     private Integer id;
     private String username;
     @JsonIgnore
     private String password;
-    @NotEmpty
+    @NotEmpty(groups = {User.Update.class})
     @Pattern(regexp = "^\\S{2,25}$")
     private String nickname;
-    @NotNull
+    @NotNull(groups = {User.Update.class})
     @Email
     private String email;
     private String userPic;
+    @JsonIgnore
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime createTime;
+    @JsonIgnore
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime updateTime;
     private static final long serialVersionUID = 1L;
+
+    public interface Add{
+
+    }
+
+    public interface Update{
+
+    }
 }
