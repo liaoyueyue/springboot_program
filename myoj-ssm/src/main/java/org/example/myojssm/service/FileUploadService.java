@@ -1,6 +1,5 @@
 package org.example.myojssm.service;
 
-import org.example.myojssm.common.Result;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -11,5 +10,10 @@ import org.springframework.web.multipart.MultipartFile;
  * Time: 0:04
  */
 public interface FileUploadService {
-    Result upload(MultipartFile uploadFile);
+    /**
+     * 上传图片
+     * @param uploadFile 需要上传的文件
+     * @return 上传到 OSS 的图片地址
+     */
+    String uploadImage(MultipartFile uploadFile);
 }

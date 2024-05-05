@@ -92,7 +92,7 @@ public interface UserService {
     User getUserInfo();
 
     /**
-     * 获取当前用户编号
+     * 获取当前用户编号 从线程
      * @return 用户编号
      */
     Integer getUserId();

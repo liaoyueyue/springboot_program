@@ -27,7 +27,7 @@
     </update>
     <update id="updateAvatar">
         update user
-        set user_pic    = #{avatarUrl},
+        set user_pic    = #{avatarURL},
             update_time = now()
         where id = #{id}
     </update>

@@ -1,24 +1,22 @@
 package org.example.myojssm.service.impl;
 
 import org.example.myojssm.common.Result;
+import org.example.myojssm.common.utils.AliyunOSSUtil;
 import org.example.myojssm.common.utils.JWTUtil;
 import org.example.myojssm.common.utils.ThreadLocalUtil;
 import org.example.myojssm.common.utils.UniqueUsernameUtil;
 import org.example.myojssm.entity.User;
 import org.example.myojssm.mapper.UserMapper;
+import org.example.myojssm.service.FileUploadService;
 import org.example.myojssm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -30,13 +28,13 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 public class UserServiceImpl implements UserService {
-    @Value("${file-path}")
-    private String FILE_PATH;
 
     @Autowired
     private UserMapper userMapper;
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    private FileUploadService fileUploadService;
 
     @Override
     public Result login(String account, String password) {
@@ -92,20 +90,22 @@ public class UserServiceImpl implements UserService {
         return userMapper.updateUser(user) > 0 ? Result.success() : Result.fail("Update failed");
     }
 
-    /**
-     * 等待更新
-     */
+    // 允许上传文件(图片)的格式
+    private static final String[] IMAGE_TYPE = new String[]{".bmp", ".jpg", ".jpeg", ".png"};
+
     @Override
     public Result updateAvatar(MultipartFile avatarFile) {
-        String originalFilename = avatarFile.getOriginalFilename();
-        String avatarName = UUID.randomUUID().toString().replace("-", "") + originalFilename.substring(originalFilename.lastIndexOf("."));
-        try {
-            avatarFile.transferTo(new File(FILE_PATH + avatarName));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        // 1. 保存图片到 OSS
+        String newAvatarURL = fileUploadService.uploadImage(avatarFile);
+        // 2. 在 OSS 中删除用户旧头像
+        User loginUser = getUserInfo();
+        String oldUserPicURL = loginUser.getUserPic();
+        if (!oldUserPicURL.isEmpty()) {
+            String oldAvatarFileName = oldUserPicURL.substring(oldUserPicURL.lastIndexOf('/') + 1);
+            AliyunOSSUtil.delete(oldAvatarFileName);
         }
-        Integer id = getUserId();
-        return userMapper.updateAvatar(avatarName, id) > 0 ? Result.success("/avatar/" + avatarName) : Result.fail("Update failed");
+        // 3. 更新数据库用户头像地址, 返回新头像地址
+        return userMapper.updateAvatar(newAvatarURL, loginUser.getId()) > 0 ? Result.success(newAvatarURL) : Result.fail("Update failed");
     }
 
     @Override

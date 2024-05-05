@@ -62,17 +62,17 @@ public class UserController {
         return Result.success(userService.getUserInfo());
     }
 
-    @PutMapping("/updateinfo")
+    @PutMapping("/update-info")
     public Result updateUserInfo(@RequestBody @Validated(User.Update.class) User user) {
         return userService.updateUserInfo(user);
     }
 
-    @PatchMapping("/updateAvatar")
-    public Result updateAvatar(@NotNull MultipartFile avatarFile) {
+    @PostMapping("/update-avatar")
+    public Result updateAvatar(@NotNull @RequestParam("avatar") MultipartFile avatarFile) {
         return userService.updateAvatar(avatarFile);
     }
 
-    @PatchMapping("/updatePwd")
+    @PatchMapping("/update-pwd")
     public Result updatePwd(@NotBlank @Pattern(regexp = "^\\S{6,16}$") @RequestParam("old_pwd") String oldPwd, @NotBlank @Pattern(regexp = "^\\S{6,16}$") @RequestParam("new_pwd") String newPwd, @RequestHeader("Authorization") String oldToken) {
         return userService.updatePwd(oldPwd, newPwd, oldToken);
     }

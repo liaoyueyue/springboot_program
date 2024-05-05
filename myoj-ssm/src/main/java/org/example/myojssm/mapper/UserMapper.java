@@ -29,6 +29,22 @@ public interface UserMapper {
     int updateUser(User user);
 
     /**
+     * 更新用户头像
+     *
+     * @param avatarURL 头像文件地址
+     * @param id         用户编号
+     * @return 数据库影响行数
+     */
+    int updateAvatar(@Param("avatarURL") String avatarURL, @Param("id") Integer id);
+
+    /**
+     * @param id     用户编号
+     * @param newPwd 新密码
+     * @return 数据库影响行数
+     */
+    int updatePwd(@Param("id") Integer id, @Param("newPwd") String newPwd);
+
+    /**
      * 查询用户使用用户名
      *
      * @param username 用户名
@@ -75,22 +91,6 @@ public interface UserMapper {
      * @return 数据库影响行数
      */
     int queryEmailExist(@Param("email") String email);
-
-    /**
-     * 更新用户头像
-     *
-     * @param avatarName 头像文件名称
-     * @param id         用户编号
-     * @return 数据库影响行数
-     */
-    int updateAvatar(@Param("avatarUrl") String avatarName, @Param("id") Integer id);
-
-    /**
-     * @param id     用户编号
-     * @param newPwd 新密码
-     * @return 数据库影响行数
-     */
-    int updatePwd(@Param("id") Integer id, @Param("newPwd") String newPwd);
 }
 
 
