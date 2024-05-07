@@ -24,7 +24,7 @@ create table video
     upload_time timestamp default now()
 );
 insert into video(title, video_path, image_path)
-values ('这里是我测试的第一个视频', 'yourname.mp4', 'youname.png');
+values ('这里是我测试的第一个视频', 'yourname.mp4', 'yourname.png');
 
 drop table if exists danmu;
 create table danmu

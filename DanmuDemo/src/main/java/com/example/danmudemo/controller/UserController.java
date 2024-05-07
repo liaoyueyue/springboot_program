@@ -6,7 +6,6 @@ import com.example.danmudemo.entiy.User;
 import com.example.danmudemo.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.thymeleaf.util.StringUtils;
 
 @RestController
 @RequestMapping("/user")

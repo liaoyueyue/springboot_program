@@ -13,7 +13,7 @@
     <ul class="layui-nav layui-bg-blue">
         <li class="layui-nav-item"><a href="/index">首页</a></li>
         <li class="layui-nav-item"><a href="/admin/index">管理员首页</a></li>
-        <li class="layui-nav-item layui-layout-right"><a href="/user/logout">注销</a></li>
+        <li class="layui-nav-item layui-layout-right"><a href="javascript:logout()">注销</a></li>
     </ul>
 </nav>
 <div style="width: 1300px; margin: 50px">
@@ -66,6 +66,15 @@
         location.href = "/admin/edit/" + id;
     }
 
+    function logout() {
+        layer.confirm("确定注销吗？需要重新登录!", (index) => {
+            fetch("/user/logout", {method: "get"}).finally(result => {
+                location.href = "/user/login";
+            });
+            layer.close(index);
+        });
+    }
+
     function deleteVideo(id) {
         layer.confirm("确定删除id为" + id + "的视频吗?", (index) => {
             fetch("/admin/delete/" + id, {method: "post"})
@@ -83,7 +92,7 @@
                     // 处理错误
                     console.error('There was a problem with the fetch operation:', error);
                 }).finally(result => {
-                    location.reload();
+                location.reload();
             });
 
             layer.close(index);
