@@ -2,6 +2,7 @@ package org.example.myojssm.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.example.myojssm.common.Result;
 import org.example.myojssm.common.exception.CodeVaildException;
@@ -13,6 +14,7 @@ import org.example.myojssm.entity.Task;
 import org.example.myojssm.service.ProblemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -41,7 +43,8 @@ public class CompileController {
     }
 
     @PostMapping("/compile")
-    public Result compileProblem(HttpServletRequest req, HttpServletResponse resp, int id, String code) {
+    public Result compileProblem(HttpServletRequest req, HttpServletResponse resp, @NotNull int id, @NotNull String code) {
+        System.out.println("------" + id + code);
         CompileRequest compileRequest = null;
         CompileResponse compileResponse = new CompileResponse();
         try {

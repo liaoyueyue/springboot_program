@@ -7,8 +7,8 @@ drop table if exists usertbl;
 create table usertbl
 (
     id          int primary key auto_increment,
-    username    varchar(64) unique not null ,
-    password    varchar(64) not null,
+    username    varchar(64) unique not null,
+    password    varchar(64)        not null,
     name        varchar(64),
     gender      varchar(64),
     permission  varchar(64),
@@ -23,9 +23,12 @@ values ('admin', '123', '张三', '男', '管理员', '开发经验20年，高�
 drop table if exists tabletbl;
 create table tabletbl
 (
-    id int primary key auto_increment,
-    ord_id int,
-    num varchar(64),
-    flag varchar(64),
+    id          int primary key auto_increment,
+    ord_id      int,
+    num         varchar(64),
+    flag        varchar(64),
     description varchar(64)
-)
+);
+insert into tabletbl(ord_id, num, flag, description)
+values (1, 2, '0', '大桌1'),(2, 3, '1', '大桌2');
+

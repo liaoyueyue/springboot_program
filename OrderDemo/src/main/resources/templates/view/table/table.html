@@ -20,7 +20,110 @@
         <div style="padding: 50px;">
             <div class="layui-row">
                 <div class="layui-col-md10 layui-col-md-offset1">
+
+                    <!--联合搜索-->
+                    <form class="layui-form layui-row layui-col-space16">
+                        <div class="layui-col-md4">
+                            <div class="layui-input-wrap">
+                                <input type="text" name="id" value="" placeholder="桌号" class="layui-input"
+                                       lay-affix="clear">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-input-wrap">
+                                <label class="layui-form-label">状态</label>
+                                <div class="layui-input-inline">
+                                    <select name="flag" lay-filter="flag">
+                                        <option value="0">空闲</option>
+                                        <option value="1">满座</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <button class="layui-btn" lay-submit lay-filter="demo-table-search">搜索</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">清除</button>
+                        </div>
+
+                    </form>
+
+                    <!--数据表格-->
                     <table class="layui-hide" id="test" lay-filter="test"></table>
+
+                    <!--编辑弹出层-->
+                    <form class="layui-form layui-form-pane" id="tableForm" style="display: none" lay-filter="formData">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">桌号</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="id" disabled class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">订单号</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="ordId" disabled class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">人数</label>
+                            <div class="layui-input-inline">
+                                <select name="num" lay-filter="num">
+                                    <option value="2">2</option>
+                                    <option value="4">4</option>
+                                    <option value="6">6</option>
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">状态</label>
+                            <div class="layui-input-inline">
+                                <select name="flag" lay-filter="flag">
+                                    <option value="0">空闲</option>
+                                    <option value="1">满座</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">描述</label>
+                            <div class="layui-input-block">
+                                <textarea name="description" class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+
+                    </form>
+
+                    <!--添加弹出层-->
+                    <form class="layui-form layui-form-pane" id="addTable" style="display: none" lay-filter="formData">
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">人数</label>
+                            <div class="layui-input-inline">
+                                <select name="num" lay-filter="num">
+                                    <option value="2">2</option>
+                                    <option value="4">4</option>
+                                    <option value="6">6</option>
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">描述</label>
+                            <div class="layui-input-block">
+                                <textarea name="description" class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+
+                    </form>
+
                 </div>
             </div>
 
@@ -31,14 +134,18 @@
     <div th:insert="~{/view/commons/footer.html}"></div>
 </div>
 
-
+<!--头部工具栏事件-->
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-danger layui-btn-sm" lay-event="deletes">批量删除</button>
+        <button class="layui-btn  layui-btn-sm" lay-event="addTable">添加</button>
+    </div>
+</script>
 <!--右侧工具栏事件模板-->
 <script type="text/html" id="barDemo">
     <div class="layui-clear-space">
         <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="more">
-            删除
-        </a>
+        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete">删除</a>
     </div>
 </script>
 
@@ -50,6 +157,9 @@
     layui.use(function () {
         var element = layui.element;
         var table = layui.table;
+        var layer = layui.layer;
+        var $ = layui.$;
+        var form = layui.form;
 
         // 渲染表格 (加载此页面是执行 - 刷新)
         table.render({
@@ -71,23 +181,176 @@
                     {field: 'num', title: '人数', width: '10%', fixed: 'left', align: 'center'},
                     {field: 'flag', title: '状态', width: '10%', fixed: 'left', align: 'center'},
                     {field: 'description', title: '描述', width: '22%', fixed: 'left', align: 'center'},
-                    {fixed: 'right', title:'操作', width: '8%', minWidth: 125, toolbar: '#barDemo'}
+                    {fixed: 'right', title: '操作', width: '8%', minWidth: 125, toolbar: '#barDemo'}
                 ] //
             ],
             // 开启分页
             page: true, // 1
             // 每页显示的条数
             limit: 3,
-            limits:[3, 5, 10],
+            limits: [3, 5, 10],
             // 数据请求失败的回调
-            error: function(e, msg) {
+            error: function (e, msg) {
                 layer.msg("数据异常");
             },
             // 开启头部工具栏事件
-            toolbar: true
-
+            toolbar: '#toolbarDemo'
         });
 
+        // 头部工具栏事件
+        table.on('toolbar(test)', function (obj) {
+            var id = obj.config.id;
+            var checkStatus = table.checkStatus(id);
+            var othis = lay(this);
+            switch (obj.event) {
+                case 'deletes':
+
+                    layer.confirm("您确定删除吗?", function (r) {
+
+
+                        // 获取选中行的数据
+                        var data = checkStatus.data; // 是一个集合
+                        // 需要获取到所有数据的 id 并且拼接在一起
+                        var arrIds = "";
+                        for (var i = 0; i < data.length; i++) {
+
+                            if (i < data.length - 1) {
+                                arrIds += data[i].id + ",";
+                            } else {
+                                arrIds += data[i].id;
+                            }
+
+                        }
+                        // 需要把数据提交到后台
+                        $.post("/table/deletes", {"ids": arrIds}, function (result) {
+
+                            layer.msg(result.msg, function (d) {
+                                // 关闭弹出层
+                                layer.closeAll();
+                                // 刷新页面
+                                location.reload();
+                            });
+
+                        }, "json");
+                    })
+                    break;
+                case 'addTable':
+                    layer.open({
+                        // 弹出一个页面层
+                        type: 1,
+                        // 标题
+                        title: ['添加餐桌信息', 'font-size: 25px;'],
+                        // 绑定的标签
+                        content: $('#addTable'),
+                        // 弹出的大小
+                        area: ['600px', '300px'],
+                        // 弹出层出场的动画方式
+                        anim: 0,
+                        // 按钮
+                        btn: ['添加', '取消'],
+                        // 按钮的排列方式
+                        btnAlign: 'c',
+                        // 弹层遮罩
+                        shade: 0.0,
+                        // 弹出之前执行的函数
+                        success: function (layero, index, that) {
+
+                        },
+                        // 点击修改之后执行的函数
+                        yes: function (index, layero, that) {
+                            // 获取表单信息
+                            var formData = form.val('formData');
+                            // 把表单信息提交到后台
+                            $.post("/table/add", formData, function (result) {
+
+                                // 提示
+                                layer.msg(result.msg, function (d) {
+                                    // 关闭弹出层
+                                    layer.closeAll();
+
+                                    // 重载数据表格
+                                    table.reload("test");
+                                })
+                            }, "json");
+                        }
+                    })
+                    break;
+            }
+        });
+
+        // 触发右侧工具栏事件
+        table.on('tool(test)', function (obj) {
+            // 首先获取整条数据
+            var tableData = obj.data;
+            // 先判断事件类型
+            // 删除 (通过桌号删除)
+            if (obj.event === 'delete') {
+                layer.confirm("您确定删除吗?", function (d) {
+                    // 点击确定之后执行
+
+                    // 获取到桌号
+                    var tableId = tableData.id;
+                    // 把桌号提交到后台做删除
+                    $.post("/table/delete", {"id": tableId}, function (result) {
+
+                        // 提示成功或者失败
+                        layer.msg(result.msg, function (s) {
+
+                            // 关闭弹出加载曾
+                            layer.closeAll();
+
+                            // 重载数据表格
+                            table.reload('test');
+                        })
+
+                    }, "json");
+                })
+            }
+            // 修改
+            else if (obj.event === 'edit') {
+                layer.open({
+                    // 弹出一个页面层
+                    type: 1,
+                    // 标题
+                    title: ['修改餐桌信息', 'font-size: 25px;'],
+                    // 绑定的标签
+                    content: $('#tableForm'),
+                    // 弹出的大小
+                    area: ['600px', '500px'],
+                    // 弹出层出场的动画方式
+                    anim: 0,
+                    // 按钮
+                    btn: ['修改', '取消'],
+                    // 按钮的排列方式
+                    btnAlign: 'c',
+                    // 弹层遮罩
+                    shade: 0.0,
+                    // 弹出之前执行的函数
+                    success: function (layero, index, that) {
+                        // 给表单赋值
+                        form.val('formData', tableData);
+                    },
+                    // 点击修改之后执行的函数
+                    yes: function (index, layero, that) {
+                        // 获取表单信息
+                        var formData = form.val('formData');
+                        // 把表单信息提交到后台
+                        $.post("/table/update", formData, function (result) {
+
+                            // 提示
+                            layer.msg(result.msg, function (d) {
+                                // 关闭弹出层
+                                layer.closeAll();
+
+                                // 重载数据表格
+                                table.reload("test");
+                            })
+                        }, "json");
+                    }
+                })
+            }
+            // 获取当前行的数据
+        })
 
     });
 </script>

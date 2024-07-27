@@ -13,7 +13,6 @@ import lombok.experimental.Accessors;
  */
 @AllArgsConstructor
 @Data
-@Accessors(chain = true)
 public class Result {
     // 状态码
     private Integer code;
@@ -73,4 +72,21 @@ public class Result {
         return new Result(-1, "illegal request", null);
     }
 
+    // 单独封装消息提示
+    public Result  msg(String msg) {
+        this.msg = msg;
+        return this;
+    }
+
+    // 封装数据
+    public Result data(Object data) {
+        this.data = data;
+        return this;
+    }
+
+    // 封装总数量
+    public Result count(Integer count) {
+        this.count = count;
+        return this;
+    }
 }

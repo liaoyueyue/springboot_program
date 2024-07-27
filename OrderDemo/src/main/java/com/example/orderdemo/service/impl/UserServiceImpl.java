@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
         try {
             userMapper.updateUser(user);
             User user1 = userMapper.queryUserByUsername(user.getUsername());
-            return Result.success("修改成功").setData(user1);
+            return Result.success("修改成功").data(user1);
         } catch (Exception e) {
             return Result.fail("修改失败");
         }

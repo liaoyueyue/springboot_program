@@ -1,8 +1,7 @@
 package com.example.orderdemo.mapper;
 
 import com.example.orderdemo.entity.Table;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -33,4 +32,14 @@ public interface TableMapper {
     @Select("select count(*) from tabletbl")
     int count();
 
+    // 删除
+    @Delete("delete from tabletbl where id = #{id}")
+    void delete(Integer id);
+
+    // 修改
+    @Update("update tabletbl set num = #{num},flag = #{flag}, description  = #{description} where id = #{id}")
+    void update(Table table);
+    // 添加
+    @Insert("insert into tabletbl (num,description) values (#{num},#{description})")
+    void add(Table table);
 }

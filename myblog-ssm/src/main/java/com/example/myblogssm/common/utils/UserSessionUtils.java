@@ -35,4 +35,5 @@ public class UserSessionUtils {
         HttpSession session = request.getSession(false);
         session.setAttribute(AppConstant.USER_SESSION_KEY, user);
     }
+
 }

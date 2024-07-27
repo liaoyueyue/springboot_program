@@ -165,6 +165,11 @@ public class UserController {
         String photoPathAbsolute = AppConstant.IMG_PATH_ABSOLUTE + fileName; //绝对路径
         String photoPathRelative = AppConstant.IMG_PATH_RELATIVE + fileName; //相对路径
         try {
+            // 判断服务器头像文件夹是否存在
+            File dir = new File(photoPathAbsolute);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
             // 将上传文件绝对路径保存到服务器文件夹
             photo.transferTo(new File(photoPathAbsolute));
             // 保存图片相对路径到数据库中

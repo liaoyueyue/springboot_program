@@ -3,6 +3,7 @@ package org.example.myojssm.config.interceptors;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.example.myojssm.common.exception.TokenNotFound;
 import org.example.myojssm.common.utils.JWTUtil;
 import org.example.myojssm.common.utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         try {
             String token = request.getHeader(TOKEN_HEADER_KEY);
+            if (token == null) {
+                throw new TokenNotFound("token is null");
+            }
             Map<String, Object> claims = JWTUtil.parseToken(token);
             String localUsername = (String) claims.get("username");
             // 从 redis 获取 登录用户对应的 token

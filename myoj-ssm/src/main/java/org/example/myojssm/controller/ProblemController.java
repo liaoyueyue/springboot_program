@@ -55,5 +55,4 @@ public class ProblemController {
         Problem problem = problemservice.queryProblemById(id);
         return problem != null ? Result.success(problem) : Result.fail();
     }
-
 }

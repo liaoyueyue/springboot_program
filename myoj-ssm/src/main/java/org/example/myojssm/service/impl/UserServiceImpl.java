@@ -100,7 +100,7 @@ public class UserServiceImpl implements UserService {
         // 2. 在 OSS 中删除用户旧头像
         User loginUser = getUserInfo();
         String oldUserPicURL = loginUser.getUserPic();
-        if (!oldUserPicURL.isEmpty()) {
+        if (oldUserPicURL != null && !oldUserPicURL.isEmpty()) {
             String oldAvatarFileName = oldUserPicURL.substring(oldUserPicURL.lastIndexOf('/') + 1);
             AliyunOSSUtil.delete(oldAvatarFileName);
         }

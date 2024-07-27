@@ -27,6 +27,7 @@ public class AliyunOSSUtil {
     private static final String URL_PREFIX = "https://lyyoj.oss-cn-hangzhou.aliyuncs.com/avatar/";
     // oss目标文件夹
     private static final String FILE_HOST = "avatar/";
+    // 从环境变量中获取访问凭证。运行本代码示例之前，请确保已设置环境变量 OSS_ACCESS_KEY_ID 和 OSS_ACCESS_KEY_SECRET
     private static final EnvironmentVariableCredentialsProvider credentialsProvider;
 
     static {
