@@ -17,22 +17,21 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-    @Value("${file-path}")
-    private String FILE_PATH;
+    @Value("${local-directory}")
+    private String LOCAL_DIRECTORY;
 
     @Autowired
     private LoginInterceptor LoginInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(LoginInterceptor)
                 .addPathPatterns("/**") // 拦截所有接口
-                .excludePathPatterns("/user/login", "/user/register")  //排除接口
-//                .excludePathPatterns("/problem/all", "/problem/list")  //排除接口
-                .excludePathPatterns("/file/**", "/upload/**");  //排除接口
+                .excludePathPatterns("/user/login", "/user/register", "/index");
     }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/file/**").addResourceLocations("file:" + FILE_PATH);
+        registry.addResourceHandler("/local/**").addResourceLocations("file:" + LOCAL_DIRECTORY);
     }
 }
