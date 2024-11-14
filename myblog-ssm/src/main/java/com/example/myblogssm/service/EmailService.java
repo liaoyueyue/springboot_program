@@ -31,7 +31,7 @@ public class EmailService {
      */
     public void sendVerificationCode(String toEmail, String code) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("liaoyueyue.email@qq.com");
+        message.setFrom("a973044869@163.com");
         message.setTo(toEmail);
         message.setSubject("个人博客系统");
         message.setText("您的验证码为: " + code + "。 如果不是您操作的请不要将验证码给他人。");

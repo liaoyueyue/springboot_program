@@ -5,15 +5,14 @@ spring:
     password: xBs547kiszh7kpxn
     driver-class-name: com.mysql.jdbc.Driver
   redis:
-    host: 127.0.0.1
-    port: 6379
-    password: pwd123456
     database: 0
+    host: localhost
+    port: 6379
   mail:
-    host: smtp.qq.com
+    host: smtp.163.com
     port: 465 #端口号 465 或 587
-    username: liaoyueyue.email@qq.com
-    password: ipkphrqvhwokbebi
+    username: a973044869@163.com
+    password: EE7BpxeFakzpymjW
     default-encoding: utf-8
     protocol: smtp
     properties:
